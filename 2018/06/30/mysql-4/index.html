@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>高性能MySQL阅读笔记四 | 沧海一粟</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 查询性能优化1.1 优化数据访问 检查是否检索大量超过需要的数据.是否访问太多行或太多列,增加网络开销,消耗cpu和内存资源 检查服务器层是否在分析大量超过需要的数据行  1.2 重构查询的方式1.2.1 切分查询 有时对于一个大查询我们需要分而治之,切分成小查询每次只完成一部分  1.2.2 分解关联查询 缓存效率更高: 方便缓存单表查询结果 执行单个查询可以减少锁的竞争 在应用层做关联，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能MySQL阅读笔记四">
+<meta property="og:url" content="https://whales2018.github.io/2018/06/30/mysql-4/index.html">
+<meta property="og:site_name" content="沧海一粟">
+<meta property="og:description" content="1. 查询性能优化1.1 优化数据访问 检查是否检索大量超过需要的数据.是否访问太多行或太多列,增加网络开销,消耗cpu和内存资源 检查服务器层是否在分析大量超过需要的数据行  1.2 重构查询的方式1.2.1 切分查询 有时对于一个大查询我们需要分而治之,切分成小查询每次只完成一部分  1.2.2 分解关联查询 缓存效率更高: 方便缓存单表查询结果 执行单个查询可以减少锁的竞争 在应用层做关联，">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-30T06:08:38.531Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能MySQL阅读笔记四">
+<meta name="twitter:description" content="1. 查询性能优化1.1 优化数据访问 检查是否检索大量超过需要的数据.是否访问太多行或太多列,增加网络开销,消耗cpu和内存资源 检查服务器层是否在分析大量超过需要的数据行  1.2 重构查询的方式1.2.1 切分查询 有时对于一个大查询我们需要分而治之,切分成小查询每次只完成一部分  1.2.2 分解关联查询 缓存效率更高: 方便缓存单表查询结果 执行单个查询可以减少锁的竞争 在应用层做关联，">
+  
+    <link rel="alternate" href="/atom.xml" title="沧海一粟" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">沧海一粟</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://whales2018.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql-4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-4/" class="article-date">
+  <time datetime="2018-06-30T06:00:01.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      高性能MySQL阅读笔记四
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-查询性能优化"><a href="#1-查询性能优化" class="headerlink" title="1. 查询性能优化"></a>1. 查询性能优化</h1><h2 id="1-1-优化数据访问"><a href="#1-1-优化数据访问" class="headerlink" title="1.1 优化数据访问"></a>1.1 优化数据访问</h2><ol>
+<li>检查是否检索大量超过需要的数据.是否访问太多行或太多列,增加网络开销,消耗cpu和内存资源</li>
+<li>检查服务器层是否在分析大量超过需要的数据行</li>
+</ol>
+<h2 id="1-2-重构查询的方式"><a href="#1-2-重构查询的方式" class="headerlink" title="1.2 重构查询的方式"></a>1.2 重构查询的方式</h2><h3 id="1-2-1-切分查询"><a href="#1-2-1-切分查询" class="headerlink" title="1.2.1 切分查询"></a>1.2.1 切分查询</h3><ol>
+<li>有时对于一个大查询我们需要分而治之,切分成小查询每次只完成一部分</li>
+</ol>
+<h3 id="1-2-2-分解关联查询"><a href="#1-2-2-分解关联查询" class="headerlink" title="1.2.2 分解关联查询"></a>1.2.2 分解关联查询</h3><ol>
+<li>缓存效率更高: 方便缓存单表查询结果</li>
+<li>执行单个查询可以减少锁的竞争</li>
+<li>在应用层做关联，更容易对数据库进行拆分，更容易做到高性能和可扩展</li>
+<li>使用in　代替关联查询可能比随机的关联要高效</li>
+<li>可以减少冗余记录的查询</li>
+</ol>
+<h2 id="1-3-查询执行的基础"><a href="#1-3-查询执行的基础" class="headerlink" title="1.3 查询执行的基础"></a>1.3 查询执行的基础</h2><h3 id="1-3-1-查询流程"><a href="#1-3-1-查询流程" class="headerlink" title="1.3.1 查询流程"></a>1.3.1 查询流程</h3><ol>
+<li>先检查缓存</li>
+<li>sql解析,预处理,优化器生成相应的执行计划</li>
+<li>调用存储引擎的api执行查询</li>
+</ol>
+<h3 id="1-3-2-通信协议"><a href="#1-3-2-通信协议" class="headerlink" title="1.3.2 通信协议"></a>1.3.2 通信协议</h3><ol>
+<li>半双工,任何一时刻要么是服务器向客户端发送数据,要么是客户端向服务端发送数据</li>
+<li>客户端从服务器获取数据时,实际是MySQL向客户端推送数据的过程</li>
+</ol>
+<h3 id="1-3-3-查询状态"><a href="#1-3-3-查询状态" class="headerlink" title="1.3.3 查询状态"></a>1.3.3 查询状态</h3><ol>
+<li>Ｓleep: 线程正在等待客户端发送新的请求</li>
+<li>Query: 线程正在执行查询或者正在将结果发送给客户端</li>
+<li>Locked: 服务器层,线程正在等待表锁</li>
+<li>Analyzing and statistics: 线程正在收集存储引擎统计信息,并生成查询的执行计划</li>
+<li>Copying to tmp table: 线程正在执行查询,并且将结果集复制到一个临时表中.常见group by或文件排序操作</li>
+<li>Sorting result: 线程正在对结果进行排序</li>
+<li>Sending data: 线程可能在多个状态之间传送数据或在生成结果集或向客户端返回数据</li>
+</ol>
+<h3 id="1-3-4-查询优化"><a href="#1-3-4-查询优化" class="headerlink" title="1.3.4 查询优化"></a>1.3.4 查询优化</h3><h4 id="1-3-4-1-语法解析器和预处理"><a href="#1-3-4-1-语法解析器和预处理" class="headerlink" title="1.3.4.1 语法解析器和预处理"></a>1.3.4.1 语法解析器和预处理</h4><ol>
+<li>通过关键字将sql语句进行解析,生成对应的解析树</li>
+<li>解析器使用语法规则验证和解析查询</li>
+<li>预处理器进一步检查解析树是否合法,验证权限</li>
+</ol>
+<h4 id="1-3-4-2-查询优化器"><a href="#1-3-4-2-查询优化器" class="headerlink" title="1.3.4.2 查询优化器"></a>1.3.4.2 查询优化器</h4><ol>
+<li>一条查询可以有多种执行方式,优化器找到其中最好的执行计划,MySQL使用基于成本的优化器</li>
+<li>优化类型</li>
+<li>重新定义关联表的顺序</li>
+<li>外联结转化成内连接</li>
+<li>使用等价变换规则</li>
+<li>优化count, min, max函数</li>
+<li>预估并转化为常数表达式</li>
+<li>覆盖索引扫描</li>
+<li>子查询优化</li>
+<li>提前终止查询,如limit</li>
+<li>等值传播</li>
+<li>In优化</li>
+</ol>
+<h4 id="1-3-4-3-关联查询"><a href="#1-3-4-3-关联查询" class="headerlink" title="1.3.4.3 关联查询"></a>1.3.4.3 关联查询</h4><ol>
+<li>嵌套循环: 先在一个表中循环取出单条数据,然后再嵌套循环到下一个表中寻找匹配的行,如果最后一个联表无法找到更多的行,则返回上一层次关联表</li>
+<li>UNION查询和子查询时都会将临时结果存放到一个临时表中</li>
+</ol>
+<h4 id="1-3-4-4-执行计划"><a href="#1-3-4-4-执行计划" class="headerlink" title="1.3.4.4 执行计划"></a>1.3.4.4 执行计划</h4><ol>
+<li>MySQL生成一棵指令树,通过存储引擎执行完成并返回结果</li>
+</ol>
+<h4 id="1-3-4-5-排序优化"><a href="#1-3-4-5-排序优化" class="headerlink" title="1.3.4.5 排序优化"></a>1.3.4.5 排序优化</h4><ol>
+<li>排序是一个成本很高的操作</li>
+<li>MySQL排序: 如果数据量小,则在内存中进行; 数据量大则先分块再排序再合并</li>
+<li>MySQL4.1后使用单次传输排序: 先读取查询所需要的所有列,再根据给定列排序</li>
+</ol>
+<h4 id="1-3-4-6-查询执行引擎"><a href="#1-3-4-6-查询执行引擎" class="headerlink" title="1.3.4.6 查询执行引擎"></a>1.3.4.6 查询执行引擎</h4><ol>
+<li>根据执行计划的指令逐步执行</li>
+</ol>
+<h4 id="1-3-4-7-返回结果给客户端"><a href="#1-3-4-7-返回结果给客户端" class="headerlink" title="1.3.4.7 返回结果给客户端"></a>1.3.4.7 返回结果给客户端</h4><ol>
+<li>如果查询可以缓存,则缓存在这个阶段进行</li>
+<li>返回结果的过程是一个增量逐步返回的过程,一旦开始生成第一条结果时就可以开始向客户端返回结果集</li>
+</ol>
+<h2 id="1-4-查询优化器的局限"><a href="#1-4-查询优化器的局限" class="headerlink" title="1.4 查询优化器的局限"></a>1.4 查询优化器的局限</h2><ol>
+<li>子查询相对糟糕(不是绝对),如子查询用in</li>
+<li>联表查询与子查询根据场景不同有不同优势</li>
+<li>MySQL无法将限制条件下推到子查询</li>
+<li>索引合并优化</li>
+<li>MySQL无法利用多核特性并行执行查询</li>
+<li>MySQL并不支持哈希关联, MariaDB已经实现了真正的哈希关联  </li>
+<li>松散索引扫描,无法按照不连续的方式扫描一个索引</li>
+<li>最大值最小值函数的优化一般</li>
+<li>不允许同一张表上同时查询和更新, 如update set 等于 select 自己.解决方法,可以通过关联临时表</li>
+</ol>
+<h2 id="1-5-查询优化器的提示"><a href="#1-5-查询优化器的提示" class="headerlink" title="1.5 查询优化器的提示"></a>1.5 查询优化器的提示</h2><ol>
+<li>设置查询优化器参数,可以阅读官方手册</li>
+<li>一般除非需要,修改查询优化器参数会提高维护成本</li>
+</ol>
+<h2 id="1-6-优化特定类型的查询"><a href="#1-6-优化特定类型的查询" class="headerlink" title="1.6 优化特定类型的查询"></a>1.6 优化特定类型的查询</h2><ol>
+<li>关联查询: on的列加索引; 使用group by和order by 只使用一个表的列可以利用索引</li>
+<li>优化LIMIT分页: 尽量使用覆盖索引</li>
+<li>子查询: 尽量使用关联查询替换</li>
+<li>静态查询分析: Percona Toolkit中的pt-query-advisor能解析查询日志,分析查询模式</li>
+<li>使用用户自定义变量: 无法使用查询缓存,可能被优化器优化掉</li>
+</ol>
+<h1 id="2-MySQL高级特性"><a href="#2-MySQL高级特性" class="headerlink" title="2. MySQL高级特性"></a>2. MySQL高级特性</h1><h2 id="2-1-分区表"><a href="#2-1-分区表" class="headerlink" title="2.1 分区表"></a>2.1 分区表</h2><h3 id="2-1-1-应用"><a href="#2-1-1-应用" class="headerlink" title="2.1.1 应用"></a>2.1.1 应用</h3><ol>
+<li>表非常大无法全部放在内存中,或者只在表的最后部分有热点数据其他均是历史数据</li>
+<li>分区表的数据更容易维护</li>
+<li>分区表的数据可以分布在不同的物理设备上</li>
+<li>使用分区表避免某些瓶颈,如InnoDB单个索引的互斥访问</li>
+<li>备份和恢复独立分区,对于大数据集效果较好</li>
+</ol>
+<h3 id="2-1-2限制"><a href="#2-1-2限制" class="headerlink" title="2.1.2限制"></a>2.1.2限制</h3><ol>
+<li>一个表最多1024个分区</li>
+<li>分区表达式必须是整数或返回整数的表达式</li>
+<li>如果分区字段有主键或唯一索引列,那么所有主键列和唯一索引都必须包含进来</li>
+<li>分区表中无法使用外键约束</li>
+</ol>
+<h3 id="2-1-3-原理"><a href="#2-1-3-原理" class="headerlink" title="2.1.3 原理"></a>2.1.3 原理</h3><ol>
+<li>分区表由多个相关的底层表实现,存储引擎管理它们跟管理普通表一样</li>
+<li>select 查询: 分区层打开并锁住所有底层表,优化器判断是否过滤分区,在调用存储引擎api访问各个分区数据</li>
+<li>insert: 分区层打开并锁住所有底层表,确定分区,写入</li>
+<li>delete: 分区层打开并锁住所有底层表,确定数据所在分区,删除</li>
+<li>update: 分区层打开并锁住所有底层表,确定分区,取出数据,更新,确定分区,写入</li>
+<li>打开并锁住所有底层表: 如果存储引擎实现行级锁如InnoDB,则会在分区层释放表锁</li>
+</ol>
+<h3 id="2-1-4-分区表类型"><a href="#2-1-4-分区表类型" class="headerlink" title="2.1.4 分区表类型"></a>2.1.4 分区表类型</h3><ol>
+<li>根据范围进行分区: 每个分区储存落在某个范围的记录</li>
+<li>根据键值进行分区,减少InnoDB互斥量竞争</li>
+<li>使用数学模函数进行分区,然后将数据轮询放入不同的分区,适用于只想保留几天的数据</li>
+</ol>
+<h3 id="2-1-5-使用"><a href="#2-1-5-使用" class="headerlink" title="2.1.5 使用"></a>2.1.5 使用</h3><ol>
+<li>问题回顾:数据量很大时,除非是索引覆盖查询,否则数据库需要根据索引扫描回表查询,产生大量的随机IO,数据库响应时间很大</li>
+<li>全量扫描数据不要索引,根据分区定位数据位置</li>
+<li>索引数据,分离热点. 将热点数据单独放在一个分区</li>
+<li>NULL值会使分区过滤无效: 分区表达式接收NULL值并将其放到第一个分区导致查询时多查分区.解决方法:创建第一个无用分区存放NULL值数据</li>
+<li>分区列和索引列不匹配,查询无法进行分区过滤</li>
+<li>选择分区成本高,插入大量数据时都需要扫描分区定义找到分区</li>
+<li>打开并锁住所有底层表的成本可能很高</li>
+<li>维护分区的成本很高,同alter一样创建临时表然后拷贝数据</li>
+<li>所有分区都必须使用相同的存储引擎</li>
+</ol>
+<h3 id="2-1-6-查询优化"><a href="#2-1-6-查询优化" class="headerlink" title="2.1.6 查询优化"></a>2.1.6 查询优化</h3><ol>
+<li>在where条件带入分区列</li>
+<li>创建分区时可以使用表达式,但是查询时只能在使用分区列本身进行比较时才能过滤分区,而不能根据表达式的值过滤分区</li>
+</ol>
+<h2 id="2-2-视图"><a href="#2-2-视图" class="headerlink" title="2.2 视图"></a>2.2 视图</h2><p>视图本身是一个虚拟表,不存放任何数据,不能对视图创建触发器</p>
+<h3 id="2-2-1-算法"><a href="#2-2-1-算法" class="headerlink" title="2.2.1 算法"></a>2.2.1 算法</h3><ol>
+<li>合并算法: 将存放的视图sql和用户发起的查询sql合并后执行</li>
+<li>临时表算法: 由存放的视图sql先创建临时表后根据用户的查询sql查询返回</li>
+</ol>
+<h3 id="2-2-2-可更新视图"><a href="#2-2-2-可更新视图" class="headerlink" title="2.2.2 可更新视图"></a>2.2.2 可更新视图</h3><ol>
+<li>可以通过更新视图更新相关表, 所有临时表算法实现的视图都无法更新</li>
+</ol>
+<h3 id="2-2-3-视图对性能的影响"><a href="#2-2-3-视图对性能的影响" class="headerlink" title="2.2.3 视图对性能的影响"></a>2.2.3 视图对性能的影响</h3><ol>
+<li>一般情况视图不能提升性能,在某些情况下可以帮助提升性能,需要做比较详细的测试</li>
+<li>视图还可以实现基于列的权限控制不用真正创建列权限</li>
+</ol>
+<h3 id="2-2-4-视图的限制"><a href="#2-2-4-视图的限制" class="headerlink" title="2.2.4 视图的限制"></a>2.2.4 视图的限制</h3><ol>
+<li>不保存视图定义的原始sql语句</li>
+<li>查看视图创建的语句,可以通过使用视图的.frm文件的最后一行获取一些信息</li>
+</ol>
+<h2 id="2-3-外键约束"><a href="#2-3-外键约束" class="headerlink" title="2.3 外键约束"></a>2.3 外键约束</h2><ol>
+<li>InnoDB强制外键使用索引</li>
+<li>查询需要额外访问一些表,需要额外的锁容易导致一些死锁</li>
+<li>如果使用外键做约束,通常在应用程序里实现会更好</li>
+</ol>
+<h2 id="2-4-内部存储代码"><a href="#2-4-内部存储代码" class="headerlink" title="2.4 内部存储代码"></a>2.4 内部存储代码</h2><h3 id="2-4-1-优点"><a href="#2-4-1-优点" class="headerlink" title="2.4.1 优点"></a>2.4.1 优点</h3><ol>
+<li>离数据最近,节省带宽和网络延迟</li>
+<li>帮助提升安全性,应用程序可以通过存储过程访问那些没有权限的表</li>
+<li>服务器端可以缓存存储过程的执行计划</li>
+<li>维护方便,便于分工</li>
+</ol>
+<h3 id="2-4-2-缺点"><a href="#2-4-2-缺点" class="headerlink" title="2.4.2 缺点"></a>2.4.2 缺点</h3><ol>
+<li>调试困难,难以定位问题</li>
+<li>存储代码效率相对差</li>
+<li>增加维护复杂性,存储过程会给数据库服务器增加额外压力</li>
+<li>存在安全隐患,没有什么选项可以控制存储程序的资源消耗,所以一个小错误可能直接把服务器拖死</li>
+</ol>
+<h3 id="2-4-3-存储过程和函数"><a href="#2-4-3-存储过程和函数" class="headerlink" title="2.4.3 存储过程和函数"></a>2.4.3 存储过程和函数</h3><ol>
+<li>优化器无法评估存储函数的执行成本</li>
+<li>每个连接都有独立的存储过程的执行计划缓存,多个连接调用同一个存储过程会浪费缓存空间反复缓存同样的执行计划</li>
+</ol>
+<h3 id="2-4-4-触发器"><a href="#2-4-4-触发器" class="headerlink" title="2.4.4 触发器"></a>2.4.4 触发器</h3><ol>
+<li>每个表的每个事件只能一个</li>
+<li>MySQL只支持基于行的触发,如果变更的数据集非常庞大的化效率会很低</li>
+<li>触发器的问题很难排查</li>
+<li>可能导致死锁和锁等待</li>
+<li>实现一些约束,系统维护任务及更新反范式化数据的时候会比较有用</li>
+</ol>
+<h3 id="2-4-5-事件"><a href="#2-4-5-事件" class="headerlink" title="2.4.5 事件"></a>2.4.5 事件</h3><ol>
+<li>类似Linux的定时任务</li>
+</ol>
+<h2 id="2-5-游标"><a href="#2-5-游标" class="headerlink" title="2.5 游标"></a>2.5 游标</h2><ol>
+<li>MySQL在服务器端提供只读的,单向的游标</li>
+<li>一个存储过程中可以有多个游标,也可以嵌套</li>
+</ol>
+<h2 id="2-6-绑定变量"><a href="#2-6-绑定变量" class="headerlink" title="2.6 绑定变量"></a>2.6 绑定变量</h2><ol>
+<li>创建一个绑定变量sql时客户端向服务器发送了一个sql语句原型</li>
+<li>服务器端解析并存储这个sql语句的部分执行计划返回客户端一个sql语句处理句柄</li>
+<li>可以使用问号作为sql的占位,在使用sql接口执行时赋予变量值</li>
+</ol>
+<h2 id="2-7-插件"><a href="#2-7-插件" class="headerlink" title="2.7 插件"></a>2.7 插件</h2><ol>
+<li>存储过程插件</li>
+<li>后台插件: 如Percona Server中包含的Handler-Socket</li>
+<li>INFORMATION_SCHEMA插件</li>
+<li>全文解析插件: 可以对文档进行分词处理</li>
+<li>审计插件: 可以用作记录事件日志</li>
+<li>认证插件: 扩展认证功能</li>
+</ol>
+<h2 id="2-8-字符集和校对"><a href="#2-8-字符集和校对" class="headerlink" title="2.8 字符集和校对"></a>2.8 字符集和校对</h2><ol>
+<li>字符集是指一种从二进制编码到某类字符符号的映射</li>
+<li>校对是指一组用于某个字符集的排序规则<h3 id="2-8-1-创建对象时的默认设置"><a href="#2-8-1-创建对象时的默认设置" class="headerlink" title="2.8.1 创建对象时的默认设置"></a>2.8.1 创建对象时的默认设置</h3></li>
+<li>服务器,数据库,表都有默认的字符集和校对规则,这是一个逐层继承的默认设置</li>
+<li>创建数据库时根据character_set_server设置来设定默认字符集</li>
+</ol>
+<h3 id="2-8-2-服务器和客户端通信设置"><a href="#2-8-2-服务器和客户端通信设置" class="headerlink" title="2.8.2 服务器和客户端通信设置"></a>2.8.2 服务器和客户端通信设置</h3><ol>
+<li>服务端总是假设客户端按照character_set_client设置的字符来传输数据和sql语句</li>
+<li>服务器端收到sql语句后根据character_set_connection转换成字符串</li>
+<li>服务器端返回数据时会将其转换为character_set_result</li>
+</ol>
+<h3 id="2-8-3-选择字符集和校对规则"><a href="#2-8-3-选择字符集和校对规则" class="headerlink" title="2.8.3 选择字符集和校对规则"></a>2.8.3 选择字符集和校对规则</h3><ol>
+<li>极简原则: 先为服务器选择合理的字符集在根据实际情况让某些列选择合适的字符集</li>
+</ol>
+<h3 id="2-8-4-对查询的影响"><a href="#2-8-4-对查询的影响" class="headerlink" title="2.8.4 对查询的影响"></a>2.8.4 对查询的影响</h3><ol>
+<li>不同字符集和校对规则之间的转换会带来额外的开销</li>
+<li>排序查询要求的字符集与服务器数据的字符集相同时才能利用索引进行排序</li>
+<li>当两个字符集不同列关联两个表时,MySQL会尝试转换其中一个列的字符集</li>
+</ol>
+<h2 id="2-9-全文索引"><a href="#2-9-全文索引" class="headerlink" title="2.9 全文索引"></a>2.9 全文索引</h2><ol>
+<li>自然语言的全文索引: 相关度是基于匹配的关键词个数及关键词在文档中出现的次数,整个索引中出现次数越少的词语匹配的相关度越高</li>
+<li>布尔全文索引: 只有MyISAM才能使用</li>
+<li>平时没接触过,有兴趣者请自行google</li>
+</ol>
+<h2 id="2-10-分布式XA事务"><a href="#2-10-分布式XA事务" class="headerlink" title="2.10 分布式XA事务"></a>2.10 分布式XA事务</h2><ol>
+<li>事务协调器保证所有事务参与者完成工作,通知所有事务提交</li>
+<li>内部XA事务: 存储引擎提交的同时,需要将提交的信息写入二进制日志</li>
+<li>外部XA事务: XA事务是一种在多个服务器之间同步数据的方法,如果由于不能使用MySQL本身的复制或者性能并不是瓶颈可以尝试使用</li>
+</ol>
+<h2 id="2-11-查询缓存"><a href="#2-11-查询缓存" class="headerlink" title="2.11 查询缓存"></a>2.11 查询缓存</h2><ol>
+<li>查询缓存系统会跟踪查询中涉及的每个表,如果表发生变化则缓存数据失效</li>
+<li>缓存存放在一个引用表中,通过一个哈希值引用,哈希值包括查询本身,查询数据库等信息</li>
+<li>当sql语句和客户端发送过来的其他原始信息,任何字符上的不同都会导致缓存不命中</li>
+<li>打开查询缓存对读和写都会带来额外的消耗</li>
+<li>InnoDB事务修改表时,会将这个表对应的查询缓存都设置失效</li>
+<li>查询缓存被发现是一个影响服务器扩展性的因素</li>
+<li>如果缓存了大量的查询结果,那么失效操作可能会造成系统僵死.因为靠一个全局锁保护,所有该操作都要等锁</li>
+<li>减少碎片, 选择合适的query_cache_min_res_unit可以减少内存浪费</li>
+<li>对于写密集型的应用,直接禁用更好</li>
+<li>高并发环境也不适合.只有明确缓存的好处才使用</li>
+<li>查询缓存的替代方案: 客户端缓存</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-4/" data-id="cjj1125000003gvzlo1d1wym7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/30/mysql-5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          高性能MySQL阅读笔记五
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/30/mysql-3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">高性能MySQL阅读笔记三</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/30/mysql-6/">高性能MySQL阅读笔记六</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-5/">高性能MySQL阅读笔记五</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-4/">高性能MySQL阅读笔记四</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-3/">高性能MySQL阅读笔记三</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-2/">高性能MySQL阅读笔记二</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Whales<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>高性能MySQL阅读笔记一 | 沧海一粟</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. MySQL服务器逻辑架构连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等. 查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等. 存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信. 2. 并发控制每种存储引擎有不同的锁策略和锁粒度 表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能MySQL阅读笔记一">
+<meta property="og:url" content="https://whales2018.github.io/2018/06/30/mysql-1/index.html">
+<meta property="og:site_name" content="沧海一粟">
+<meta property="og:description" content="1. MySQL服务器逻辑架构连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等. 查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等. 存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信. 2. 并发控制每种存储引擎有不同的锁策略和锁粒度 表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-30T03:28:35.136Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能MySQL阅读笔记一">
+<meta name="twitter:description" content="1. MySQL服务器逻辑架构连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等. 查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等. 存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信. 2. 并发控制每种存储引擎有不同的锁策略和锁粒度 表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表">
+  
+    <link rel="alternate" href="/atom.xml" title="沧海一粟" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">沧海一粟</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://whales2018.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-1/" class="article-date">
+  <time datetime="2018-06-30T03:21:11.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      高性能MySQL阅读笔记一
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-MySQL服务器逻辑架构"><a href="#1-MySQL服务器逻辑架构" class="headerlink" title="1. MySQL服务器逻辑架构"></a>1. MySQL服务器逻辑架构</h1><p>连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等.</p>
+<p>查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等.</p>
+<p>存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信.</p>
+<h1 id="2-并发控制"><a href="#2-并发控制" class="headerlink" title="2. 并发控制"></a>2. 并发控制</h1><p>每种存储引擎有不同的锁策略和锁粒度</p>
+<p>表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表的读写操作.写锁比读锁有更高的优先级.</p>
+<p>行级锁: InnoDB和[XtraDB][1],行级锁只在存储引擎实现</p>
+<p>事务: ACID, 原子性,一致性,隔离性(isolation),持久性(durability).</p>
+<p>MySQL默认的[事务隔离级别][2]为可重复读(REPEATABLE READ)</p>
+<p>死锁: 不同引擎处理方式不同.InnoDB 处理死锁方法,将持有最少行级排他锁的事务进行回滚</p>
+<p>多版本并发控制(MVCC): 如InnoDB, 通过在每行记录后面保存两个列存储创建和删除时的系统版本号.</p>
+<h1 id="3-存储引擎"><a href="#3-存储引擎" class="headerlink" title="3. 存储引擎"></a>3. 存储引擎</h1><p>创建表时,MySQL会在数据库子目录下创建一个同名.frm文件保存表的定义</p>
+<p>InnoDB: 处理大量的短期事务, 通过间隙锁锁定查询涉及的行和索引中的间隙进行锁定,防止幻影行的插入, 基于聚簇索引创建表.通过一些机制和工具支持真正的热备份.**一般优先考虑InnoDB存储引擎**</p>
+<p>MyISAM: 包括全文索引,压缩,空间函数,延迟更新索引键等特性,不支持事务和行级锁,崩溃后无法安全恢复.对于只读数据,表小可以忍受修复操作可以使用该引擎.</p>
+<p>如果要使用全文索引,建议用InnoDB加上Sphinx组合替换MyISAM</p>
+<p>使用引擎考虑:事务,备份,崩溃恢复,特有特性</p>
+<p>日志型应用: MyISAM 或者Archive,因为开销低插入速度快更为适合</p>
+<p>对于大数据量需要建立数据仓库,[Infobright][3]和[TokuDB][4]是比较好的解决方案</p>
+<p>[1]: <a href="https://mariadb.com/kb/zh-cn/about-xtradb/" target="_blank" rel="noopener">https://mariadb.com/kb/zh-cn/about-xtradb/</a></p>
+<p>[2]: <a href="https://zh.wikipedia.org/wiki/事務隔離" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/事務隔離</a></p>
+<p>[3]: <a href="http://www.csdn.net/article/2014-08-26/2821379" target="_blank" rel="noopener">http://www.csdn.net/article/2014-08-26/2821379</a></p>
+<p>[4]: <a href="http://blog.jobbole.com/109104/" target="_blank" rel="noopener">http://blog.jobbole.com/109104/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-1/" data-id="cjj1124zh0000gvzly5gc8n37" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/30/mysql-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          高性能MySQL阅读笔记二
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/30/mysql-6/">高性能MySQL阅读笔记六</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-5/">高性能MySQL阅读笔记五</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-4/">高性能MySQL阅读笔记四</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-3/">高性能MySQL阅读笔记三</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-2/">高性能MySQL阅读笔记二</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Whales<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

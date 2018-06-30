@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>高性能MySQL阅读笔记六 | 沧海一粟</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 可扩展的Mysql可扩展性: 通过增加资源提升容量的能力 1.1 考虑负载容量可以简单地认为是处理负载的能力,考虑负载可从以下几个角度  数据量: 很多应用从不物理删除任何数据,应用所积累的数据量是可扩展的普遍挑战 用户量: 更多的用户意味着更多的事务,更多的复杂查询 用户活跃度 相关数据集的大小  1.2 规划可扩展性 估算需要承担的负载到底有多少 大致正确地估计日程表 应用的功能完成多少">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能MySQL阅读笔记六">
+<meta property="og:url" content="https://whales2018.github.io/2018/06/30/mysql-6/index.html">
+<meta property="og:site_name" content="沧海一粟">
+<meta property="og:description" content="1. 可扩展的Mysql可扩展性: 通过增加资源提升容量的能力 1.1 考虑负载容量可以简单地认为是处理负载的能力,考虑负载可从以下几个角度  数据量: 很多应用从不物理删除任何数据,应用所积累的数据量是可扩展的普遍挑战 用户量: 更多的用户意味着更多的事务,更多的复杂查询 用户活跃度 相关数据集的大小  1.2 规划可扩展性 估算需要承担的负载到底有多少 大致正确地估计日程表 应用的功能完成多少">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-06-30T06:22:26.509Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高性能MySQL阅读笔记六">
+<meta name="twitter:description" content="1. 可扩展的Mysql可扩展性: 通过增加资源提升容量的能力 1.1 考虑负载容量可以简单地认为是处理负载的能力,考虑负载可从以下几个角度  数据量: 很多应用从不物理删除任何数据,应用所积累的数据量是可扩展的普遍挑战 用户量: 更多的用户意味着更多的事务,更多的复杂查询 用户活跃度 相关数据集的大小  1.2 规划可扩展性 估算需要承担的负载到底有多少 大致正确地估计日程表 应用的功能完成多少">
+  
+    <link rel="alternate" href="/atom.xml" title="沧海一粟" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">沧海一粟</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://whales2018.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-6/" class="article-date">
+  <time datetime="2018-06-30T06:21:03.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      高性能MySQL阅读笔记六
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-可扩展的Mysql"><a href="#1-可扩展的Mysql" class="headerlink" title="1. 可扩展的Mysql"></a>1. 可扩展的Mysql</h1><p>可扩展性: 通过增加资源提升容量的能力</p>
+<h2 id="1-1-考虑负载"><a href="#1-1-考虑负载" class="headerlink" title="1.1 考虑负载"></a>1.1 考虑负载</h2><p>容量可以简单地认为是处理负载的能力,考虑负载可从以下几个角度</p>
+<ol>
+<li>数据量: 很多应用从不物理删除任何数据,应用所积累的数据量是可扩展的普遍挑战</li>
+<li>用户量: 更多的用户意味着更多的事务,更多的复杂查询</li>
+<li>用户活跃度</li>
+<li>相关数据集的大小</li>
+</ol>
+<h2 id="1-2-规划可扩展性"><a href="#1-2-规划可扩展性" class="headerlink" title="1.2 规划可扩展性"></a>1.2 规划可扩展性</h2><ol>
+<li>估算需要承担的负载到底有多少</li>
+<li>大致正确地估计日程表</li>
+<li>应用的功能完成多少</li>
+<li>预期的最大负载是多少</li>
+<li>如果依赖系统的每个部分分担负载,某个部分失效时会发生什么</li>
+</ol>
+<h2 id="1-3-向上扩展-垂直扩展"><a href="#1-3-向上扩展-垂直扩展" class="headerlink" title="1.3 向上扩展(垂直扩展)"></a>1.3 向上扩展(垂直扩展)</h2><ol>
+<li>单台服务器增加各种高性能硬件</li>
+<li>烧钱有效的方法</li>
+<li>不应该无限制向上扩展</li>
+</ol>
+<h2 id="1-4-向外扩展"><a href="#1-4-向外扩展" class="headerlink" title="1.4 向外扩展"></a>1.4 向外扩展</h2><ol>
+<li>策略: 复制,拆分,数据分片</li>
+<li>按功能拆分: 常见做法,根据功能将应用部署在不同服务器,并使用专用的数据库服务器</li>
+</ol>
+<h3 id="1-4-1-数据分片"><a href="#1-4-1-数据分片" class="headerlink" title="1.4.1 数据分片"></a>1.4.1 数据分片</h3><p>数据分片是目前扩展大型MySQL最通用且最成功的方法</p>
+<ol>
+<li>应用设计初期考虑到,后期实现就比较容易,否则很难将应用从单一数据存储转换为分片架构</li>
+<li>文中举例: 通过用户id来对文章和评论进行分片,而将用户的信息保留在单个节点上</li>
+<li>数据库访问抽象层,降低应用和分片数据之间通信的复杂度</li>
+<li>如非必要尽量不分片</li>
+<li>数据分片最大的挑战就是查找和获取数据</li>
+<li>类似于表分区,选择分区键和数据分片方式是关键,具体请细查</li>
+</ol>
+<h2 id="1-5-通过集群扩展"><a href="#1-5-通过集群扩展" class="headerlink" title="1.5 通过集群扩展"></a>1.5 通过集群扩展</h2><ol>
+<li>可以使用集群或数据库分布式技术根据场景适当解决一些问题</li>
+<li>书中提到技术: NDB Cluster, Clustrix等技术</li>
+</ol>
+<h2 id="1-6-向内扩展"><a href="#1-6-向内扩展" class="headerlink" title="1.6 向内扩展"></a>1.6 向内扩展</h2><ol>
+<li>对不再需要的数据进行归档和清理</li>
+<li>需要考虑对应用的影响</li>
+<li>需要考虑数据逻辑的一致性,例如清理A表历史数据时需要考虑所有关联数据的处理</li>
+<li>冷热数据分离</li>
+</ol>
+<h2 id="1-7-负载均衡"><a href="#1-7-负载均衡" class="headerlink" title="1.7 负载均衡"></a>1.7 负载均衡</h2><h3 id="1-7-1-目的"><a href="#1-7-1-目的" class="headerlink" title="1.7.1 目的"></a>1.7.1 目的</h3><ol>
+<li>可扩展性: 如读写分离时从备库读数据</li>
+<li>高效性: 把更多工作分配给更好的机器</li>
+<li>可用性: 使用时刻保持可用的服务器</li>
+<li>透明性: 客户端无需知道服务器</li>
+<li>一致性: 如果应用是有状态的,负载均衡器就应该将相关的查询指向同一个服务器</li>
+</ol>
+<h3 id="1-7-2-直接连接"><a href="#1-7-2-直接连接" class="headerlink" title="1.7.2 直接连接"></a>1.7.2 直接连接</h3><h4 id="1-7-2-1-复制上的读写分离"><a href="#1-7-2-1-复制上的读写分离" class="headerlink" title="1.7.2.1 复制上的读写分离"></a>1.7.2.1 复制上的读写分离</h4><ol>
+<li>基于查询分离: 将不能容忍脏数据的查询分配到主库,其他分配到备库</li>
+<li>基于脏数据分离: 让应用检查复制延迟,许多报表类应用使用这个策略</li>
+<li>基于会话分离: 可以在会话层做一个标记,如果用户修改了数据,则一段时间内总是指向主库</li>
+<li>基于版本分离: 给用户的操作增加版本号,检查版本号决定从主库还是备库读取数据</li>
+</ol>
+<h4 id="1-7-2-3-修改DNS名"><a href="#1-7-2-3-修改DNS名" class="headerlink" title="1.7.2.3 修改DNS名"></a>1.7.2.3 修改DNS名</h4><ol>
+<li>通过变更DNS名指定的服务器实现</li>
+<li>缺点很多,不建议</li>
+</ol>
+<h4 id="1-7-2-4-转移IP地址"><a href="#1-7-2-4-转移IP地址" class="headerlink" title="1.7.2.4 转移IP地址"></a>1.7.2.4 转移IP地址</h4><ol>
+<li>在服务器之间转移虚拟地址</li>
+<li>给服务器分配固定的ip地址,为每个逻辑上的服务使用一个虚拟ip地址</li>
+</ol>
+<h3 id="1-7-3-引入中间件"><a href="#1-7-3-引入中间件" class="headerlink" title="1.7.3 引入中间件"></a>1.7.3 引入中间件</h3><ol>
+<li>负载均衡器,如HAproxy</li>
+<li>负载均衡算法: 随机, 轮询,最少连接数,最快响应,哈希,权重</li>
+<li>服务器池中增加或移除服务器: 在配置连接池中的服务器时,要保证有足够多未使用的容量</li>
+</ol>
+<h1 id="2-高可用性"><a href="#2-高可用性" class="headerlink" title="2. 高可用性"></a>2. 高可用性</h1><ol>
+<li>高可用性意味着更少的宕机时间<h2 id="2-1-宕机原因"><a href="#2-1-宕机原因" class="headerlink" title="2.1 宕机原因"></a>2.1 宕机原因</h2></li>
+<li>磁盘空间不足</li>
+<li>糟糕的sql或者服务器bug引起</li>
+<li>糟糕的表和索引设计</li>
+<li>复制问题通常由于主备数据不一致导致</li>
+</ol>
+<h2 id="2-2-高可用性实现"><a href="#2-2-高可用性实现" class="headerlink" title="2.2 高可用性实现"></a>2.2 高可用性实现</h2><ol>
+<li>衡量指标: 平均失效时间(MTBF), 平均恢复时间(MTTR)</li>
+<li>避免问题: 适当的配置,监控和规范</li>
+<li>保证在宕机时能快速恢复,系统制造冗余,具备故障转移能力</li>
+</ol>
+<h3 id="2-2-1-避免单点失效"><a href="#2-2-1-避免单点失效" class="headerlink" title="2.2.1 避免单点失效"></a>2.2.1 避免单点失效</h3><ol>
+<li>通过增加冗余避免</li>
+<li>共享存储或磁盘复制,如果服务器挂了,备用服务器可以挂载相同的文件系统执行需要的恢复操作</li>
+<li>MySQL同步复制</li>
+</ol>
+<h3 id="2-2-2-故障转移和故障恢复"><a href="#2-2-2-故障转移和故障恢复" class="headerlink" title="2.2.2 故障转移和故障恢复"></a>2.2.2 故障转移和故障恢复</h3><ol>
+<li>提升备库或切换角色</li>
+<li>虚拟IP地址或IP接管: 当MySQL实例失效时可以将IP地址转移到另一台MySQL服务器上</li>
+<li>使用中间件解决方案</li>
+</ol>
+<h1 id="3-备份与恢复"><a href="#3-备份与恢复" class="headerlink" title="3. 备份与恢复"></a>3. 备份与恢复</h1><h2 id="3-1-设计MySQL备份方案考虑点"><a href="#3-1-设计MySQL备份方案考虑点" class="headerlink" title="3.1 设计MySQL备份方案考虑点"></a>3.1 设计MySQL备份方案考虑点</h2><ol>
+<li>在线备份还是离线备份</li>
+<li>逻辑备份还是物理备份</li>
+<li>非显著数据: 如二进制日志和InnoDB事务日志</li>
+<li>代码: 存储过程,触发器</li>
+<li>服务器配置和复制配置</li>
+<li>外部配置,管理脚本</li>
+<li>增量备份和差异备份</li>
+<li>存储引擎和数据一致性</li>
+</ol>
+<h2 id="3-2-备份数据方式"><a href="#3-2-备份数据方式" class="headerlink" title="3.2 备份数据方式"></a>3.2 备份数据方式</h2><ol>
+<li>文件系统中或SAN快照中直接复制数据文件</li>
+<li>Percona XtraBackup 做热备份</li>
+</ol>
+<h2 id="3-3-InnoDB崩溃恢复"><a href="#3-3-InnoDB崩溃恢复" class="headerlink" title="3.3 InnoDB崩溃恢复"></a>3.3 InnoDB崩溃恢复</h2><ol>
+<li>二级索引损坏: 使用OPTIMIZE TABLE修复损坏的二级索引,此外可以通过构建一个新表重建受影响的索引</li>
+<li>聚簇索引损坏: innodb_force_recovery导出表</li>
+<li>损坏系统结构: 系统结构包括事务日志等,可能需要做整个数据库的导出和还原,因为InnoDB内部绝大部分的工作可能受影响</li>
+</ol>
+<h1 id="4-MySQL用户工具"><a href="#4-MySQL用户工具" class="headerlink" title="4. MySQL用户工具"></a>4. MySQL用户工具</h1><p>工欲善其事,必先利其器</p>
+<h2 id="4-1-接口工具"><a href="#4-1-接口工具" class="headerlink" title="4.1 接口工具"></a>4.1 接口工具</h2><ol>
+<li>MySQL Workbench: 一站式的工具</li>
+<li>SQLyog: 可视化工具之一</li>
+</ol>
+<h2 id="4-2-命令行工具集"><a href="#4-2-命令行工具集" class="headerlink" title="4.2 命令行工具集"></a>4.2 命令行工具集</h2><ol>
+<li>Percona Toolkit</li>
+<li>MySQL Workbench 工具集</li>
+</ol>
+<h2 id="4-3-SQL实用集"><a href="#4-3-SQL实用集" class="headerlink" title="4.3 SQL实用集"></a>4.3 SQL实用集</h2><ol>
+<li>common_schema</li>
+<li>MySQL Forge</li>
+</ol>
+<h2 id="4-4-监测工具"><a href="#4-4-监测工具" class="headerlink" title="4.4 监测工具"></a>4.4 监测工具</h2><ol>
+<li>Nagios</li>
+<li>Zabbix: 同时支持监控和指标收集的完整系统</li>
+<li>Zenoss: Python写的</li>
+<li>Hyperic HQ: 基于Java</li>
+</ol>
+<h2 id="4-5-Innotop命令行监控"><a href="#4-5-Innotop命令行监控" class="headerlink" title="4.5 Innotop命令行监控"></a>4.5 Innotop命令行监控</h2><p>主要包括以下功能</p>
+<ol>
+<li>事务列表</li>
+<li>当前运行的查询</li>
+<li>当前锁和锁等待列表</li>
+<li>服务器状态和变量汇总信息</li>
+<li>InnoDB内部信息</li>
+<li>复制监控</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjj1125090005gvzl6yrnj8v8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/30/mysql-5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">高性能MySQL阅读笔记五</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/30/mysql-6/">高性能MySQL阅读笔记六</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-5/">高性能MySQL阅读笔记五</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-4/">高性能MySQL阅读笔记四</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-3/">高性能MySQL阅读笔记三</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/30/mysql-2/">高性能MySQL阅读笔记二</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Whales<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
