@@ -327,7 +327,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-4/" data-id="cjscki75z000lp9zlih520i8e" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-4/" data-id="cjscy3mze000q3jzlei2cz4vk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -597,7 +597,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-3/" data-id="cjscki75x000kp9zl8is0sytq" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-3/" data-id="cjscy3mzb000n3jzlawb2bbgs" class="article-share-link">Share</a>
       
       
     </footer>
@@ -721,7 +721,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-2/" data-id="cjscki74p0001p9zljt5575zd" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-2/" data-id="cjscy3myj00023jzlvsvuz6wc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -782,7 +782,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-1/" data-id="cjscki75h0008p9zlpwfi0mmc" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-1/" data-id="cjscy3myn00043jzlk2a1hc2d" class="article-share-link">Share</a>
       
       
     </footer>
@@ -792,14 +792,14 @@
 
 
   
-    <article id="post-http-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-opsystem-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/06/18/http-1/" class="article-date">
+    <a href="/2018/06/18/opsystem-1/" class="article-date">
   <time datetime="2018-06-18T03:21:11.000Z" itemprop="datePublished">2018-06-18</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/《HTTP权威指南》阅读笔记/">《HTTP权威指南》阅读笔记</a>
+    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记一/">《现代操作系统》阅读笔记一</a>
   </div>
 
   </div>
@@ -810,7 +810,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/18/http-1/">《HTTP权威指南》阅读笔记一</a>
+      <a class="article-title" href="/2018/06/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
     </h1>
   
 
@@ -818,161 +818,111 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-常见概念"><a href="#1-常见概念" class="headerlink" title="1. 常见概念"></a>1. 常见概念</h1><ol>
-<li><p>MIME：Multipurpose Internet Mail Extension，电子邮件系统和HTTP用于描述标记多媒体内容</p>
-</li>
-<li><p>URI：统一资源标识符，可以有URL和URN两种形式</p>
-</li>
-<li><p>URL：协议+服务器地址+资源路径</p>
-</li>
-<li><p>事务：通过HTTP报文格式化数据块完成一次请求和响应</p>
-</li>
+        <h1 id="一-进程与线程"><a href="#一-进程与线程" class="headerlink" title="一. 进程与线程"></a>一. 进程与线程</h1><h2 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h2><ol>
+<li>系统初始化</li>
+<li>正在进行的进程调用进程创建系统调用</li>
+<li>用户请求</li>
+<li>批处理作业初始化</li>
 </ol>
-<h1 id="2-URL与资源"><a href="#2-URL与资源" class="headerlink" title="2. URL与资源"></a>2. URL与资源</h1><ol>
-<li><p>大多数URL方案的语法建立在<scheme>://<user>:<password>@<host>:<port>/<path></path>;<params>?<query>#<frag></frag></query></params></port></host></password></user></scheme></p>
-</li>
-<li><p>设计URL使其可以通过任意因特网协议安全传输是很重要的，有些协议如SMTP的传输方法只能使用相对较小，通用的安全字母表中的字符</p>
-</li>
-<li><p>URL中包含如中文等非安全字母表二进制数据或字符时，则需要进行转义</p>
-</li>
-<li><p>转义：百分号+字符编码的十六进制数</p>
-</li>
+<h2 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h2><ol>
+<li>正常退出</li>
+<li>出错退出，自愿</li>
+<li>严重错误，非自愿</li>
+<li>被其他进程杀死</li>
 </ol>
-<h1 id="3-HTTP报文"><a href="#3-HTTP报文" class="headerlink" title="3. HTTP报文"></a>3. HTTP报文</h1><ol>
-<li>组成：对报文进行描述的起始行start line \r\n作为行结束，包含属性的首部块header，包含数据的body</li>
+<h2 id="进程层次结构"><a href="#进程层次结构" class="headerlink" title="进程层次结构"></a>进程层次结构</h2><ol>
+<li>系统启动初始化由init特殊进程运行</li>
 </ol>
-<h2 id="常见HTTP方法"><a href="#常见HTTP方法" class="headerlink" title="常见HTTP方法"></a>常见HTTP方法</h2><ol>
-<li>GET，HEAD，POST，PUT，DELETE，TRACE(对可能经过代理服务器传送的报文进行追踪，服务响应会带上实际收到的请求原文)，OPTIONS(决定可以在服务器上执行哪些方法)</li>
+<h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><ol>
+<li>运行，就绪，阻塞</li>
+<li>进程中断处理，启动，停止由操作系统进程调度程序控制</li>
 </ol>
-<h2 id="已定义状态码"><a href="#已定义状态码" class="headerlink" title="已定义状态码"></a>已定义状态码</h2><ol>
-<li>100-101：信息提示</li>
-<li>200-206：成功</li>
-<li>300-305：重定向</li>
-<li>400-415：客户端错误</li>
-<li>500-505：服务端错误</li>
+<h2 id="进程的实现"><a href="#进程的实现" class="headerlink" title="进程的实现"></a>进程的实现</h2><ol>
+<li>操作系统维护一个进程表，每个进程占用一个进程表项（进程控制块PCB）</li>
+<li>PCB：包含了进程状态的重要信息，程序计数器，堆栈指针，内存分配状况，打开的文件，进程由运行状态转换到就绪或阻塞需要保存的信息等</li>
+<li>进程切换：保存寄存器值，设置新的堆栈，C中断服务程序运行，调度程序决定下一个进程运行，开始运行新的当前进程</li>
+<li>CPU利用率：进程等待IO操作时间与其停留在内存中时间的比对P，内存中同时有N个进程，则利用率=1-P的N次方</li>
 </ol>
-<h1 id="4-连接管理"><a href="#4-连接管理" class="headerlink" title="4. 连接管理"></a>4. 连接管理</h1><ol>
-<li>连接过程：解析主机名，dns查询ip，获取端口号，发起连接，发送请求报文，返回响应报文，关闭连接</li>
-<li>HTTP事务时延：DNS查询，连接，请求，处理，响应，关闭</li>
-<li>性能聚焦区域：TCP连接，TCP慢启动拥塞控制，数据聚集的Nagle算法+TCP延迟确认，TIME_WAIT时延和端口耗尽</li>
-<li>并行连接：由客户端的网络带宽限制并行连接数</li>
-<li>持久连接：HTTP/1.1及HTTP/1.0的增强版本 允许设备在事务处理结束时将连接保持打开状态，省去建立连接和慢启动的阶段，1.0可以通过Connection：keep-alive</li>
-<li>管道化连接：HTTP/1.1允许在持久连接上使用请求管道，响应到达前将请求放入队列，不能传送非幂等请求如POST</li>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><ol>
+<li>传统：每个进程有一个地址空间和一个控制线程</li>
+<li>对于大量IO操作，多线程允许这些活动重叠进行</li>
+<li>所有线程都有完全一样的地址空间</li>
+<li>线程共享进程内容：地址空间，全局变量，打开文件，子进程，信号与信号处理程序</li>
+<li>线程独有：程序计数器，寄存器，堆栈，状态</li>
+<li>线程创建的线程与当前线程平等，线程可以阻塞等待其他线程返回，线程也可以主动让出CPU</li>
 </ol>
-<h1 id="5-Web服务器"><a href="#5-Web服务器" class="headerlink" title="5. Web服务器"></a>5. Web服务器</h1><ol>
-<li>重定向使用场景：永久删除或临时删除的资源，负载均衡，服务器关联，规范目录名称</li>
-<li>对非持久连接，发送完响应关闭服务端连接；对持久连接，需要正确计算content-length首部</li>
+<h2 id="线程的实现"><a href="#线程的实现" class="headerlink" title="线程的实现"></a>线程的实现</h2><h3 id="用户级线程"><a href="#用户级线程" class="headerlink" title="用户级线程"></a>用户级线程</h3><ol>
+<li>线程的调度不需要内核，内核不知道多线程的存在，由用户程序自己控制内核切换，切换快</li>
+<li>可以在不支持线程的操作系统实现，允许进程定制调度算法</li>
+<li>同一个进程只能同时有一个线程在运行，如果有一个线程阻塞于系统调用，则整个进程阻塞</li>
+<li>执行系统调用时将导致所属进程被中断，而内核级线程只导致线程中断</li>
 </ol>
-<h1 id="6-代理"><a href="#6-代理" class="headerlink" title="6. 代理"></a>6. 代理</h1><ol>
-<li>代理可以监视流量并对其进行修改</li>
-<li>应用场景：安全防火墙，Web缓存，反向代理，内容路由器，转码，匿名</li>
-<li>via： 列出了与报文途径的每个中间节点</li>
+<h3 id="内核级线程"><a href="#内核级线程" class="headerlink" title="内核级线程"></a>内核级线程</h3><ol>
+<li>多核机器，一个进程的多个线程可以同时处理</li>
+<li>线程用户态运行内核态调度切换</li>
 </ol>
-<h1 id="7-缓存"><a href="#7-缓存" class="headerlink" title="7. 缓存"></a>7. 缓存</h1><h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ol>
-<li>冗余的数据传输：服务器多次传输同一份文档，增大负担，消耗带宽</li>
-<li>带宽瓶颈：客户端会以路径上最慢的网速访问服务器，如果客户端能在局域网获取一份副本，将大大提升性能</li>
-<li>瞬间拥塞：使web服务器过载</li>
-<li>距离时延</li>
+<h3 id="混合线程模型"><a href="#混合线程模型" class="headerlink" title="混合线程模型"></a>混合线程模型</h3><ol>
+<li>用户线程由运行时库调度器管理，内核线程由操作系统调度器管理</li>
+<li>一对一，多对一，多对多</li>
 </ol>
-<h2 id="缓存再验证"><a href="#缓存再验证" class="headerlink" title="缓存再验证"></a>缓存再验证</h2><ol>
-<li>大部分缓存只有在客户端发起请求，且副本时间需要再次检测才会进行再验证</li>
-<li>向原始服务器发送小请求，如果返回304，则缓存继续有效</li>
-<li>首部：if-modified-since，只有在缓存了对象的副本后又对其进行修改，才发送此对象</li>
-<li>商业代理缓存会在via首部附加额外信息以描述命中情况</li>
+<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>IPC问题</p>
+<ol>
+<li>进程传递信息给另一个</li>
+<li>多个进程在关键活动不会出现交叉</li>
+<li>正确的顺序</li>
 </ol>
-<h2 id="HTTP缓存体系"><a href="#HTTP缓存体系" class="headerlink" title="HTTP缓存体系"></a>HTTP缓存体系</h2><ol>
-<li>缓存存储策略：决定http响应内容是否可缓存到客户端，Cache-Control</li>
-<li>缓存过期策略：决定客户端是否可以直接使用缓存数据，Expires</li>
-<li>缓存对比策略：将缓存在客户端的数据标识发往服务端，服务端会查看if-modified-since等请求头，对比判断标识是否有效，如果有效则返回304</li>
+<h3 id="通信方法"><a href="#通信方法" class="headerlink" title="通信方法"></a>通信方法</h3><ol>
+<li>共享内存</li>
+<li>管道</li>
+<li>消息队列</li>
+<li>socket</li>
+<li>远程过程调用RPC</li>
 </ol>
-<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><ol>
-<li><a href="https://imweb.io/topic/5795dcb6fb312541492eda8c" target="_blank" rel="noopener">HTTP缓存控制小结</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/24467558" target="_blank" rel="noopener">彻底弄懂 Http 缓存机制</a></li>
+<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><ol>
+<li>对进程共享资源的程序片段称作临界区</li>
+<li>避免竞争条件：任何两个进程不能同时处于临界区，不对CPU作假设，临界区外运行的进程不能阻塞其他进程，不能使进程无限等待进入临界区</li>
 </ol>
-<h1 id="8-网关，隧道及中继"><a href="#8-网关，隧道及中继" class="headerlink" title="8. 网关，隧道及中继"></a>8. 网关，隧道及中继</h1><h2 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h2><p>如应用程序服务器，早期的CGI通用网关接口</p>
-<h2 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h2><ol>
-<li>web隧道允许用户通过http连接发送非http流量</li>
-<li>使用http方法CONNECT建立http隧道</li>
-<li>SSL隧道：最初的web隧道是为了通过防火墙传输SSL流量。发送CONNECT请求，返回认证请求，发送带有认证信息CONNECT请求，建立连接</li>
+<h3 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a>进程同步</h3><ol>
+<li>互斥锁+条件变量</li>
+<li>信号量pv操作</li>
 </ol>
-<h2 id="中继"><a href="#中继" class="headerlink" title="中继"></a>中继</h2><ol>
-<li>盲转发</li>
-<li>无法处理Connection：keep-alive</li>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><ol>
+<li>衡量调度：吞吐量系统每小时完成的作业数，周转时间批处理到结束的平均统计时间，CPU利用率</li>
 </ol>
-<h1 id="9-爬虫"><a href="#9-爬虫" class="headerlink" title="9. 爬虫"></a>9. 爬虫</h1><ol>
-<li>链接提取及相对链接的标准化</li>
-<li>避免环路的出现</li>
-<li>广度优先</li>
-<li>节流</li>
-<li>内容指纹</li>
+<h1 id="二、存储管理"><a href="#二、存储管理" class="headerlink" title="二、存储管理"></a>二、存储管理</h1><h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ol>
+<li>地址空间：一个进程可用于寻址内存的一套地址集合</li>
+<li>每个进程的地址空间映射到物理内存的不同部分</li>
+<li>程序装载到内存中连续地址。程序的起始物理地址装载到基址寄存器，程序的长度装载到界限寄存器。进程寄存器相关值由内核维护</li>
 </ol>
-<h1 id="10-客户端识别与cookie机制"><a href="#10-客户端识别与cookie机制" class="headerlink" title="10. 客户端识别与cookie机制"></a>10. 客户端识别与cookie机制</h1><h2 id="用户识别机制"><a href="#用户识别机制" class="headerlink" title="用户识别机制"></a>用户识别机制</h2><ol>
-<li>承载用户信息的HTTP首部：user-agent，cookie，referer，x-forward–for等</li>
-<li>客户端IP地址：并不能精确识别客户</li>
-<li>用户登录：通过www-authenticate，authorization首部</li>
-<li>cookie</li>
+<h2 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h2><ol>
+<li>进程完整调入内存运行一段时间，存回磁盘</li>
+<li>被唤醒时重新装载到内存，由基址寄存器和界限寄存器重新映射物理内存</li>
 </ol>
-<h1 id="11-基本认证机制"><a href="#11-基本认证机制" class="headerlink" title="11. 基本认证机制"></a>11. 基本认证机制</h1><ol>
-<li>实际使用并不安全，用户名和密码都是以明文形式传送，安全使用的唯一方式就是结合SSL</li>
+<h2 id="空闲内存管理"><a href="#空闲内存管理" class="headerlink" title="空闲内存管理"></a>空闲内存管理</h2><ol>
+<li>使用位图：每个分配单元对应1位，0表示空闲</li>
+<li>使用链表：每个节点代表一块内存，便于交换</li>
 </ol>
-<h1 id="12-摘要认证"><a href="#12-摘要认证" class="headerlink" title="12. 摘要认证"></a>12. 摘要认证</h1><ol>
-<li>用摘要保护密码，不通过网络发送密码</li>
-<li>单向摘要，MD5输出的128位摘要被写成32个16进制字符</li>
-<li>用随机数防止重放攻击，服务器质询时返回给客户端一个随机数，客户端在计算摘要之前要加上这个随机数</li>
+<h2 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h2><p>每个程序有自己的地址空间，被分割成多个快，即页面，每一页有连续的地址范围。这些页被映射到物理内存，不一定需要在内存中才能运行，<br>当程序引用到一部分不在物理内存中的地址空间时，操作系统负责将缺失的部分装入物理内存并重新执行失败指令。当程序等待它的一部分读入内存时，可以让出CPU</p>
+<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><ol>
+<li>虚拟地址：没有虚拟内存时，系统直接将虚拟地址送到内存总线。使用虚拟内存，则送到内存管理单元MMU映射为物理地址</li>
+<li>页面：虚拟地址空间按照固定大小划分为固定大小的页面</li>
+<li>页框：物理内存对应页面的单元</li>
+<li>页面找无法映射物理内存时，CPU陷入缺页中断page fault，操作系统选择很少使用的页框，将内容写入磁盘，随后将页面对应的内容读入到内存，修改映射关系，重新执行指令</li>
+<li>MMU页表：虚拟地址分成虚拟页号和偏移量，虚拟页号作页表索引，由页表项找到页框号</li>
+<li>引入TLB快表加快虚拟地址到物理地址的转换</li>
+<li>引入多级页表，解决虚拟地址空间巨大的问题</li>
+<li>页面置换算法：最近未使用页面置换算法，先进先出等</li>
+<li>页面大小：小页面减少内存占用，但页表太大，磁盘与内存传输是按页进行，进程切换页表装入硬件寄存器也会变慢。大页面则容易产生更大碎片，浪费内存</li>
 </ol>
-<h1 id="13-安全HTTP"><a href="#13-安全HTTP" class="headerlink" title="13. 安全HTTP"></a>13. 安全HTTP</h1><ol>
-<li>对称秘钥加密：编码和解码使用相同的秘钥，流行算法：DES，RC2，RC4</li>
-<li>公开秘钥加密：使用非对称秘钥，只有接收端可以用私钥解密，RSA算法</li>
-<li>公开秘钥加密算法的计算可能会很慢，对称加密更快</li>
-<li>两个节点间通过公开秘钥加密建立安全通信，再用安全通道产生发送临时随机对称秘钥</li>
-<li>数字签名：附加在报文上的特殊加密校验码，可以证明是作者编写了这条报文，防止报文被篡改</li>
-<li>数字证书：对象，过期时间，发布者，公钥，数字签名等，常见标准格式X.509 v3</li>
-<li>浏览器收到服务器证书后，会对签名颁发机构进行检查</li>
-<li>SSL握手：交换协议版本号，选择一个两端都了解的密码，对两端的身份进行认证，生成临时会话秘钥。</li>
-<li>服务器可以要求客户端使用客户端证书，常见于组织机构内网</li>
-<li>站点证书有效性：日期检测，签名颁发者可信度检测，签名检测，站点身份检测检查证书域名与访问站点域名是否一致</li>
-<li>OpenSSL：SSL和TLS常见的开源实现，创建SSL本地上下文，建立443TCP连接，将SSL层附加到TCP连接，SSL握手</li>
-<li>HTTPS SSL隧道协议：http通过CONNECT方法告诉代理，建立一条直接到服务端的连接，以隧道协议传输数据</li>
-</ol>
-<h1 id="14-实体和编码"><a href="#14-实体和编码" class="headerlink" title="14. 实体和编码"></a>14. 实体和编码</h1><ol>
-<li>content-length：检测报文截尾，这对缓存服务器尤其重要；对于持久连接，客户端需要直到报文在哪里结束</li>
-<li>内容编码：如果主体进行编码，content-length说明的就是编码后的长度；编码后，增加content-encoding首部用户客户端解码；客户端通过accept-encoding告知服务端可以接受的编码方式</li>
-<li>实体摘要：发送方在生成初始主体时生成一个数据校验和，这样接收方就可以通过检查这个校验和捕获所有意外，相关首部content-md5</li>
-<li>传输编码：改变报文数据在网络中的传输方式，解决可靠传输存在的问题：未知尺寸，用传输编码发送数据，用特别的结束脚注表明数据结束；安全性（被SSL取代），扰乱报文内容</li>
-<li>Transfer-Encoding：传输编码类型，TE：告诉服务器可以使用哪些传输编码扩展</li>
-<li>分块编码：把报文分割为若干个小块紧挨着发送。非持久连接，客户端读取直到服务端关闭连接。持久连接，说明每块大小，最后用0块作为主体结束的信号</li>
-<li>传输编码规则：传输编码集合中要包含分块；必须最后一个作用于报文主体；不能多次作用到一个报文主体上；</li>
-<li>范围请求：允许客户端只请求文档的一部分，在点对点文件共享客户端应用广泛</li>
-<li>差异编码：客户端可以使用A-IM首部说明可以接受的实例操控类型，Delta-base用于计算差异的基线文档Etag，支持差异编码的服务器必须保持页面随时间变化的多个版本</li>
-</ol>
-<h1 id="15-国际化"><a href="#15-国际化" class="headerlink" title="15. 国际化"></a>15. 国际化</h1><ol>
-<li>charset参数和content-language：告知客户端文档的字母表和语言</li>
-<li>accept-language和accept-charset：告知服务端支持的字母表和语言及其优先顺序</li>
-</ol>
-<h1 id="16-内容协商与转码"><a href="#16-内容协商与转码" class="headerlink" title="16. 内容协商与转码"></a>16. 内容协商与转码</h1><ol>
-<li>Vary：响应首部列出客户端请求首部，服务端可用这些首部选择文档</li>
-<li>转码：格式转换，信息综合，内容注入</li>
-</ol>
-<h1 id="17-内容发布与分发"><a href="#17-内容发布与分发" class="headerlink" title="17. 内容发布与分发"></a>17. 内容发布与分发</h1><ol>
-<li>CDN：内容分发网络，节点可以是web服务器，反向代理，或缓存</li>
-</ol>
-<h1 id="18-重定向与负载均衡"><a href="#18-重定向与负载均衡" class="headerlink" title="18. 重定向与负载均衡"></a>18. 重定向与负载均衡</h1><ol>
-<li>HTTP重定向：增加时延</li>
-<li>DNS重定向：返回多个ip选中的ip，缺点时DNS会缓存</li>
-<li>任播寻址：地理上分散的web服务器拥有相同的ip地址，将地址广告给骨干网路由，则客户端的请求将通过最短路径路由给最近的服务器</li>
-<li>IP MAC转发：交换机将分组转发到指定MAC地址</li>
-<li>IP地址转发：修改目的IP地址，即NAT网络地址交换</li>
-<li>代理自动配置协议PAC：配置url使用代理</li>
-</ol>
-<h1 id="19-日志记录"><a href="#19-日志记录" class="headerlink" title="19. 日志记录"></a>19. 日志记录</h1><ol>
-<li>常用日志格式：参考nginx access.log</li>
-<li>对重要的页面进行缓存清除</li>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><ol>
+<li>静态链接：将被调用函数的库程序全部装载生成二进制可执行文件，耗空间，每次都需要重新编译</li>
+<li>动态链接：加载了一小段能够在运行时绑定被调用函数的存根例程，在第一次被调用时被装载</li>
 </ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/18/http-1/" data-id="cjscki75f0006p9zllrds1jep" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/18/opsystem-1/" data-id="cjscy3myp00053jzlivfm5rb1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -997,7 +947,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx文档笔记/">Nginx文档笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python源码学习/">Python源码学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis文档阅读笔记/">Redis文档阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《HTTP权威指南》阅读笔记/">《HTTP权威指南》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《高性能MySQL》阅读笔记/">《高性能MySQL》阅读笔记</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx文档笔记/">Nginx文档笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python源码学习/">Python源码学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis文档阅读笔记/">Redis文档阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《HTTP权威指南》阅读笔记/">《HTTP权威指南》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《现代操作系统》阅读笔记一/">《现代操作系统》阅读笔记一</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《高性能MySQL》阅读笔记/">《高性能MySQL》阅读笔记</a></li></ul>
     </div>
   </div>
 
