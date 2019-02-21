@@ -58,6 +58,165 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-redis-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/redis-2/" class="article-date">
+  <time datetime="2018-06-30T06:47:41.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis文档阅读笔记/">Redis文档阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/redis-2/">Redis文档阅读笔记二</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-Redis-Mass-Insertion"><a href="#1-Redis-Mass-Insertion" class="headerlink" title="1. Redis Mass Insertion"></a>1. Redis Mass Insertion</h1><ol>
+<li>有时候需要将原先存有的大量数据迁移到新的redis实例,redis提供一些方案可以让这个过程更快</li>
+<li>通过redis-cli一个一个操作太慢</li>
+<li>通过pipeline操作,又会阻塞服务器</li>
+<li>大数据量插入时,先按官网提到的协议生成对应格式的文本文件,然后使用redis-cli的管道模式批量导入</li>
+</ol>
+<h1 id="2-Partitioning"><a href="#2-Partitioning" class="headerlink" title="2. Partitioning"></a>2. Partitioning</h1><ol>
+<li>将数据分布到不同的redis实例</li>
+</ol>
+<h2 id="2-1-分片策略"><a href="#2-1-分片策略" class="headerlink" title="2.1 分片策略"></a>2.1 分片策略</h2><ol>
+<li>范围分片: 例如根据用户id的区间决定数据划分到哪个实例</li>
+<li>hash分片: 先使用哈希函数求得哈希值,再通过取模根据结果例如介于0-3之间决定数据存储在哪个实例.少数客户端在这基础上实现了连续哈希</li>
+<li>客户端分片: 在客户端就决定好读写的实例</li>
+<li>代理分片: 客户端发送请求到代理,由代理决定实际的redis实例并返回响应给客户端,例如Twemproxy就应用这种模式</li>
+<li>查询路由: 客户端发送请求到随机的一个redis实例,redis再转发请求到正确的节点.Redis Cluster 使用了这种模式,不同的是将客户端的连接重定向到正确的redis实例上而不是直接转发.</li>
+</ol>
+<h2 id="2-2-分片缺点"><a href="#2-2-分片缺点" class="headerlink" title="2.2 分片缺点"></a>2.2 分片缺点</h2><ol>
+<li>分片后,不能直接对多个key一次操作</li>
+<li>事务不能对多个key操作</li>
+<li>像有序集合数据集被包含在一个大key中无法对内部key进行分片</li>
+<li>增加操作复杂度,例如备份数据,需要整合各个实例的持久化文件</li>
+<li>增加或减少容量比较复杂,Redis Cluster会重新平衡数据,当增加或者移除节点时.而使用客户端或代理分片方式则难以做到,Pre-sharding技术通过迁移实例的方式实现</li>
+</ol>
+<h1 id="3-Distributed-locks"><a href="#3-Distributed-locks" class="headerlink" title="3. Distributed locks"></a>3. Distributed locks</h1><ol>
+<li>已经有多种库实现了分布式redis锁管理,具体<a href="https://redis.io/topics/distlock" target="_blank" rel="noopener">https://redis.io/topics/distlock</a><h2 id="3-1-安全性和活跃度保证"><a href="#3-1-安全性和活跃度保证" class="headerlink" title="3.1 安全性和活跃度保证"></a>3.1 安全性和活跃度保证</h2></li>
+<li>安全性: 互斥,同一个时刻只能有一个客户端拥有锁</li>
+<li>死锁的释放: 例如当客户端锁住资源发生崩溃而其他客户端获取锁时</li>
+<li>故障容错: 只要大部分redis节点存活,客户端就能进行正常的获取释放锁</li>
+</ol>
+<h2 id="3-2-故障转移缺陷例子"><a href="#3-2-故障转移缺陷例子" class="headerlink" title="3.2 故障转移缺陷例子"></a>3.2 故障转移缺陷例子</h2><ol>
+<li>客户端A从主库获取对资源a的锁</li>
+<li>对key的写入发送到从库前,主库崩溃</li>
+<li>从库被提升为主库</li>
+<li>客户端B从主库获取对资源a的锁,此时就违背了安全性原则</li>
+</ol>
+<h2 id="3-3-单实例的正确用法"><a href="#3-3-单实例的正确用法" class="headerlink" title="3.3 单实例的正确用法"></a>3.3 单实例的正确用法</h2><ol>
+<li>使用setnx设置key的值,值必须全局唯一,释放锁时检查key是否存在,值是否与预期一致(第二条解释)</li>
+<li>当客户端获取的锁的key带有过期时间.直接使用del最后释放锁的方式,如果过程中因为一些耗时操作导致key过期,此时其他客户端能够获取到锁,则最后del释放锁会把其他客户端的锁也释放.所以通过设置锁key的值作为签名并在最后使用del释放时做检查</li>
+<li>使锁key的值唯一可以使用rc4根据具体信息生成对应随机字符串</li>
+</ol>
+<h2 id="3-4-Redlock-algorithm"><a href="#3-4-Redlock-algorithm" class="headerlink" title="3.4 Redlock algorithm"></a>3.4 Redlock algorithm</h2><ol>
+<li>假设有5个redis独立主库</li>
+<li>客户端先获取当前的时间毫秒级</li>
+<li>顺序获取5个实例的锁,同样的key名和随机值.</li>
+<li>客户端获取锁时,会设置一个相对锁过期时间很小的超时时间,如果一个实例获取不到锁超时则立刻获取下一个实例的</li>
+<li>顺序获取实例锁时,锁的有效时间会逐渐递减,以最后获取实例的锁有效时间为准,最后每个实例锁的过期时间会是一致</li>
+<li>如果已经存在N/2+1实例的锁key或者锁过期,则放弃获取所有实例的锁的操作.这就可以实现互斥原则,当一个客户端获取成功后,其他客户端可以因为没有获取到足够实例的锁而放弃</li>
+<li>该算法基于假设所有机器和进程的时钟频率一致或相对于锁过期时间产生的误差可以忽略不计</li>
+<li>当获取锁失败时,需要及时释放已获取的部分实例锁,可以避免需要等到key过期才能再次获取锁</li>
+<li>文档对安全性和可用性进行了讨论,具体可以看文档</li>
+<li>提高锁的性能可以通过使用非阻塞模式发送所有命令,再读取检查</li>
+<li>需要设置持久化参数fsync=always避免断电或其他灾难后重启key丢失问题</li>
+<li>算法对于断电或灾难重启后的实例不再参与现有活跃的锁.如果客户端A获取到3/5实例锁,而重启新增了一个实例,此时存在N/2+1实例的锁key条件不存在,其他客户端又可以获取锁了.解决问题的方法时,重启后保持一段不可用时间大于其他锁的过期时间.这里会引入一个问题就是如果多个实例重启,在这个不可用期间,意味着新的获取锁可能失败.</li>
+<li>扩展可以考虑可重入锁的实现</li>
+</ol>
+<h1 id="4-Redis-Keyspace-Notifications"><a href="#4-Redis-Keyspace-Notifications" class="headerlink" title="4. Redis Keyspace Notifications"></a>4. Redis Keyspace Notifications</h1><ol>
+<li>key空间报告通过发布订阅模式实现,默认不开启,可以通过配置文件开启</li>
+<li>接收对key产生实际操作的事件</li>
+</ol>
+<h1 id="5-Secondary-indexing-with-Redis"><a href="#5-Secondary-indexing-with-Redis" class="headerlink" title="5. Secondary indexing with Redis"></a>5. Secondary indexing with Redis</h1><ol>
+<li>redis主要通过key来获取数据,利用redis的一些数据结构可以创建二级索引<h2 id="5-1-有序集合的数值索引"><a href="#5-1-有序集合的数值索引" class="headerlink" title="5.1 有序集合的数值索引"></a>5.1 有序集合的数值索引</h2></li>
+<li>通过有序集合的分值对数据对象进行索引</li>
+<li>常见的操作为,hash结构存储数据对象集合,有序集合对数据对象创建索引</li>
+<li>如果能将多维数据转为线性,则可以利用有序集合对数据进行list索引</li>
+<li>两个分值一样的,则通过C函数memcmp比较</li>
+</ol>
+<h2 id="5-2-字典索引"><a href="#5-2-字典索引" class="headerlink" title="5.2 字典索引"></a>5.2 字典索引</h2><ol>
+<li>ZRANGEBYLEX可以对值进行检索,包括或排除,可以利用在自动补全场景</li>
+<li>可以再给值加上频率条件</li>
+<li>考虑大小写条件时,可以按小写:频率:大写的方式存储值</li>
+<li>使用组合索引,实际就是将多个字段信息组合后存储为有序集合</li>
+<li>只要找到一种规则就可以合理利用ZRANGEBYLEX对数据进行查询</li>
+</ol>
+<h1 id="6-Replication"><a href="#6-Replication" class="headerlink" title="6. Replication"></a>6. Replication</h1><ol>
+<li>主库发送将命令实时发送给从库</li>
+<li>主从连接断开时会重连,并找回连接断开期间主库命令重新同步</li>
+<li>如果找回断开期间部分的命令失败,则执行全部同步,具体由主库发送快照给从库,然后继续保持同步</li>
+<li>从库复制异步进行,从库返回确认也是异步进行</li>
+<li>如果从库落后主库,可以根据配置决定此时从库是否还可以使用旧的数据</li>
+<li>主从复制的一个好处是可以避免主库持久化总是需要将数据写入磁盘,可以通过从库复制实时保存.然而需要注意的是,如果重启主库,主库数据集为空,从库同步复制主库时,从库数据也会被清空</li>
+<li>建议在主从都开启持久化,或者如果不开启持久化则要避免重启机器后自动重启服务</li>
+<li>每一个主库有一个replication id标识,对每个发送给从库的命令会有一个下标.如果从库断连后重连,则会告诉主库最后一个下标,并从该下标开始追赶执行命令同步主库</li>
+<li>从新同步时,主库会开启一个存储进程生成RDB文件(写入磁盘),并缓存新接收的写命令.将RDB文件发送给从库,从库加载RDB文件到内存中,并接收主库缓存的命令然后继续同步</li>
+<li>从库不会对key做expire操作,当主库key过期时执行del操作时发送到从库,从库执行</li>
+<li>当访问从库已过期key时,因为主库的延迟操作,从库根据自身时钟做出判断报告该key不存在</li>
+<li>主库执行Lua脚本时,时间被冻结,所以脚本必须同步到从库执行保证一致效果</li>
+</ol>
+<h1 id="7-Redis-Persistence"><a href="#7-Redis-Persistence" class="headerlink" title="7. Redis Persistence"></a>7. Redis Persistence</h1><h2 id="7-1-模式"><a href="#7-1-模式" class="headerlink" title="7.1 模式"></a>7.1 模式</h2><ol>
+<li>RDB: 通过对某个时间点数据集存储为快照文件</li>
+<li>AOF: 记录每一个写操作,通过重放方式初始化数据</li>
+<li>可以在同一个实例中同时使用这两种模式,重启实例时,AOF模式用于从新初始化数据</li>
+</ol>
+<h2 id="7-2-RDB"><a href="#7-2-RDB" class="headerlink" title="7.2 RDB"></a>7.2 RDB</h2><ol>
+<li>随心所欲对某个时间点的数据进行备份</li>
+<li>适合用于灾难恢复</li>
+<li>通过子进程完成备份,而父进程不用磁盘IO,不影响其他命令的进行</li>
+<li>重启初始化数据更快</li>
+<li>派生子进程,在数据集很大时会比较耗时.频繁备份对性能有一定损耗</li>
+</ol>
+<h2 id="7-3-AOF"><a href="#7-3-AOF" class="headerlink" title="7.3 AOF"></a>7.3 AOF</h2><ol>
+<li>可以多种文件同步策略,每秒记录或每个写命令时记录,持续性更好</li>
+<li>是一个只加文件,无需定位,容易修复</li>
+<li>如果AOF文件太大时,redis会自动生成新的文件并切换到新的文件</li>
+<li>如果不小心执行了FLUSHALL命令,只要还没有新的命令写入,停止实例.并将最后一个命令删除后重启redis就可以了</li>
+</ol>
+<h2 id="7-4-备份数据"><a href="#7-4-备份数据" class="headerlink" title="7.4 备份数据"></a>7.4 备份数据</h2><ol>
+<li>redis会避免RDB和AOF的进程在同一时刻进行</li>
+<li>建议设置定时任务生成每个小时的RDB文件放在一个文件夹和生成每天的RDB文件放在另一个文件夹</li>
+<li>定时任务每次执行,清除比较老的RDB文件</li>
+<li>每天转移RDB文件</li>
+</ol>
+<h1 id="8-Redis-Security"><a href="#8-Redis-Security" class="headerlink" title="8. Redis Security"></a>8. Redis Security</h1><ol>
+<li>网络安全策略,将redis运行在虚拟化的linux实例避免直接暴露,外部无法通过防火墙连接redis,客户端通过环回地址与对应端口通信</li>
+<li>安全模式: 从3.2.0版本开始,如果在配置上允许绑定所有端口,而且外部访问无需密码时会进入安全模式,只有通过环回地址的才能够正常访问,其他的客户端返回错误</li>
+<li>认证功能: 密码应该设置足够长</li>
+<li>数据加密: redis并不支持,不过可以再加一层SSL代理.redis推荐Spiped做对称加密</li>
+<li>设置一些命令不可用</li>
+<li>NoSQL注入: 注意从不可信赖来源获取可能为Lua脚本作为字符串的问题</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjsei11eu000ubfzl97czhhx2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-redis-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/30/redis-1/" class="article-date">
@@ -171,7 +330,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjsehznca00096szlkmdf0njv" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjsei11e8000cbfzl8v5c2k98" class="article-share-link">Share</a>
       
       
     </footer>
@@ -349,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjsehznc600056szl0qu0blks" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjsei11dy0005bfzllkgjsf41" class="article-share-link">Share</a>
       
       
     </footer>
@@ -564,7 +723,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-5/" data-id="cjsehzncy000s6szlfsndfxsh" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-5/" data-id="cjsei11et000tbfzl719fo8wl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -843,277 +1002,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-4/" data-id="cjsehzncz000t6szlqejiw672" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-mysql-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/30/mysql-3/" class="article-date">
-  <time datetime="2018-06-30T05:53:23.000Z" itemprop="datePublished">2018-06-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/《高性能MySQL》阅读笔记/">《高性能MySQL》阅读笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/30/mysql-3/">《高性能MySQL》阅读笔记三</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-schema与数据类型优化"><a href="#1-schema与数据类型优化" class="headerlink" title="1. schema与数据类型优化"></a>1. schema与数据类型优化</h1><h2 id="1-1-数据类型选择"><a href="#1-1-数据类型选择" class="headerlink" title="1.1 数据类型选择"></a>1.1 数据类型选择</h2><p>更小: 选择不超过需求范围的最小类型</p>
-<p>更简单</p>
-<p>避免使用Null: 含有Null列会使索引,索引统计和值更为复杂</p>
-<p>分配空间: 根据实际需要分配.使用内存临时表或操作时会比较糟糕</p>
-<p>特殊类型:书中举例,ip地址应该用无符号整数存储,MySQL提供inet_aton, inet_ntoa方法转换</p>
-<h2 id="1-2-schema-设计陷阱"><a href="#1-2-schema-设计陷阱" class="headerlink" title="1.2 schema 设计陷阱"></a>1.2 schema 设计陷阱</h2><ol>
-<li><p>太多列,存储引擎api需要在服务器层和存储引擎层通过行缓冲格式拷贝数据,然后解码.转换代价依赖于列的数量</p>
-</li>
-<li><p>太多的关联,单个查询最好在12个表以内</p>
-</li>
-<li><p>最好不用枚举enum</p>
-</li>
-<li><p>可以使用其他”空值”替代Null</p>
-</li>
-</ol>
-<h2 id="1-3-范式和反范式"><a href="#1-3-范式和反范式" class="headerlink" title="1.3 范式和反范式"></a>1.3 范式和反范式</h2><ol>
-<li><p>范式化: 每个事实数据只出现一次</p>
-</li>
-<li><p>反范式化: 信息是冗余的</p>
-</li>
-<li><p>第一范式1NF: 关系中的每个属性都不可再分</p>
-</li>
-<li><p>第二范式2NF: 每个表中的非主属性完全依赖于码(例如主键, 可以唯一决定属性集合)</p>
-</li>
-<li><p>第三范式3NF: 消除非主属性之间的依赖关系，只保留非主属性与码的依赖关系</p>
-</li>
-<li><p>范式化优点: 更新操作更快,占用空间更小</p>
-</li>
-<li><p>范式化缺点: 表的关联查询更多</p>
-</li>
-<li><p>混用范式和反范式: 从父表冗余一些数据到子表有利于排序, 缓存衍生值减少子查询计算</p>
-</li>
-</ol>
-<h2 id="1-4-缓存表和汇总表"><a href="#1-4-缓存表和汇总表" class="headerlink" title="1.4 缓存表和汇总表"></a>1.4 缓存表和汇总表</h2><p>业务上有时需要一张完全独立的汇总表或缓存表主要用于满足检索的需求</p>
-<ol>
-<li><p>Flexviews实现物化视图,可以增量重新计算物化视图的内容</p>
-</li>
-<li><p>计数器表: 如果需要在表中保存计数器,更新计数器时,会有全局的互斥锁.要获的高并发更新的性能,可以将计数器保存在多行,每次随机选择一个进行更新</p>
-</li>
-</ol>
-<h2 id="1-5-修改表结构"><a href="#1-5-修改表结构" class="headerlink" title="1.5 修改表结构"></a>1.5 修改表结构</h2><ol>
-<li><p>大部分的alter table操作将导致服务中断</p>
-</li>
-<li><p>所有的modify column 操作都将导致表重建</p>
-</li>
-<li><p>可以新建一个.frm文件为修改后的表结构,替换原来的.frm文件避免表重建</p>
-</li>
-</ol>
-<h1 id="2-创建高性能的索引"><a href="#2-创建高性能的索引" class="headerlink" title="2. 创建高性能的索引"></a>2. 创建高性能的索引</h1><p>索引是存储引擎用于快速查找记录的数据结构</p>
-<h2 id="2-1-索引基础"><a href="#2-1-索引基础" class="headerlink" title="2.1 索引基础"></a>2.1 索引基础</h2><p>MySQL中,存储引擎先在索引中找到对应值根据匹配的索引记录找到对应的数据行.索引在存储引擎层实现</p>
-<h3 id="2-1-1-B-Tree索引"><a href="#2-1-1-B-Tree索引" class="headerlink" title="2.1.1 B-Tree索引"></a>2.1.1 B-Tree索引</h3><ol>
-<li><p>目前大部分数据库系统及文件系统都采用B-Tree或其变种B+Tree作为索引结构. </p>
-</li>
-<li><p>InnoDB使用B+Tree, NDB集群存储引擎实际使用T-Tree. 索引对多个值的排序一句是根据表定义索引时列的顺序.</p>
-</li>
-<li><p>索引对如下类型的查询有效</p>
-</li>
-<li><p>全值匹配</p>
-</li>
-<li><p>匹配最左前缀,只使用索引第一列</p>
-</li>
-<li><p>匹配列前缀: 只匹配某一列值的开头部分</p>
-</li>
-<li><p>匹配范围值</p>
-</li>
-<li><p>精确匹配某一列并范围匹配另外一列</p>
-</li>
-<li><p>只访问索引的查询: 查询只需要访问索引无需访问数据行(覆盖扫描)</p>
-</li>
-<li><p>限制</p>
-</li>
-<li><p>如果不是按照索引的最左列开始,则无法使用索引</p>
-</li>
-<li><p>不能跳过索引中的列,即定义索引(a,b,c),则使用a,c查询条件时,只能使用索引第一列</p>
-</li>
-<li><p>如果查询中有某个列的范围查询,则右边所有的列都无法使用索引优化查找</p>
-</li>
-</ol>
-<h3 id="2-1-2-哈希索引"><a href="#2-1-2-哈希索引" class="headerlink" title="2.1.2 哈希索引"></a>2.1.2 哈希索引</h3><ol>
-<li><p>对于每一行数据,存储引擎会对索引列计算一个哈希码.索引包含哈希码和行指针</p>
-</li>
-<li><p>MySQL中只有Memory存储引擎支持</p>
-</li>
-<li><p>限制</p>
-</li>
-<li><p>不能使用索引中的值避免读取行</p>
-</li>
-<li><p>无法用于排序</p>
-</li>
-<li><p>不支持部分索引列匹配查找</p>
-</li>
-<li><p>不支持范围查询</p>
-</li>
-<li><p>出现哈希冲突时会扫表</p>
-</li>
-</ol>
-<h3 id="2-1-3-伪哈希索引"><a href="#2-1-3-伪哈希索引" class="headerlink" title="2.1.3 伪哈希索引"></a>2.1.3 伪哈希索引</h3><ol>
-<li><p>应用: 当存储引擎不支持哈希索引,在B-Tree基础上使用哈希值索引查找</p>
-</li>
-<li><p>场景: 需要存储大量的url并根据url进行搜索查找</p>
-</li>
-<li><p>问题: 如果使用B-Tree存储,内容很大</p>
-</li>
-<li><p>方案: 删除url列索引,新增一个被索引的url_crc列,使用CRC32做哈希.</p>
-</li>
-<li><p>sql: select id from t_url where url=”<a href="https://www.google.as/&quot;" target="_blank" rel="noopener">https://www.google.as/&quot;</a> and url_crc=CRC32(“<a href="https://www.google.as/&quot;" target="_blank" rel="noopener">https://www.google.as/&quot;</a>)</p>
-</li>
-<li><p>结果: MySQL优化器会使用选择性很高体积很小的基于url_crc索引完成查找</p>
-</li>
-<li><p>缺陷: 需要维护哈希值, crc32表大时会出现大量冲突</p>
-</li>
-<li><p>注意: 不要使用SHA1和MD5做哈希函数,因为计算出来的哈希值比较长; 必须在where子句中包含常量</p>
-</li>
-<li><p>插件: 移植自Percona Server的FNV64可以在MySQL中作为哈希函数使用</p>
-</li>
-</ol>
-<h3 id="2-1-4-空间数据索引-R-Tree"><a href="#2-1-4-空间数据索引-R-Tree" class="headerlink" title="2.1.4 空间数据索引(R-Tree)"></a>2.1.4 空间数据索引(R-Tree)</h3><ol>
-<li>MyISAM表支持空间索引,可以用作地理数据存储</li>
-</ol>
-<h3 id="2-1-5-全文索引"><a href="#2-1-5-全文索引" class="headerlink" title="2.1.5 全文索引"></a>2.1.5 全文索引</h3><ol>
-<li>全文索引是一种特殊类型索引,查找文本中的关键词,后续讨论</li>
-</ol>
-<h3 id="2-1-6-其他"><a href="#2-1-6-其他" class="headerlink" title="2.1.6 其他"></a>2.1.6 其他</h3><ol>
-<li><p>TokuDB 使用分形树索引, 对于InnoDB的讨论也适用于TokuDB</p>
-</li>
-<li><p>ScaleDB 使用Patricia tries</p>
-</li>
-<li><p>InfiniDB和Infobright使用一些特殊的数据结构优化某些特殊的查询</p>
-</li>
-</ol>
-<h2 id="2-2索引的优点"><a href="#2-2索引的优点" class="headerlink" title="2.2索引的优点"></a>2.2索引的优点</h2><ol>
-<li><p>减少扫描数据量</p>
-</li>
-<li><p>避免排序和临时表</p>
-</li>
-<li><p>将随机I/O变成顺序I/O</p>
-</li>
-<li><p>对于TB级别的数据,经常会使用块级别的数据技术来替代索引</p>
-</li>
-</ol>
-<h2 id="2-3-高性能的索引策略"><a href="#2-3-高性能的索引策略" class="headerlink" title="2.3 高性能的索引策略"></a>2.3 高性能的索引策略</h2><h3 id="2-3-1-独立的列"><a href="#2-3-1-独立的列" class="headerlink" title="2.3.1 独立的列"></a>2.3.1 独立的列</h3><ol>
-<li>索引列不能是表达式一部分或函数参数,否则不能使用索引</li>
-</ol>
-<h3 id="2-3-2-前缀索引"><a href="#2-3-2-前缀索引" class="headerlink" title="2.3.2 前缀索引"></a>2.3.2 前缀索引</h3><ol>
-<li><p>场景: 需要索引很长的字符列,这会让索引变得大且慢</p>
-</li>
-<li><p>方案: 根据业务找到最适合的前缀长度,创建前缀索引</p>
-</li>
-<li><p>优点: 索引更小,更快</p>
-</li>
-<li><p>缺点: MySQL无法使用前缀索引order by 和group by,也无法使用前缀索引做覆盖扫描</p>
-</li>
-<li><p>常见: 用16进制唯一id存储session id,如果采用长度为8的前缀索引能显著提升性能</p>
-</li>
-</ol>
-<h3 id="2-3-3-多列索引"><a href="#2-3-3-多列索引" class="headerlink" title="2.3.3 多列索引"></a>2.3.3 多列索引</h3><ol>
-<li><p>MySQL的索引合并(index merge)策略,一定程度上可以使用多个单列索引定位</p>
-</li>
-<li><p>where查询条件的列最好使用多列索引而不是单独列单独索引</p>
-</li>
-</ol>
-<h3 id="2-3-4-选择合适的索引顺序"><a href="#2-3-4-选择合适的索引顺序" class="headerlink" title="2.3.4 选择合适的索引顺序"></a>2.3.4 选择合适的索引顺序</h3><ol>
-<li><p>将选择性最高的列放在索引最前列</p>
-</li>
-<li><p>性能不只依赖于所有索引列的选择性,也和查询条件的具体值分布有关,可能需要根据运行频率最高的查询调整索引列顺序</p>
-</li>
-<li><p>有时需要根据排序,分组和范围条件综合考虑</p>
-</li>
-</ol>
-<h3 id="2-3-5-聚簇索引"><a href="#2-3-5-聚簇索引" class="headerlink" title="2.3.5 聚簇索引"></a>2.3.5 聚簇索引</h3><ol>
-<li><p>聚簇索引并不是单独的索引类型,而是一种数据存储方式.叶子页包含行的全部数据,节点页只包含索引列</p>
-</li>
-<li><p>InnoDB默认使用主键聚集数据,如果没有会选择一个唯一的非空索引作为<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-index-types.html" target="_blank" rel="noopener">聚簇索引</a></p>
-</li>
-<li><p>可以把相关数据保存一起,减少磁盘I/O</p>
-</li>
-<li><p>数据访问更快</p>
-</li>
-<li><p>插入速度严重依赖插入顺序</p>
-</li>
-<li><p>更新聚簇索引代价高</p>
-</li>
-<li><p>可能面临”页分裂”问题,导致占用更多磁盘空间</p>
-</li>
-<li><p>可能导致全表扫描变慢,由于行比较稀疏或页分裂导致数据存储不连续</p>
-</li>
-<li><p>二级索引变大,二级索引访问需要两次索引查找</p>
-</li>
-</ol>
-<h3 id="2-3-6-覆盖索引"><a href="#2-3-6-覆盖索引" class="headerlink" title="2.3.6 覆盖索引"></a>2.3.6 覆盖索引</h3><ol>
-<li><p>如果一个索引包含所有需要查询的字段的值</p>
-</li>
-<li><p>覆盖索引必须要存储索引列的值</p>
-</li>
-<li><p>MySQL不能在索引中执行like 操作,但能在索引中做最左前缀匹配的like比较,因为可以转换为简单的比较操作</p>
-</li>
-<li><p>延迟关联: 先通过覆盖索引返回需要的主键再通过这些主键关联原表获得需要的行</p>
-</li>
-</ol>
-<h3 id="2-3-7-使用索引扫描做排序"><a href="#2-3-7-使用索引扫描做排序" class="headerlink" title="2.3.7 使用索引扫描做排序"></a>2.3.7 使用索引扫描做排序</h3><ol>
-<li><p>只有索引列的顺序和order by 子句的顺序一致时才能使用索引对结果做排序</p>
-</li>
-<li><p>如果关联多表,则只有当order by子句引用的字段全部为第一个表时才能使用索引排序</p>
-</li>
-</ol>
-<h3 id="2-3-8-压缩索引"><a href="#2-3-8-压缩索引" class="headerlink" title="2.3.8 压缩索引"></a>2.3.8 压缩索引</h3><ol>
-<li><p>MyISAM使用前缀压缩减少索引的大小</p>
-</li>
-<li><p>create table 时通过指定pack_keys控制压缩方式</p>
-</li>
-</ol>
-<h3 id="2-3-9-未使用的索引"><a href="#2-3-9-未使用的索引" class="headerlink" title="2.3.9 未使用的索引"></a>2.3.9 未使用的索引</h3><ol>
-<li><p>通过查询INFORMATION_SCHEMA.INDEX_STATISTICES能查到每个索引的使用频率</p>
-</li>
-<li><p>冗余和重复的索引会降低性能</p>
-</li>
-</ol>
-<h3 id="2-3-10-索引和锁"><a href="#2-3-10-索引和锁" class="headerlink" title="2.3.10 索引和锁"></a>2.3.10 索引和锁</h3><ol>
-<li>InnoDB在二级索引上使用共享(读)锁,但访问主键索引需要排他(写)锁,消除了使用覆盖索引的可能</li>
-</ol>
-<h2 id="2-4-维护索引和表"><a href="#2-4-维护索引和表" class="headerlink" title="2.4 维护索引和表"></a>2.4 维护索引和表</h2><ol>
-<li><p>check table 通常能够找出大多数的表和索引的错误</p>
-</li>
-<li><p>MyISAM表易损坏,InnoDB不容易,损坏可能是硬件或人为错误</p>
-</li>
-<li><p>MySQL查询优化器通过两个api,一个获取范围大概数据量,一个返回各种类型的数据包括索引基数</p>
-</li>
-<li><p>减少索引和数据的碎片,B-TREE索引可能碎片化,这会降低效率</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-3/" data-id="cjsehzncx000q6szl9xmkc7lu" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-4/" data-id="cjsei11eq000qbfzlu1yduayn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1166,6 +1055,10 @@
       <ul>
         
           <li>
+            <a href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
+          </li>
+        
+          <li>
             <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
           </li>
         
@@ -1179,10 +1072,6 @@
         
           <li>
             <a href="/2018/07/17/amqp/">Python amqp源码学习</a>
-          </li>
-        
-          <li>
-            <a href="/2018/06/30/redis-2/">Redis文档阅读笔记二</a>
           </li>
         
       </ul>
