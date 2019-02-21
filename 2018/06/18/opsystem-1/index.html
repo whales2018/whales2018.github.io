@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="沧海一粟">
 <meta property="og:description" content="一. 进程与线程进程创建 系统初始化 正在进行的进程调用进程创建系统调用 用户请求 批处理作业初始化  进程终止 正常退出 出错退出，自愿 严重错误，非自愿 被其他进程杀死  进程层次结构 系统启动初始化由init特殊进程运行  进程状态 运行，就绪，阻塞 进程中断处理，启动，停止由操作系统进程调度程序控制  进程的实现 操作系统维护一个进程表，每个进程占用一个进程表项（进程控制块PCB） PCB">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-20T08:41:20.139Z">
+<meta property="og:updated_time" content="2019-02-21T03:17:35.347Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《现代操作系统》阅读笔记一">
 <meta name="twitter:description" content="一. 进程与线程进程创建 系统初始化 正在进行的进程调用进程创建系统调用 用户请求 批处理作业初始化  进程终止 正常退出 出错退出，自愿 严重错误，非自愿 被其他进程杀死  进程层次结构 系统启动初始化由init特殊进程运行  进程状态 运行，就绪，阻塞 进程中断处理，启动，停止由操作系统进程调度程序控制  进程的实现 操作系统维护一个进程表，每个进程占用一个进程表项（进程控制块PCB） PCB">
@@ -186,11 +186,45 @@
 <li>静态链接：将被调用函数的库程序全部装载生成二进制可执行文件，耗空间，每次都需要重新编译</li>
 <li>动态链接：加载了一小段能够在运行时绑定被调用函数的存根例程，在第一次被调用时被装载</li>
 </ol>
+<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><ol>
+<li>机制思想：进程发起一个系统调用，将一个文件映射到其虚拟地址空间的一部分，在映射共享的页面时不会读入页面的内容，而是在访问页面时才读入。进程退出或解除文件映射时所有改动的页面会被写回到文件</li>
+<li>如果多个进程同时映射了同一份文件，它们就可以通过共享内存通信</li>
+</ol>
+<h3 id="清除策略"><a href="#清除策略" class="headerlink" title="清除策略"></a>清除策略</h3><ol>
+<li>分页守护进程定时检查内存状态，通过置换算法维护空闲页框</li>
+</ol>
+<h3 id="进程创建-1"><a href="#进程创建-1" class="headerlink" title="进程创建"></a>进程创建</h3><ol>
+<li>确定程序和数据初始大小，创建页表，内存中为页表分配空间初始化</li>
+<li>磁盘交换区中分配空间</li>
+<li>程序正文和数据对交换区空间初始化，以便进程缺页中断时可以调入需要的页面</li>
+<li>页表和磁盘交换区的信息存储在进程表中</li>
+</ol>
+<h3 id="进程执行"><a href="#进程执行" class="headerlink" title="进程执行"></a>进程执行</h3><ol>
+<li>重置MMU，刷新TLB，新进程页表成为当前页表</li>
+</ol>
+<h3 id="缺页中断"><a href="#缺页中断" class="headerlink" title="缺页中断"></a>缺页中断</h3><ol>
+<li>确定缺页的虚拟地址</li>
+<li>确定缺失的页面，确定磁盘上的位置</li>
+<li>找到合适的页框，读入页面</li>
+<li>备份指令，重新执行</li>
+<li>正在进行IO操作的页面不会被移出内存</li>
+</ol>
+<h3 id="进程退出"><a href="#进程退出" class="headerlink" title="进程退出"></a>进程退出</h3><ol>
+<li>最后一个进程退出时，释放页表，页面和页面在硬盘所占用的空间</li>
+</ol>
+<h3 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h3><ol>
+<li>每个段由一个从0到最大的线性地址序列构成，每个段都是独立地址空间</li>
+<li>寻址：段号+段内地址</li>
+<li>简化对长度经常变化的数据结构管理，有利于各个过程单独编译链接</li>
+<li>使程序和数据可以划分为逻辑上独立的地址空间，有助于共享，连接和保护</li>
+<li>内存段与段之间的空闲内存外部碎片可以通过内存紧缩</li>
+<li>分段和分页的结合：段内进行分页，提供二维的虚拟内存</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/18/opsystem-1/" data-id="cjscy7v0g000qbmzlpc6daizr" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/18/opsystem-1/" data-id="cjse23sgb0006n3zl34hykdwa" class="article-share-link">Share</a>
       
       
     </footer>
@@ -199,20 +233,15 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/06/30/mysql-1/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/06/18/nginx-1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          《高性能MySQL》阅读笔记一
+          Nginx文档笔记
         
       </div>
     </a>
   
-  
-    <a href="/2018/06/18/nginx-1/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Nginx文档笔记</div>
-    </a>
   
 </nav>
 
