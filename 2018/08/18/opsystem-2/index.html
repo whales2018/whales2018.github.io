@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="沧海一粟">
 <meta property="og:description" content="三、文件系统文件 文件命名，文件结构，文件类型 文件存取：顺序存取，随机存取 文件属性：如权限，创建修改时间等 文件操作：常用系统调用如创建，打开等；open：文件属性和磁盘地址装入内存  目录 层次目录系统，路径名 目录操作：常用系统调用如创建，打开等；硬连接：文件的节点技术器增加，修改同一份文件。软连接只是符号连接，快捷方式，可以跨越磁盘界限  文件系统的实现 主引导记录MBR：磁盘的0号扇区">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-21T10:43:46.433Z">
+<meta property="og:updated_time" content="2019-02-22T03:47:29.378Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《现代操作系统》阅读笔记二">
 <meta name="twitter:description" content="三、文件系统文件 文件命名，文件结构，文件类型 文件存取：顺序存取，随机存取 文件属性：如权限，创建修改时间等 文件操作：常用系统调用如创建，打开等；open：文件属性和磁盘地址装入内存  目录 层次目录系统，路径名 目录操作：常用系统调用如创建，打开等；硬连接：文件的节点技术器增加，修改同一份文件。软连接只是符号连接，快捷方式，可以跨越磁盘界限  文件系统的实现 主引导记录MBR：磁盘的0号扇区">
@@ -141,11 +141,55 @@
 <h3 id="磁盘碎片整理"><a href="#磁盘碎片整理" class="headerlink" title="磁盘碎片整理"></a>磁盘碎片整理</h3><ol>
 <li>通过移动或复制，使空闲空间连成一片</li>
 </ol>
-<h1 id="四、输入-输出"><a href="#四、输入-输出" class="headerlink" title="四、输入/输出"></a>四、输入/输出</h1>
+<h1 id="四、输入-输出"><a href="#四、输入-输出" class="headerlink" title="四、输入/输出"></a>四、输入/输出</h1><h2 id="IO硬件原理"><a href="#IO硬件原理" class="headerlink" title="IO硬件原理"></a>IO硬件原理</h2><h3 id="IO设备"><a href="#IO设备" class="headerlink" title="IO设备"></a>IO设备</h3><ol>
+<li>块设备：硬盘，CD-ROM，USB</li>
+<li>字符设备：不可寻址没有寻道操作，打印机，网路接口，鼠标等</li>
+<li>时钟，内存映射显示器等</li>
+</ol>
+<h3 id="设备控制器"><a href="#设备控制器" class="headerlink" title="设备控制器"></a>设备控制器</h3><ol>
+<li>有寄存器用来与CPU通信</li>
+<li>数据缓冲区</li>
+<li>内存映射IO：每个控制寄存器映射到内存空间中被分配唯一的内存地址</li>
+<li>避免对设备控制器进行高速缓存，操作系统必须管理选择性高速缓存</li>
+<li>DMA：直接存储器存取，调控多个设备的数据传送</li>
+<li>中断：设备中断发出信号，由中断控制器检测</li>
+</ol>
+<h3 id="IO软件原理"><a href="#IO软件原理" class="headerlink" title="IO软件原理"></a>IO软件原理</h3><ol>
+<li>设备独立性</li>
+<li>统一命名</li>
+<li>错误处理</li>
+<li>同步阻塞，异步中断驱动：大部分物理IO是异步的，CPU启动传输便去做别的</li>
+<li>缓冲</li>
+<li>共享设备和独占设备</li>
+<li>程序控制IO：轮询设备寄存器是否就绪，直到全部IO完成，一直占用CPU</li>
+<li>中断驱动IO：中断发生在每个字符上</li>
+<li>DMA控制IO：将中断的次数从每个字符减少的每个缓冲区</li>
+<li>设备驱动程序：为了访问设备的硬件，通常必须是操作系统内核的一部分</li>
+</ol>
+<h2 id="盘"><a href="#盘" class="headerlink" title="盘"></a>盘</h2><p>磁盘组织成柱面，每个柱面包含若干磁道，磁道数与垂直堆叠的磁头个数相同，磁道分成若干扇区</p>
+<ol>
+<li>SATA：磁盘驱动器包含微控制器，负责高速缓存，重叠寻道，坏块重映等</li>
+<li>RAID：将一个装满磁盘的盒子安装到计算机，用RAID控制器替换磁盘控制器</li>
+</ol>
+<h3 id="磁盘臂调度算法"><a href="#磁盘臂调度算法" class="headerlink" title="磁盘臂调度算法"></a>磁盘臂调度算法</h3><ol>
+<li>磁盘读写时间因素：寻道占主导，旋转延迟，实际数据传输</li>
+<li>磁盘驱动程序维护一张表，按柱面号索引，每个柱面未完成的请求组成一个链表</li>
+<li>SSF：最短寻道优先算法，获得最小响应时间与公平性有冲突</li>
+<li>电梯算法：上下移动完成未完成的请求</li>
+<li>磁盘控制器高速缓存：每次将邻近的扇区也读取</li>
+</ol>
+<h2 id="时钟"><a href="#时钟" class="headerlink" title="时钟"></a>时钟</h2><ol>
+<li>时钟负责维护时间，根据已知的时间间隔产生中断。防止进程垄断CPU等</li>
+<li>大多数计算机具有一个由电池供电的备份时钟</li>
+</ol>
+<h3 id="时钟软件"><a href="#时钟软件" class="headerlink" title="时钟软件"></a>时钟软件</h3><ol>
+<li>维护日时间，防止进程超时，记录CPU使用，处理alarm系统调用，监视定时器，统计信息收集</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjsei11e50009bfzlfpgfv9ei" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjsfiqoym0009iczl8y90t266" class="article-share-link">Share</a>
       
       
     </footer>

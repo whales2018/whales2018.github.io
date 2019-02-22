@@ -7,17 +7,17 @@
   
   <title>Nginx文档笔记 | 沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、安装 安装文档  二、nginx管理 一个master进程和多个worker进程，如果缓存开启，则缓存加载和缓存管理两个进程也在初始化运行 nginx通过信号管理，除了nginx -s quit/reload/reopen/stop 也可以通过kill 命令发送信号给master进程  三、Web服务器静态资源 root 指定资源根目录 location 匹配url， =普通字符串匹配，～表示">
+  <meta name="description" content="一、安装 安装文档 Ubuntu:除了文档列出的依赖，额外依赖12345sudo apt install libssl-devsudo apt install  libxml2-devsudo apt install libxslt1-devsudo apt install libgd-devsudo apt install libgeoip-dev   二、nginx管理 一个master进程和">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx文档笔记">
 <meta property="og:url" content="https://whales2018.github.io/2018/07/26/nginx-1/index.html">
 <meta property="og:site_name" content="沧海一粟">
-<meta property="og:description" content="一、安装 安装文档  二、nginx管理 一个master进程和多个worker进程，如果缓存开启，则缓存加载和缓存管理两个进程也在初始化运行 nginx通过信号管理，除了nginx -s quit/reload/reopen/stop 也可以通过kill 命令发送信号给master进程  三、Web服务器静态资源 root 指定资源根目录 location 匹配url， =普通字符串匹配，～表示">
+<meta property="og:description" content="一、安装 安装文档 Ubuntu:除了文档列出的依赖，额外依赖12345sudo apt install libssl-devsudo apt install  libxml2-devsudo apt install libxslt1-devsudo apt install libgd-devsudo apt install libgeoip-dev   二、nginx管理 一个master进程和">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-21T03:19:52.200Z">
+<meta property="og:updated_time" content="2019-02-21T11:42:54.714Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx文档笔记">
-<meta name="twitter:description" content="一、安装 安装文档  二、nginx管理 一个master进程和多个worker进程，如果缓存开启，则缓存加载和缓存管理两个进程也在初始化运行 nginx通过信号管理，除了nginx -s quit/reload/reopen/stop 也可以通过kill 命令发送信号给master进程  三、Web服务器静态资源 root 指定资源根目录 location 匹配url， =普通字符串匹配，～表示">
+<meta name="twitter:description" content="一、安装 安装文档 Ubuntu:除了文档列出的依赖，额外依赖12345sudo apt install libssl-devsudo apt install  libxml2-devsudo apt install libxslt1-devsudo apt install libgd-devsudo apt install libgeoip-dev   二、nginx管理 一个master进程和">
   
   
     <link rel="icon" href="/favicon.png">
@@ -88,6 +88,8 @@
       
         <h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><ol>
 <li><a href="https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/" target="_blank" rel="noopener">安装文档</a></li>
+<li>Ubuntu:除了文档列出的依赖，额外依赖<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libssl-dev</span><br><span class="line">sudo apt install  libxml2-dev</span><br><span class="line">sudo apt install libxslt1-dev</span><br><span class="line">sudo apt install libgd-dev</span><br><span class="line">sudo apt install libgeoip-dev</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 <h1 id="二、nginx管理"><a href="#二、nginx管理" class="headerlink" title="二、nginx管理"></a>二、nginx管理</h1><ol>
 <li>一个master进程和多个worker进程，如果缓存开启，则缓存加载和缓存管理两个进程也在初始化运行</li>
@@ -182,7 +184,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsei11e00006bfzlusygsbzl" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsfiqoyi0006iczl2qp6wm42" class="article-share-link">Share</a>
       
       
     </footer>
