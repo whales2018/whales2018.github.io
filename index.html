@@ -58,6 +58,170 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-tcpip-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/18/tcpip-1/" class="article-date">
+  <time datetime="2018-09-18T03:21:11.000Z" itemprop="datePublished">2018-09-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjsk5vd7d000h3zzlapj5b5bh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-opsystem-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/18/opsystem-3/" class="article-date">
+  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="五、死锁"><a href="#五、死锁" class="headerlink" title="五、死锁"></a>五、死锁</h1><h3 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h3><ol>
+<li>可抢占资源：如存储器，两个进出互相等待对方占有的资源时，其中一方可以释放可抢占性资源，另一方可以顺利执行</li>
+<li>不可抢占资源：无法把资源从占有它的进程抢占过来</li>
+</ol>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><ol>
+<li>如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，该进程集合就是死锁</li>
+<li>死锁条件：互斥条件，占有和等待条件，不可抢占条件，环路等待条件</li>
+<li>处理死锁策略：检测恢复，仔细对资源分配动态避免，破坏死锁条件之一</li>
+<li>检测：需要查阅相关检测算法</li>
+<li>恢复：利用抢占恢复，回滚恢复，杀死进程</li>
+</ol>
+<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><ol>
+<li>尽量做到尽可能少的进程可以真正请求资源</li>
+<li>破坏占有和等待条件：进程在开始执行前一次性请求所需全部资源，另一种，是进程请求资源时先释放已经持有，再一次性请求</li>
+<li>破坏不可抢占条件：对资源进行虚拟化，由底层进行实际的调用。不适用于操作系统或数据库的记录</li>
+<li>避免出现环路等待：对资源进行编号，每个进程请求需要按照资源的顺序提出</li>
+<li>两阶段加锁：第一阶段将所需记录加锁，如果遇到已经被加锁记录，则释放所有记录，重新第一阶段，第二阶段修改数据然后释放</li>
+<li>通信死锁：超时</li>
+<li>活锁：进程在临界区进行轮询，则可能出现没有进程阻塞，但进程一直尝试失败，常见于资源不足</li>
+<li>饥饿：资源分配迟迟没有轮到该进程</li>
+</ol>
+<h1 id="六、多媒体操作系统"><a href="#六、多媒体操作系统" class="headerlink" title="六、多媒体操作系统"></a>六、多媒体操作系统</h1><h2 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h2><ol>
+<li>特征：使用极高的数据率，多媒体要求实时回放</li>
+<li>要求：存储量大需要进行压缩，实时数据传输</li>
+<li>视频压缩：编码算法和解码算法的速度根据场景不同考量，不必100%可逆，允许有损</li>
+<li>音频压缩：波形编码傅里叶变换，感知编码</li>
+</ol>
+<h1 id="七、多处理机系统"><a href="#七、多处理机系统" class="headerlink" title="七、多处理机系统"></a>七、多处理机系统</h1><h2 id="多处理机操作系统"><a href="#多处理机操作系统" class="headerlink" title="多处理机操作系统"></a>多处理机操作系统</h2><ol>
+<li>每个CPU有自己的操作系统：无法充分利用资源，任务分配均衡等</li>
+<li>主从多处理机：主处理机容易成为瓶颈过载</li>
+<li>对称多处理机：把操作系统分割成多个临界区，每个临界区由其互斥信号量保护</li>
+</ol>
+<h2 id="多处理机同步，调度"><a href="#多处理机同步，调度" class="headerlink" title="多处理机同步，调度"></a>多处理机同步，调度</h2><ol>
+<li>分时</li>
+<li>空间共享：多个CPU上同时调度多个线程</li>
+<li>群调度：一组相关线程作为一个单位调度，一个群的成员在不同的CPU上同时进行，群中所有成员共同开始和结束时间片</li>
+</ol>
+<h1 id="八、安全"><a href="#八、安全" class="headerlink" title="八、安全"></a>八、安全</h1><h2 id="目标与威胁"><a href="#目标与威胁" class="headerlink" title="目标与威胁"></a>目标与威胁</h2><ol>
+<li>数据机密性–数据暴露</li>
+<li>数据完整性–数据篡改，数据遗失</li>
+<li>系统可用性–拒绝服务</li>
+<li>排外性–病毒控制</li>
+</ol>
+<h2 id="密码学原理"><a href="#密码学原理" class="headerlink" title="密码学原理"></a>密码学原理</h2><ol>
+<li>密钥：算法的加密参数</li>
+<li>加密算法公开，加密安全性由独立于算法的密钥决定</li>
+<li>公钥加密：加密运算比较简单，没有密钥的解密运算十分繁琐。公钥是加密密钥，私钥用于解密</li>
+<li>单向函数：f(x)可容易计算出y值，给定y值不能计算x，也称作加密散列函数</li>
+<li>数字签名：对文档运行单向散列函数如MD5，文档拥有者用私钥计算得到D(散列值)，接收方用发送方公钥计算得到E(D(散列值))得到实际散列值，再比较</li>
+</ol>
+<h2 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h2><ol>
+<li>域：一对组合，指定一个对象和一些可在其上运行的操作子集</li>
+<li>基本原则：最低权限原则，每个域拥有最少对象和满足其完成工作的最少权限，安全性最好</li>
+<li>unix：进程的域由(UID,GID)定义，每个进程分为用户部分和核心部分，执行系统调用时，从用户态切换到内核态，核心部分可以访问与用户部分不同的对象集，这样系统调用引发域切换</li>
+<li>访问控制表与权能字</li>
+<li>隐写术：如将实际信息隐藏在图片中等</li>
+</ol>
+<h2 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h2><ol>
+<li>口令</li>
+<li>一次性口令，如网上银行银盾等</li>
+<li>挑战响应认证，密码问题等</li>
+<li>实物认证</li>
+<li>生物识别认证</li>
+</ol>
+<h2 id="内部安全"><a href="#内部安全" class="headerlink" title="内部安全"></a>内部安全</h2><ol>
+<li>逻辑炸弹</li>
+<li>后门陷阱</li>
+<li>登录欺骗</li>
+</ol>
+<h2 id="代码漏洞"><a href="#代码漏洞" class="headerlink" title="代码漏洞"></a>代码漏洞</h2><ol>
+<li>缓冲区溢出</li>
+<li>代码注入：系统调用时，如命令行</li>
+<li>权限提升攻击：利用计划任务进行攻击等</li>
+</ol>
+<h2 id="恶意软件"><a href="#恶意软件" class="headerlink" title="恶意软件"></a>恶意软件</h2><ol>
+<li>木马攻击</li>
+<li>病毒</li>
+<li>蠕虫</li>
+</ol>
+<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
+<li>防火墙</li>
+<li>反病毒扫描，完整性检查，行为检查捕捉系统调用</li>
+<li>代码签名</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjsk5vd6y00063zzlmk5suocy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-opsystem-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/08/18/opsystem-2/" class="article-date">
@@ -187,7 +351,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjsfiqoym0009iczl8y90t266" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjsk5vd7100093zzlbj407edf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -361,7 +525,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjsfiqoyk0008iczlz8nwqpgq" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjsk5vd79000e3zzlhv1vwked" class="article-share-link">Share</a>
       
       
     </footer>
@@ -495,263 +659,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsfiqoyi0006iczl2qp6wm42" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-http-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/20/http-1/" class="article-date">
-  <time datetime="2018-07-20T03:21:11.000Z" itemprop="datePublished">2018-07-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/《HTTP权威指南》阅读笔记/">《HTTP权威指南》阅读笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/20/http-1/">《HTTP权威指南》阅读笔记一</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-常见概念"><a href="#1-常见概念" class="headerlink" title="1. 常见概念"></a>1. 常见概念</h1><ol>
-<li><p>MIME：Multipurpose Internet Mail Extension，电子邮件系统和HTTP用于描述标记多媒体内容</p>
-</li>
-<li><p>URI：统一资源标识符，可以有URL和URN两种形式</p>
-</li>
-<li><p>URL：协议+服务器地址+资源路径</p>
-</li>
-<li><p>事务：通过HTTP报文格式化数据块完成一次请求和响应</p>
-</li>
-</ol>
-<h1 id="2-URL与资源"><a href="#2-URL与资源" class="headerlink" title="2. URL与资源"></a>2. URL与资源</h1><ol>
-<li><p>大多数URL方案的语法建立在<scheme>://<user>:<password>@<host>:<port>/<path></path>;<params>?<query>#<frag></frag></query></params></port></host></password></user></scheme></p>
-</li>
-<li><p>设计URL使其可以通过任意因特网协议安全传输是很重要的，有些协议如SMTP的传输方法只能使用相对较小，通用的安全字母表中的字符</p>
-</li>
-<li><p>URL中包含如中文等非安全字母表二进制数据或字符时，则需要进行转义</p>
-</li>
-<li><p>转义：百分号+字符编码的十六进制数</p>
-</li>
-</ol>
-<h1 id="3-HTTP报文"><a href="#3-HTTP报文" class="headerlink" title="3. HTTP报文"></a>3. HTTP报文</h1><ol>
-<li>组成：对报文进行描述的起始行start line \r\n作为行结束，包含属性的首部块header，包含数据的body</li>
-</ol>
-<h2 id="常见HTTP方法"><a href="#常见HTTP方法" class="headerlink" title="常见HTTP方法"></a>常见HTTP方法</h2><ol>
-<li>GET，HEAD，POST，PUT，DELETE，TRACE(对可能经过代理服务器传送的报文进行追踪，服务响应会带上实际收到的请求原文)，OPTIONS(决定可以在服务器上执行哪些方法)</li>
-</ol>
-<h2 id="已定义状态码"><a href="#已定义状态码" class="headerlink" title="已定义状态码"></a>已定义状态码</h2><ol>
-<li>100-101：信息提示</li>
-<li>200-206：成功</li>
-<li>300-305：重定向</li>
-<li>400-415：客户端错误</li>
-<li>500-505：服务端错误</li>
-</ol>
-<h1 id="4-连接管理"><a href="#4-连接管理" class="headerlink" title="4. 连接管理"></a>4. 连接管理</h1><ol>
-<li>连接过程：解析主机名，dns查询ip，获取端口号，发起连接，发送请求报文，返回响应报文，关闭连接</li>
-<li>HTTP事务时延：DNS查询，连接，请求，处理，响应，关闭</li>
-<li>性能聚焦区域：TCP连接，TCP慢启动拥塞控制，数据聚集的Nagle算法+TCP延迟确认，TIME_WAIT时延和端口耗尽</li>
-<li>并行连接：由客户端的网络带宽限制并行连接数</li>
-<li>持久连接：HTTP/1.1及HTTP/1.0的增强版本 允许设备在事务处理结束时将连接保持打开状态，省去建立连接和慢启动的阶段，1.0可以通过Connection：keep-alive</li>
-<li>管道化连接：HTTP/1.1允许在持久连接上使用请求管道，响应到达前将请求放入队列，不能传送非幂等请求如POST</li>
-</ol>
-<h1 id="5-Web服务器"><a href="#5-Web服务器" class="headerlink" title="5. Web服务器"></a>5. Web服务器</h1><ol>
-<li>重定向使用场景：永久删除或临时删除的资源，负载均衡，服务器关联，规范目录名称</li>
-<li>对非持久连接，发送完响应关闭服务端连接；对持久连接，需要正确计算content-length首部</li>
-</ol>
-<h1 id="6-代理"><a href="#6-代理" class="headerlink" title="6. 代理"></a>6. 代理</h1><ol>
-<li>代理可以监视流量并对其进行修改</li>
-<li>应用场景：安全防火墙，Web缓存，反向代理，内容路由器，转码，匿名</li>
-<li>via： 列出了与报文途径的每个中间节点</li>
-</ol>
-<h1 id="7-缓存"><a href="#7-缓存" class="headerlink" title="7. 缓存"></a>7. 缓存</h1><h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ol>
-<li>冗余的数据传输：服务器多次传输同一份文档，增大负担，消耗带宽</li>
-<li>带宽瓶颈：客户端会以路径上最慢的网速访问服务器，如果客户端能在局域网获取一份副本，将大大提升性能</li>
-<li>瞬间拥塞：使web服务器过载</li>
-<li>距离时延</li>
-</ol>
-<h2 id="缓存再验证"><a href="#缓存再验证" class="headerlink" title="缓存再验证"></a>缓存再验证</h2><ol>
-<li>大部分缓存只有在客户端发起请求，且副本时间需要再次检测才会进行再验证</li>
-<li>向原始服务器发送小请求，如果返回304，则缓存继续有效</li>
-<li>首部：if-modified-since，只有在缓存了对象的副本后又对其进行修改，才发送此对象</li>
-<li>商业代理缓存会在via首部附加额外信息以描述命中情况</li>
-</ol>
-<h2 id="HTTP缓存体系"><a href="#HTTP缓存体系" class="headerlink" title="HTTP缓存体系"></a>HTTP缓存体系</h2><ol>
-<li>缓存存储策略：决定http响应内容是否可缓存到客户端，Cache-Control</li>
-<li>缓存过期策略：决定客户端是否可以直接使用缓存数据，Expires</li>
-<li>缓存对比策略：将缓存在客户端的数据标识发往服务端，服务端会查看if-modified-since等请求头，对比判断标识是否有效，如果有效则返回304</li>
-</ol>
-<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><ol>
-<li><a href="https://imweb.io/topic/5795dcb6fb312541492eda8c" target="_blank" rel="noopener">HTTP缓存控制小结</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/24467558" target="_blank" rel="noopener">彻底弄懂 Http 缓存机制</a></li>
-</ol>
-<h1 id="8-网关，隧道及中继"><a href="#8-网关，隧道及中继" class="headerlink" title="8. 网关，隧道及中继"></a>8. 网关，隧道及中继</h1><h2 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h2><p>如应用程序服务器，早期的CGI通用网关接口</p>
-<h2 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h2><ol>
-<li>web隧道允许用户通过http连接发送非http流量</li>
-<li>使用http方法CONNECT建立http隧道</li>
-<li>SSL隧道：最初的web隧道是为了通过防火墙传输SSL流量。发送CONNECT请求，返回认证请求，发送带有认证信息CONNECT请求，建立连接</li>
-</ol>
-<h2 id="中继"><a href="#中继" class="headerlink" title="中继"></a>中继</h2><ol>
-<li>盲转发</li>
-<li>无法处理Connection：keep-alive</li>
-</ol>
-<h1 id="9-爬虫"><a href="#9-爬虫" class="headerlink" title="9. 爬虫"></a>9. 爬虫</h1><ol>
-<li>链接提取及相对链接的标准化</li>
-<li>避免环路的出现</li>
-<li>广度优先</li>
-<li>节流</li>
-<li>内容指纹</li>
-</ol>
-<h1 id="10-客户端识别与cookie机制"><a href="#10-客户端识别与cookie机制" class="headerlink" title="10. 客户端识别与cookie机制"></a>10. 客户端识别与cookie机制</h1><h2 id="用户识别机制"><a href="#用户识别机制" class="headerlink" title="用户识别机制"></a>用户识别机制</h2><ol>
-<li>承载用户信息的HTTP首部：user-agent，cookie，referer，x-forward–for等</li>
-<li>客户端IP地址：并不能精确识别客户</li>
-<li>用户登录：通过www-authenticate，authorization首部</li>
-<li>cookie</li>
-</ol>
-<h1 id="11-基本认证机制"><a href="#11-基本认证机制" class="headerlink" title="11. 基本认证机制"></a>11. 基本认证机制</h1><ol>
-<li>实际使用并不安全，用户名和密码都是以明文形式传送，安全使用的唯一方式就是结合SSL</li>
-</ol>
-<h1 id="12-摘要认证"><a href="#12-摘要认证" class="headerlink" title="12. 摘要认证"></a>12. 摘要认证</h1><ol>
-<li>用摘要保护密码，不通过网络发送密码</li>
-<li>单向摘要，MD5输出的128位摘要被写成32个16进制字符</li>
-<li>用随机数防止重放攻击，服务器质询时返回给客户端一个随机数，客户端在计算摘要之前要加上这个随机数</li>
-</ol>
-<h1 id="13-安全HTTP"><a href="#13-安全HTTP" class="headerlink" title="13. 安全HTTP"></a>13. 安全HTTP</h1><ol>
-<li>对称秘钥加密：编码和解码使用相同的秘钥，流行算法：DES，RC2，RC4</li>
-<li>公开秘钥加密：使用非对称秘钥，只有接收端可以用私钥解密，RSA算法</li>
-<li>公开秘钥加密算法的计算可能会很慢，对称加密更快</li>
-<li>两个节点间通过公开秘钥加密建立安全通信，再用安全通道产生发送临时随机对称秘钥</li>
-<li>数字签名：附加在报文上的特殊加密校验码，可以证明是作者编写了这条报文，防止报文被篡改</li>
-<li>数字证书：对象，过期时间，发布者，公钥，数字签名等，常见标准格式X.509 v3</li>
-<li>浏览器收到服务器证书后，会对签名颁发机构进行检查</li>
-<li>SSL握手：交换协议版本号，选择一个两端都了解的密码，对两端的身份进行认证，生成临时会话秘钥。</li>
-<li>服务器可以要求客户端使用客户端证书，常见于组织机构内网</li>
-<li>站点证书有效性：日期检测，签名颁发者可信度检测，签名检测，站点身份检测检查证书域名与访问站点域名是否一致</li>
-<li>OpenSSL：SSL和TLS常见的开源实现，创建SSL本地上下文，建立443TCP连接，将SSL层附加到TCP连接，SSL握手</li>
-<li>HTTPS SSL隧道协议：http通过CONNECT方法告诉代理，建立一条直接到服务端的连接，以隧道协议传输数据</li>
-</ol>
-<h1 id="14-实体和编码"><a href="#14-实体和编码" class="headerlink" title="14. 实体和编码"></a>14. 实体和编码</h1><ol>
-<li>content-length：检测报文截尾，这对缓存服务器尤其重要；对于持久连接，客户端需要直到报文在哪里结束</li>
-<li>内容编码：如果主体进行编码，content-length说明的就是编码后的长度；编码后，增加content-encoding首部用户客户端解码；客户端通过accept-encoding告知服务端可以接受的编码方式</li>
-<li>实体摘要：发送方在生成初始主体时生成一个数据校验和，这样接收方就可以通过检查这个校验和捕获所有意外，相关首部content-md5</li>
-<li>传输编码：改变报文数据在网络中的传输方式，解决可靠传输存在的问题：未知尺寸，用传输编码发送数据，用特别的结束脚注表明数据结束；安全性（被SSL取代），扰乱报文内容</li>
-<li>Transfer-Encoding：传输编码类型，TE：告诉服务器可以使用哪些传输编码扩展</li>
-<li>分块编码：把报文分割为若干个小块紧挨着发送。非持久连接，客户端读取直到服务端关闭连接。持久连接，说明每块大小，最后用0块作为主体结束的信号</li>
-<li>传输编码规则：传输编码集合中要包含分块；必须最后一个作用于报文主体；不能多次作用到一个报文主体上；</li>
-<li>范围请求：允许客户端只请求文档的一部分，在点对点文件共享客户端应用广泛</li>
-<li>差异编码：客户端可以使用A-IM首部说明可以接受的实例操控类型，Delta-base用于计算差异的基线文档Etag，支持差异编码的服务器必须保持页面随时间变化的多个版本</li>
-</ol>
-<h1 id="15-国际化"><a href="#15-国际化" class="headerlink" title="15. 国际化"></a>15. 国际化</h1><ol>
-<li>charset参数和content-language：告知客户端文档的字母表和语言</li>
-<li>accept-language和accept-charset：告知服务端支持的字母表和语言及其优先顺序</li>
-</ol>
-<h1 id="16-内容协商与转码"><a href="#16-内容协商与转码" class="headerlink" title="16. 内容协商与转码"></a>16. 内容协商与转码</h1><ol>
-<li>Vary：响应首部列出客户端请求首部，服务端可用这些首部选择文档</li>
-<li>转码：格式转换，信息综合，内容注入</li>
-</ol>
-<h1 id="17-内容发布与分发"><a href="#17-内容发布与分发" class="headerlink" title="17. 内容发布与分发"></a>17. 内容发布与分发</h1><ol>
-<li>CDN：内容分发网络，节点可以是web服务器，反向代理，或缓存</li>
-</ol>
-<h1 id="18-重定向与负载均衡"><a href="#18-重定向与负载均衡" class="headerlink" title="18. 重定向与负载均衡"></a>18. 重定向与负载均衡</h1><ol>
-<li>HTTP重定向：增加时延</li>
-<li>DNS重定向：返回多个ip选中的ip，缺点时DNS会缓存</li>
-<li>任播寻址：地理上分散的web服务器拥有相同的ip地址，将地址广告给骨干网路由，则客户端的请求将通过最短路径路由给最近的服务器</li>
-<li>IP MAC转发：交换机将分组转发到指定MAC地址</li>
-<li>IP地址转发：修改目的IP地址，即NAT网络地址交换</li>
-<li>代理自动配置协议PAC：配置url使用代理</li>
-</ol>
-<h1 id="19-日志记录"><a href="#19-日志记录" class="headerlink" title="19. 日志记录"></a>19. 日志记录</h1><ol>
-<li>常用日志格式：参考nginx access.log</li>
-<li>对重要的页面进行缓存清除</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjsfiqozc000piczlv16rzm35" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-amqp" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/17/amqp/" class="article-date">
-  <time datetime="2018-07-17T14:44:38.000Z" itemprop="datePublished">2018-07-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Python源码学习/">Python源码学习</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/17/amqp/">Python amqp源码学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>amqp的源码比较少，适合我们学习AMQP的相关知识，先看看包结构</p>
-<p><img src="http://pcyw0skfm.bkt.clouddn.com/2018-08-05%2011-03-26%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt=""></p>
-<p>通过快速阅读，大致总结一下数据的转换和处理过程，如下图</p>
-<p><img src="http://pcyw0skfm.bkt.clouddn.com/amqp_1.jpg" alt=""></p>
-<p>阅读源码之前我们需要明确几个目标及关键点</p>
-<ol>
-<li>报文结构，跟TCP/IP协议类似，通过了解AMQP报文的结构我们才能更好地理解代码的设计及处理。</li>
-<li>数据转换处理</li>
-<li>消息收发，状态转换</li>
-<li>设计思想及细节处理</li>
-</ol>
-<h3 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h3><h3 id="序列化和反序列化"><a href="#序列化和反序列化" class="headerlink" title="序列化和反序列化"></a>序列化和反序列化</h3><h4 id="serialization-py"><a href="#serialization-py" class="headerlink" title="serialization.py"></a>serialization.py</h4><ul>
-<li><p>AMQPReader: 将二进制数据转换为Python数据类型数据,使用标准库struct处理二进制数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 提供一个统一的读取数据方法</span><br><span class="line">def read_item(self):</span><br><span class="line">    # 从二进制流读取第一字节，作为数据类型标识</span><br><span class="line">    ftype = ord(self.input.read(1))</span><br><span class="line"></span><br><span class="line">    if ftype == 83:</span><br><span class="line">        val = self.read_longstr()</span><br><span class="line"></span><br><span class="line">def read_longstr(self):</span><br><span class="line">    # 这里的bitcount和bits设置为0,标志如果下一次使用read_bit,该函数将会重新读取一字节</span><br><span class="line">    self.bitcount = self.bits = 0</span><br><span class="line">    # 接着从二进制流读取4字节,获取接下来的多少字节数据属于要读取的值</span><br><span class="line">    slen = unpack(&apos;&gt;I&apos;, self.input.read(4))[0]</span><br><span class="line">    return self.input.read(slen).decode(&apos;utf-8&apos;)</span><br><span class="line"></span><br><span class="line">def read_bit(self):</span><br><span class="line">    # 读取单个bit,如果是连续调用则从单个字节中继续读取单个bit</span><br><span class="line">    if not self.bitcount:</span><br><span class="line">        self.bits = ord(self.input.read(1))</span><br><span class="line">        self.bitcount = 8</span><br><span class="line">    result = (self.bits &amp; 1) == 1</span><br><span class="line">    self.bits &gt;&gt;= 1</span><br><span class="line">    self.bitcount -= 1</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>AMQRWriter: 将Python数据类型数据转换为二进制数据</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># 与AMQPReader对不同数据类型的做相对应的处理</span><br><span class="line">def write_item(self, v, k=None):</span><br><span class="line">    elif isinstance(v, bool):</span><br><span class="line">        self.write(pack(&apos;&gt;cB&apos;, b&apos;t&apos;, int(v)))</span><br><span class="line">    elif isinstance(v, float):</span><br><span class="line">        self.write(pack(&apos;&gt;cd&apos;, b&apos;d&apos;, v))</span><br><span class="line"></span><br><span class="line">def write_bit(self, b):</span><br><span class="line">    # 这一步主要是每8个bit数值结果用一个整数代替，配合_flushbits</span><br><span class="line">    # 如果是连续调用，则将会更加节省传递数据量</span><br><span class="line">    &quot;&quot;&quot;Write a boolean value.&quot;&quot;&quot;</span><br><span class="line">    b = 1 if b else 0</span><br><span class="line">    shift = self.bitcount % 8</span><br><span class="line">    if shift == 0:</span><br><span class="line">        self.bits.append(0)</span><br><span class="line">    self.bits[-1] |= (b &lt;&lt; shift)</span><br><span class="line">    self.bitcount += 1</span><br><span class="line"></span><br><span class="line">def _flushbits(self):</span><br><span class="line">    if self.bits:</span><br><span class="line">        out = self.out</span><br><span class="line">        for b in self.bits:</span><br><span class="line">            out.write(pack(&apos;B&apos;, b))</span><br><span class="line">        self.bits = []</span><br><span class="line">        self.bitcount = 0</span><br></pre></td></tr></table></figure>
-<ul>
-<li>GenericContent</li>
-</ul>
-<p>amqp内容消息体基类，序列化和反序列化内容头部属性信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">def _load_properties(self, raw_bytes):</span><br><span class="line">    ...</span><br><span class="line">    # 通过预设置各个消息体的头部标识映射到AMQPReader对应的读取方法</span><br><span class="line"></span><br><span class="line">def _serialize_properties(self):</span><br><span class="line">    # 通过预设置各个消息体的头部标识映射到AMQRWriter对应的写入数据方法</span><br></pre></td></tr></table></figure>
-<h4 id="basic-message-py"><a href="#basic-message-py" class="headerlink" title="basic_message.py"></a>basic_message.py</h4><p>Message: amqp内容消息体基类，继承自GenericContent</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class Message(GenericContent):</span><br><span class="line">    &quot;&quot;&quot;A Message for use with the Channnel.basic_* methods.&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    # 默认可选的属性值将会在客户端和服务端之间传递</span><br><span class="line">    # 每种属性分别对应的数据类型决定了读取和写入的方法</span><br><span class="line">    PROPERTIES = [</span><br><span class="line">        (&apos;content_type&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;content_encoding&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;application_headers&apos;, &apos;table&apos;),</span><br><span class="line">        (&apos;delivery_mode&apos;, &apos;octet&apos;),</span><br><span class="line">        (&apos;priority&apos;, &apos;octet&apos;),</span><br><span class="line">        (&apos;correlation_id&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;reply_to&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;expiration&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;message_id&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;timestamp&apos;, &apos;timestamp&apos;),</span><br><span class="line">        (&apos;type&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;user_id&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;app_id&apos;, &apos;shortstr&apos;),</span><br><span class="line">        (&apos;cluster_id&apos;, &apos;shortstr&apos;)</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    def __init__(self, body=&apos;&apos;, children=None, channel=None, **properties):</span><br><span class="line">        # 具体使用了哪些属性值还是需要根据不同实例传入的properties参数</span><br></pre></td></tr></table></figure>
-<h4 id="method-framing-py"><a href="#method-framing-py" class="headerlink" title="method_framing.py"></a>method_framing.py</h4>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjsfiqoy20000iczl65v09eib" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsk5vd7000083zzltskb43zu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -776,7 +684,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx文档笔记/">Nginx文档笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python源码学习/">Python源码学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis文档阅读笔记/">Redis文档阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《HTTP权威指南》阅读笔记/">《HTTP权威指南》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《高性能MySQL》阅读笔记/">《高性能MySQL》阅读笔记</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx文档笔记/">Nginx文档笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python源码学习/">Python源码学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis文档阅读笔记/">Redis文档阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《HTTP权威指南》阅读笔记/">《HTTP权威指南》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《高性能MySQL》阅读笔记/">《高性能MySQL》阅读笔记</a></li></ul>
     </div>
   </div>
 
@@ -791,7 +699,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
     </div>
   </div>
 
@@ -804,6 +712,14 @@
       <ul>
         
           <li>
+            <a href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
+          </li>
+        
+          <li>
             <a href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
           </li>
         
@@ -813,14 +729,6 @@
         
           <li>
             <a href="/2018/07/26/nginx-1/">Nginx文档笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/20/http-1/">《HTTP权威指南》阅读笔记一</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/17/amqp/">Python amqp源码学习</a>
           </li>
         
       </ul>
