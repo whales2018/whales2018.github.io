@@ -88,270 +88,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjsk5vd7d000h3zzlapj5b5bh" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-opsystem-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/18/opsystem-3/" class="article-date">
-  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="五、死锁"><a href="#五、死锁" class="headerlink" title="五、死锁"></a>五、死锁</h1><h3 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h3><ol>
-<li>可抢占资源：如存储器，两个进出互相等待对方占有的资源时，其中一方可以释放可抢占性资源，另一方可以顺利执行</li>
-<li>不可抢占资源：无法把资源从占有它的进程抢占过来</li>
-</ol>
-<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><ol>
-<li>如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，该进程集合就是死锁</li>
-<li>死锁条件：互斥条件，占有和等待条件，不可抢占条件，环路等待条件</li>
-<li>处理死锁策略：检测恢复，仔细对资源分配动态避免，破坏死锁条件之一</li>
-<li>检测：需要查阅相关检测算法</li>
-<li>恢复：利用抢占恢复，回滚恢复，杀死进程</li>
-</ol>
-<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><ol>
-<li>尽量做到尽可能少的进程可以真正请求资源</li>
-<li>破坏占有和等待条件：进程在开始执行前一次性请求所需全部资源，另一种，是进程请求资源时先释放已经持有，再一次性请求</li>
-<li>破坏不可抢占条件：对资源进行虚拟化，由底层进行实际的调用。不适用于操作系统或数据库的记录</li>
-<li>避免出现环路等待：对资源进行编号，每个进程请求需要按照资源的顺序提出</li>
-<li>两阶段加锁：第一阶段将所需记录加锁，如果遇到已经被加锁记录，则释放所有记录，重新第一阶段，第二阶段修改数据然后释放</li>
-<li>通信死锁：超时</li>
-<li>活锁：进程在临界区进行轮询，则可能出现没有进程阻塞，但进程一直尝试失败，常见于资源不足</li>
-<li>饥饿：资源分配迟迟没有轮到该进程</li>
-</ol>
-<h1 id="六、多媒体操作系统"><a href="#六、多媒体操作系统" class="headerlink" title="六、多媒体操作系统"></a>六、多媒体操作系统</h1><h2 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h2><ol>
-<li>特征：使用极高的数据率，多媒体要求实时回放</li>
-<li>要求：存储量大需要进行压缩，实时数据传输</li>
-<li>视频压缩：编码算法和解码算法的速度根据场景不同考量，不必100%可逆，允许有损</li>
-<li>音频压缩：波形编码傅里叶变换，感知编码</li>
-</ol>
-<h1 id="七、多处理机系统"><a href="#七、多处理机系统" class="headerlink" title="七、多处理机系统"></a>七、多处理机系统</h1><h2 id="多处理机操作系统"><a href="#多处理机操作系统" class="headerlink" title="多处理机操作系统"></a>多处理机操作系统</h2><ol>
-<li>每个CPU有自己的操作系统：无法充分利用资源，任务分配均衡等</li>
-<li>主从多处理机：主处理机容易成为瓶颈过载</li>
-<li>对称多处理机：把操作系统分割成多个临界区，每个临界区由其互斥信号量保护</li>
-</ol>
-<h2 id="多处理机同步，调度"><a href="#多处理机同步，调度" class="headerlink" title="多处理机同步，调度"></a>多处理机同步，调度</h2><ol>
-<li>分时</li>
-<li>空间共享：多个CPU上同时调度多个线程</li>
-<li>群调度：一组相关线程作为一个单位调度，一个群的成员在不同的CPU上同时进行，群中所有成员共同开始和结束时间片</li>
-</ol>
-<h1 id="八、安全"><a href="#八、安全" class="headerlink" title="八、安全"></a>八、安全</h1><h2 id="目标与威胁"><a href="#目标与威胁" class="headerlink" title="目标与威胁"></a>目标与威胁</h2><ol>
-<li>数据机密性–数据暴露</li>
-<li>数据完整性–数据篡改，数据遗失</li>
-<li>系统可用性–拒绝服务</li>
-<li>排外性–病毒控制</li>
-</ol>
-<h2 id="密码学原理"><a href="#密码学原理" class="headerlink" title="密码学原理"></a>密码学原理</h2><ol>
-<li>密钥：算法的加密参数</li>
-<li>加密算法公开，加密安全性由独立于算法的密钥决定</li>
-<li>公钥加密：加密运算比较简单，没有密钥的解密运算十分繁琐。公钥是加密密钥，私钥用于解密</li>
-<li>单向函数：f(x)可容易计算出y值，给定y值不能计算x，也称作加密散列函数</li>
-<li>数字签名：对文档运行单向散列函数如MD5，文档拥有者用私钥计算得到D(散列值)，接收方用发送方公钥计算得到E(D(散列值))得到实际散列值，再比较</li>
-</ol>
-<h2 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h2><ol>
-<li>域：一对组合，指定一个对象和一些可在其上运行的操作子集</li>
-<li>基本原则：最低权限原则，每个域拥有最少对象和满足其完成工作的最少权限，安全性最好</li>
-<li>unix：进程的域由(UID,GID)定义，每个进程分为用户部分和核心部分，执行系统调用时，从用户态切换到内核态，核心部分可以访问与用户部分不同的对象集，这样系统调用引发域切换</li>
-<li>访问控制表与权能字</li>
-<li>隐写术：如将实际信息隐藏在图片中等</li>
-</ol>
-<h2 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h2><ol>
-<li>口令</li>
-<li>一次性口令，如网上银行银盾等</li>
-<li>挑战响应认证，密码问题等</li>
-<li>实物认证</li>
-<li>生物识别认证</li>
-</ol>
-<h2 id="内部安全"><a href="#内部安全" class="headerlink" title="内部安全"></a>内部安全</h2><ol>
-<li>逻辑炸弹</li>
-<li>后门陷阱</li>
-<li>登录欺骗</li>
-</ol>
-<h2 id="代码漏洞"><a href="#代码漏洞" class="headerlink" title="代码漏洞"></a>代码漏洞</h2><ol>
-<li>缓冲区溢出</li>
-<li>代码注入：系统调用时，如命令行</li>
-<li>权限提升攻击：利用计划任务进行攻击等</li>
-</ol>
-<h2 id="恶意软件"><a href="#恶意软件" class="headerlink" title="恶意软件"></a>恶意软件</h2><ol>
-<li>木马攻击</li>
-<li>病毒</li>
-<li>蠕虫</li>
-</ol>
-<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
-<li>防火墙</li>
-<li>反病毒扫描，完整性检查，行为检查捕捉系统调用</li>
-<li>代码签名</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjsk5vd6y00063zzlmk5suocy" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-opsystem-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/18/opsystem-2/" class="article-date">
-  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="三、文件系统"><a href="#三、文件系统" class="headerlink" title="三、文件系统"></a>三、文件系统</h1><h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><ol>
-<li>文件命名，文件结构，文件类型</li>
-<li>文件存取：顺序存取，随机存取</li>
-<li>文件属性：如权限，创建修改时间等</li>
-<li>文件操作：常用系统调用如创建，打开等；open：文件属性和磁盘地址装入内存</li>
-</ol>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
-<li>层次目录系统，路径名</li>
-<li>目录操作：常用系统调用如创建，打开等；硬连接：文件的节点技术器增加，修改同一份文件。软连接只是符号连接，快捷方式，可以跨越磁盘界限</li>
-</ol>
-<h2 id="文件系统的实现"><a href="#文件系统的实现" class="headerlink" title="文件系统的实现"></a>文件系统的实现</h2><ol>
-<li>主引导记录MBR：磁盘的0号扇区，引导计算机</li>
-<li>分区表：MBR后面，记录每个分区的起始结束地址</li>
-<li>分区结构：引导块，超级块，空闲管理，i节点，根目录，文件和目录</li>
-<li>过程：计算机被引导，BIOS读入并执行MBR，确定活动分区，读入并执行第一个块引导快boot block，引导块中的程序将装载该分区中的操作系统</li>
-<li>每个分区都从一个启动块开始</li>
-<li>超级块：启动块之后，包括文件系统类型用的魔数，文件系统中数据块的数量等</li>
-<li>空闲管理：超级块之后，位图或链表形式</li>
-</ol>
-<h2 id="文件的实现"><a href="#文件的实现" class="headerlink" title="文件的实现"></a>文件的实现</h2><ol>
-<li>连续分配：删除时会产生磁盘空洞，写入时需要先挑选合适大小的磁盘空洞，常见于CD-ROM</li>
-<li>链表分配：不利于随机存取，指针占了一些字节，致使存储数据不再是2的整数幂</li>
-<li>文件分配表FAT：把磁盘块的指针放在内存的一个表中，目录项中记录起始块号即可。缺点是需要将整个表放在内存中，不适用于大磁盘</li>
-<li>i节点：每个文件一个i节点数据结构，列出文件属性和文件块的磁盘地址，具有指针可以指向包含磁盘块地址的块的地址</li>
-</ol>
-<h2 id="日志文件系统"><a href="#日志文件系统" class="headerlink" title="日志文件系统"></a>日志文件系统</h2><ol>
-<li>如NTFS和Linux ext3</li>
-<li>基本思想：保存一个用于记录系统下一步将要做什么的日志，当系统崩溃重启时可以查看日志，完成未完成任务</li>
-<li>先写日志项列出要完成的动作，写入磁盘，完成动作后擦除日志项</li>
-</ol>
-<h2 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h2><ol>
-<li>和文件相关的系统调用POSIX接口指向虚拟文件系统，由虚拟文件系统调用底层实际的文件系统</li>
-</ol>
-<h2 id="文件系统管理和优化"><a href="#文件系统管理和优化" class="headerlink" title="文件系统管理和优化"></a>文件系统管理和优化</h2><ol>
-<li>选定块大小：性能和空间利用率不可兼得</li>
-<li>记录空闲块：位图，空闲列表</li>
-<li>磁盘配额：通过打开文件表中的配额指针，找到配额表中用户的配额表项。</li>
-<li>文件系统的一致性：块检查检查使用表和空闲表并进行校正，目录检查检查文件使用表和文件i节点的计数。rm操作只修改i节点，没有把磁盘块返回空闲表</li>
-</ol>
-<h2 id="文件系统性能"><a href="#文件系统性能" class="headerlink" title="文件系统性能"></a>文件系统性能</h2><p>如果只需要读一个字，内存比磁盘方位快百万数量级</p>
-<h3 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h3><ol>
-<li>逻辑上属于磁盘，实际保存在内存中。与分页类似，置换算法类似</li>
-<li>系统调用SYNC强制性把全部修改过的块写回磁盘，若没有SYNC就移动磁盘，则数据丢失</li>
-</ol>
-<h3 id="块提前读"><a href="#块提前读" class="headerlink" title="块提前读"></a>块提前读</h3><ol>
-<li>在需要用到块时，试图提前将其写入高速缓存，提高命中率，如完成k块操作时，预读k+1块到高速缓存</li>
-<li>不适用于随机存取文件</li>
-</ol>
-<h3 id="减少磁盘臂运动"><a href="#减少磁盘臂运动" class="headerlink" title="减少磁盘臂运动"></a>减少磁盘臂运动</h3><ol>
-<li>把有可能顺序存取的块放在一起，最好是同一个柱面，减少磁盘臂运动</li>
-<li>使用i节点的文件系统中，需要两次磁盘访问，访问i节点和访问块。所以将i节点存放在磁盘中部，可以减少寻道时间</li>
-</ol>
-<h3 id="磁盘碎片整理"><a href="#磁盘碎片整理" class="headerlink" title="磁盘碎片整理"></a>磁盘碎片整理</h3><ol>
-<li>通过移动或复制，使空闲空间连成一片</li>
-</ol>
-<h1 id="四、输入-输出"><a href="#四、输入-输出" class="headerlink" title="四、输入/输出"></a>四、输入/输出</h1><h2 id="IO硬件原理"><a href="#IO硬件原理" class="headerlink" title="IO硬件原理"></a>IO硬件原理</h2><h3 id="IO设备"><a href="#IO设备" class="headerlink" title="IO设备"></a>IO设备</h3><ol>
-<li>块设备：硬盘，CD-ROM，USB</li>
-<li>字符设备：不可寻址没有寻道操作，打印机，网路接口，鼠标等</li>
-<li>时钟，内存映射显示器等</li>
-</ol>
-<h3 id="设备控制器"><a href="#设备控制器" class="headerlink" title="设备控制器"></a>设备控制器</h3><ol>
-<li>有寄存器用来与CPU通信</li>
-<li>数据缓冲区</li>
-<li>内存映射IO：每个控制寄存器映射到内存空间中被分配唯一的内存地址</li>
-<li>避免对设备控制器进行高速缓存，操作系统必须管理选择性高速缓存</li>
-<li>DMA：直接存储器存取，调控多个设备的数据传送</li>
-<li>中断：设备中断发出信号，由中断控制器检测</li>
-</ol>
-<h3 id="IO软件原理"><a href="#IO软件原理" class="headerlink" title="IO软件原理"></a>IO软件原理</h3><ol>
-<li>设备独立性</li>
-<li>统一命名</li>
-<li>错误处理</li>
-<li>同步阻塞，异步中断驱动：大部分物理IO是异步的，CPU启动传输便去做别的</li>
-<li>缓冲</li>
-<li>共享设备和独占设备</li>
-<li>程序控制IO：轮询设备寄存器是否就绪，直到全部IO完成，一直占用CPU</li>
-<li>中断驱动IO：中断发生在每个字符上</li>
-<li>DMA控制IO：将中断的次数从每个字符减少的每个缓冲区</li>
-<li>设备驱动程序：为了访问设备的硬件，通常必须是操作系统内核的一部分</li>
-</ol>
-<h2 id="盘"><a href="#盘" class="headerlink" title="盘"></a>盘</h2><p>磁盘组织成柱面，每个柱面包含若干磁道，磁道数与垂直堆叠的磁头个数相同，磁道分成若干扇区</p>
-<ol>
-<li>SATA：磁盘驱动器包含微控制器，负责高速缓存，重叠寻道，坏块重映等</li>
-<li>RAID：将一个装满磁盘的盒子安装到计算机，用RAID控制器替换磁盘控制器</li>
-</ol>
-<h3 id="磁盘臂调度算法"><a href="#磁盘臂调度算法" class="headerlink" title="磁盘臂调度算法"></a>磁盘臂调度算法</h3><ol>
-<li>磁盘读写时间因素：寻道占主导，旋转延迟，实际数据传输</li>
-<li>磁盘驱动程序维护一张表，按柱面号索引，每个柱面未完成的请求组成一个链表</li>
-<li>SSF：最短寻道优先算法，获得最小响应时间与公平性有冲突</li>
-<li>电梯算法：上下移动完成未完成的请求</li>
-<li>磁盘控制器高速缓存：每次将邻近的扇区也读取</li>
-</ol>
-<h2 id="时钟"><a href="#时钟" class="headerlink" title="时钟"></a>时钟</h2><ol>
-<li>时钟负责维护时间，根据已知的时间间隔产生中断。防止进程垄断CPU等</li>
-<li>大多数计算机具有一个由电池供电的备份时钟</li>
-</ol>
-<h3 id="时钟软件"><a href="#时钟软件" class="headerlink" title="时钟软件"></a>时钟软件</h3><ol>
-<li>维护日时间，防止进程超时，记录CPU使用，处理alarm系统调用，监视定时器，统计信息收集</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjsk5vd7100093zzlbj407edf" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjstw79of000gsnt967h875z8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -525,7 +262,270 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjsk5vd79000e3zzlhv1vwked" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjstw79o40008snt9jd258eur" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-opsystem-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/18/opsystem-2/" class="article-date">
+  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="三、文件系统"><a href="#三、文件系统" class="headerlink" title="三、文件系统"></a>三、文件系统</h1><h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><ol>
+<li>文件命名，文件结构，文件类型</li>
+<li>文件存取：顺序存取，随机存取</li>
+<li>文件属性：如权限，创建修改时间等</li>
+<li>文件操作：常用系统调用如创建，打开等；open：文件属性和磁盘地址装入内存</li>
+</ol>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li>层次目录系统，路径名</li>
+<li>目录操作：常用系统调用如创建，打开等；硬连接：文件的节点技术器增加，修改同一份文件。软连接只是符号连接，快捷方式，可以跨越磁盘界限</li>
+</ol>
+<h2 id="文件系统的实现"><a href="#文件系统的实现" class="headerlink" title="文件系统的实现"></a>文件系统的实现</h2><ol>
+<li>主引导记录MBR：磁盘的0号扇区，引导计算机</li>
+<li>分区表：MBR后面，记录每个分区的起始结束地址</li>
+<li>分区结构：引导块，超级块，空闲管理，i节点，根目录，文件和目录</li>
+<li>过程：计算机被引导，BIOS读入并执行MBR，确定活动分区，读入并执行第一个块引导快boot block，引导块中的程序将装载该分区中的操作系统</li>
+<li>每个分区都从一个启动块开始</li>
+<li>超级块：启动块之后，包括文件系统类型用的魔数，文件系统中数据块的数量等</li>
+<li>空闲管理：超级块之后，位图或链表形式</li>
+</ol>
+<h2 id="文件的实现"><a href="#文件的实现" class="headerlink" title="文件的实现"></a>文件的实现</h2><ol>
+<li>连续分配：删除时会产生磁盘空洞，写入时需要先挑选合适大小的磁盘空洞，常见于CD-ROM</li>
+<li>链表分配：不利于随机存取，指针占了一些字节，致使存储数据不再是2的整数幂</li>
+<li>文件分配表FAT：把磁盘块的指针放在内存的一个表中，目录项中记录起始块号即可。缺点是需要将整个表放在内存中，不适用于大磁盘</li>
+<li>i节点：每个文件一个i节点数据结构，列出文件属性和文件块的磁盘地址，具有指针可以指向包含磁盘块地址的块的地址</li>
+</ol>
+<h2 id="日志文件系统"><a href="#日志文件系统" class="headerlink" title="日志文件系统"></a>日志文件系统</h2><ol>
+<li>如NTFS和Linux ext3</li>
+<li>基本思想：保存一个用于记录系统下一步将要做什么的日志，当系统崩溃重启时可以查看日志，完成未完成任务</li>
+<li>先写日志项列出要完成的动作，写入磁盘，完成动作后擦除日志项</li>
+</ol>
+<h2 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h2><ol>
+<li>和文件相关的系统调用POSIX接口指向虚拟文件系统，由虚拟文件系统调用底层实际的文件系统</li>
+</ol>
+<h2 id="文件系统管理和优化"><a href="#文件系统管理和优化" class="headerlink" title="文件系统管理和优化"></a>文件系统管理和优化</h2><ol>
+<li>选定块大小：性能和空间利用率不可兼得</li>
+<li>记录空闲块：位图，空闲列表</li>
+<li>磁盘配额：通过打开文件表中的配额指针，找到配额表中用户的配额表项。</li>
+<li>文件系统的一致性：块检查检查使用表和空闲表并进行校正，目录检查检查文件使用表和文件i节点的计数。rm操作只修改i节点，没有把磁盘块返回空闲表</li>
+</ol>
+<h2 id="文件系统性能"><a href="#文件系统性能" class="headerlink" title="文件系统性能"></a>文件系统性能</h2><p>如果只需要读一个字，内存比磁盘方位快百万数量级</p>
+<h3 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h3><ol>
+<li>逻辑上属于磁盘，实际保存在内存中。与分页类似，置换算法类似</li>
+<li>系统调用SYNC强制性把全部修改过的块写回磁盘，若没有SYNC就移动磁盘，则数据丢失</li>
+</ol>
+<h3 id="块提前读"><a href="#块提前读" class="headerlink" title="块提前读"></a>块提前读</h3><ol>
+<li>在需要用到块时，试图提前将其写入高速缓存，提高命中率，如完成k块操作时，预读k+1块到高速缓存</li>
+<li>不适用于随机存取文件</li>
+</ol>
+<h3 id="减少磁盘臂运动"><a href="#减少磁盘臂运动" class="headerlink" title="减少磁盘臂运动"></a>减少磁盘臂运动</h3><ol>
+<li>把有可能顺序存取的块放在一起，最好是同一个柱面，减少磁盘臂运动</li>
+<li>使用i节点的文件系统中，需要两次磁盘访问，访问i节点和访问块。所以将i节点存放在磁盘中部，可以减少寻道时间</li>
+</ol>
+<h3 id="磁盘碎片整理"><a href="#磁盘碎片整理" class="headerlink" title="磁盘碎片整理"></a>磁盘碎片整理</h3><ol>
+<li>通过移动或复制，使空闲空间连成一片</li>
+</ol>
+<h1 id="四、输入-输出"><a href="#四、输入-输出" class="headerlink" title="四、输入/输出"></a>四、输入/输出</h1><h2 id="IO硬件原理"><a href="#IO硬件原理" class="headerlink" title="IO硬件原理"></a>IO硬件原理</h2><h3 id="IO设备"><a href="#IO设备" class="headerlink" title="IO设备"></a>IO设备</h3><ol>
+<li>块设备：硬盘，CD-ROM，USB</li>
+<li>字符设备：不可寻址没有寻道操作，打印机，网路接口，鼠标等</li>
+<li>时钟，内存映射显示器等</li>
+</ol>
+<h3 id="设备控制器"><a href="#设备控制器" class="headerlink" title="设备控制器"></a>设备控制器</h3><ol>
+<li>有寄存器用来与CPU通信</li>
+<li>数据缓冲区</li>
+<li>内存映射IO：每个控制寄存器映射到内存空间中被分配唯一的内存地址</li>
+<li>避免对设备控制器进行高速缓存，操作系统必须管理选择性高速缓存</li>
+<li>DMA：直接存储器存取，调控多个设备的数据传送</li>
+<li>中断：设备中断发出信号，由中断控制器检测</li>
+</ol>
+<h3 id="IO软件原理"><a href="#IO软件原理" class="headerlink" title="IO软件原理"></a>IO软件原理</h3><ol>
+<li>设备独立性</li>
+<li>统一命名</li>
+<li>错误处理</li>
+<li>同步阻塞，异步中断驱动：大部分物理IO是异步的，CPU启动传输便去做别的</li>
+<li>缓冲</li>
+<li>共享设备和独占设备</li>
+<li>程序控制IO：轮询设备寄存器是否就绪，直到全部IO完成，一直占用CPU</li>
+<li>中断驱动IO：中断发生在每个字符上</li>
+<li>DMA控制IO：将中断的次数从每个字符减少的每个缓冲区</li>
+<li>设备驱动程序：为了访问设备的硬件，通常必须是操作系统内核的一部分</li>
+</ol>
+<h2 id="盘"><a href="#盘" class="headerlink" title="盘"></a>盘</h2><p>磁盘组织成柱面，每个柱面包含若干磁道，磁道数与垂直堆叠的磁头个数相同，磁道分成若干扇区</p>
+<ol>
+<li>SATA：磁盘驱动器包含微控制器，负责高速缓存，重叠寻道，坏块重映等</li>
+<li>RAID：将一个装满磁盘的盒子安装到计算机，用RAID控制器替换磁盘控制器</li>
+</ol>
+<h3 id="磁盘臂调度算法"><a href="#磁盘臂调度算法" class="headerlink" title="磁盘臂调度算法"></a>磁盘臂调度算法</h3><ol>
+<li>磁盘读写时间因素：寻道占主导，旋转延迟，实际数据传输</li>
+<li>磁盘驱动程序维护一张表，按柱面号索引，每个柱面未完成的请求组成一个链表</li>
+<li>SSF：最短寻道优先算法，获得最小响应时间与公平性有冲突</li>
+<li>电梯算法：上下移动完成未完成的请求</li>
+<li>磁盘控制器高速缓存：每次将邻近的扇区也读取</li>
+</ol>
+<h2 id="时钟"><a href="#时钟" class="headerlink" title="时钟"></a>时钟</h2><ol>
+<li>时钟负责维护时间，根据已知的时间间隔产生中断。防止进程垄断CPU等</li>
+<li>大多数计算机具有一个由电池供电的备份时钟</li>
+</ol>
+<h3 id="时钟软件"><a href="#时钟软件" class="headerlink" title="时钟软件"></a>时钟软件</h3><ol>
+<li>维护日时间，防止进程超时，记录CPU使用，处理alarm系统调用，监视定时器，统计信息收集</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjstw79o50009snt9xwdyy0g4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-opsystem-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/18/opsystem-3/" class="article-date">
+  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="五、死锁"><a href="#五、死锁" class="headerlink" title="五、死锁"></a>五、死锁</h1><h3 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h3><ol>
+<li>可抢占资源：如存储器，两个进出互相等待对方占有的资源时，其中一方可以释放可抢占性资源，另一方可以顺利执行</li>
+<li>不可抢占资源：无法把资源从占有它的进程抢占过来</li>
+</ol>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><ol>
+<li>如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，该进程集合就是死锁</li>
+<li>死锁条件：互斥条件，占有和等待条件，不可抢占条件，环路等待条件</li>
+<li>处理死锁策略：检测恢复，仔细对资源分配动态避免，破坏死锁条件之一</li>
+<li>检测：需要查阅相关检测算法</li>
+<li>恢复：利用抢占恢复，回滚恢复，杀死进程</li>
+</ol>
+<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><ol>
+<li>尽量做到尽可能少的进程可以真正请求资源</li>
+<li>破坏占有和等待条件：进程在开始执行前一次性请求所需全部资源，另一种，是进程请求资源时先释放已经持有，再一次性请求</li>
+<li>破坏不可抢占条件：对资源进行虚拟化，由底层进行实际的调用。不适用于操作系统或数据库的记录</li>
+<li>避免出现环路等待：对资源进行编号，每个进程请求需要按照资源的顺序提出</li>
+<li>两阶段加锁：第一阶段将所需记录加锁，如果遇到已经被加锁记录，则释放所有记录，重新第一阶段，第二阶段修改数据然后释放</li>
+<li>通信死锁：超时</li>
+<li>活锁：进程在临界区进行轮询，则可能出现没有进程阻塞，但进程一直尝试失败，常见于资源不足</li>
+<li>饥饿：资源分配迟迟没有轮到该进程</li>
+</ol>
+<h1 id="六、多媒体操作系统"><a href="#六、多媒体操作系统" class="headerlink" title="六、多媒体操作系统"></a>六、多媒体操作系统</h1><h2 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h2><ol>
+<li>特征：使用极高的数据率，多媒体要求实时回放</li>
+<li>要求：存储量大需要进行压缩，实时数据传输</li>
+<li>视频压缩：编码算法和解码算法的速度根据场景不同考量，不必100%可逆，允许有损</li>
+<li>音频压缩：波形编码傅里叶变换，感知编码</li>
+</ol>
+<h1 id="七、多处理机系统"><a href="#七、多处理机系统" class="headerlink" title="七、多处理机系统"></a>七、多处理机系统</h1><h2 id="多处理机操作系统"><a href="#多处理机操作系统" class="headerlink" title="多处理机操作系统"></a>多处理机操作系统</h2><ol>
+<li>每个CPU有自己的操作系统：无法充分利用资源，任务分配均衡等</li>
+<li>主从多处理机：主处理机容易成为瓶颈过载</li>
+<li>对称多处理机：把操作系统分割成多个临界区，每个临界区由其互斥信号量保护</li>
+</ol>
+<h2 id="多处理机同步，调度"><a href="#多处理机同步，调度" class="headerlink" title="多处理机同步，调度"></a>多处理机同步，调度</h2><ol>
+<li>分时</li>
+<li>空间共享：多个CPU上同时调度多个线程</li>
+<li>群调度：一组相关线程作为一个单位调度，一个群的成员在不同的CPU上同时进行，群中所有成员共同开始和结束时间片</li>
+</ol>
+<h1 id="八、安全"><a href="#八、安全" class="headerlink" title="八、安全"></a>八、安全</h1><h2 id="目标与威胁"><a href="#目标与威胁" class="headerlink" title="目标与威胁"></a>目标与威胁</h2><ol>
+<li>数据机密性–数据暴露</li>
+<li>数据完整性–数据篡改，数据遗失</li>
+<li>系统可用性–拒绝服务</li>
+<li>排外性–病毒控制</li>
+</ol>
+<h2 id="密码学原理"><a href="#密码学原理" class="headerlink" title="密码学原理"></a>密码学原理</h2><ol>
+<li>密钥：算法的加密参数</li>
+<li>加密算法公开，加密安全性由独立于算法的密钥决定</li>
+<li>公钥加密：加密运算比较简单，没有密钥的解密运算十分繁琐。公钥是加密密钥，私钥用于解密</li>
+<li>单向函数：f(x)可容易计算出y值，给定y值不能计算x，也称作加密散列函数</li>
+<li>数字签名：对文档运行单向散列函数如MD5，文档拥有者用私钥计算得到D(散列值)，接收方用发送方公钥计算得到E(D(散列值))得到实际散列值，再比较</li>
+</ol>
+<h2 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h2><ol>
+<li>域：一对组合，指定一个对象和一些可在其上运行的操作子集</li>
+<li>基本原则：最低权限原则，每个域拥有最少对象和满足其完成工作的最少权限，安全性最好</li>
+<li>unix：进程的域由(UID,GID)定义，每个进程分为用户部分和核心部分，执行系统调用时，从用户态切换到内核态，核心部分可以访问与用户部分不同的对象集，这样系统调用引发域切换</li>
+<li>访问控制表与权能字</li>
+<li>隐写术：如将实际信息隐藏在图片中等</li>
+</ol>
+<h2 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h2><ol>
+<li>口令</li>
+<li>一次性口令，如网上银行银盾等</li>
+<li>挑战响应认证，密码问题等</li>
+<li>实物认证</li>
+<li>生物识别认证</li>
+</ol>
+<h2 id="内部安全"><a href="#内部安全" class="headerlink" title="内部安全"></a>内部安全</h2><ol>
+<li>逻辑炸弹</li>
+<li>后门陷阱</li>
+<li>登录欺骗</li>
+</ol>
+<h2 id="代码漏洞"><a href="#代码漏洞" class="headerlink" title="代码漏洞"></a>代码漏洞</h2><ol>
+<li>缓冲区溢出</li>
+<li>代码注入：系统调用时，如命令行</li>
+<li>权限提升攻击：利用计划任务进行攻击等</li>
+</ol>
+<h2 id="恶意软件"><a href="#恶意软件" class="headerlink" title="恶意软件"></a>恶意软件</h2><ol>
+<li>木马攻击</li>
+<li>病毒</li>
+<li>蠕虫</li>
+</ol>
+<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
+<li>防火墙</li>
+<li>反病毒扫描，完整性检查，行为检查捕捉系统调用</li>
+<li>代码签名</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjstw79o9000csnt9irh0t9iq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -581,6 +581,7 @@
 <li>proxy_pass: 请求发送到指定服务组</li>
 <li>proxy_bind：如果代理服务器有多个网卡，则与上游服务连接时可以指定ip地址</li>
 <li>proxy_set_header，proxy_buffer_size，proxy_timeout，proxy_connect_timeout等</li>
+<li>SSL: 基本原理与配置与https一致</li>
 </ol>
 <h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><ol>
 <li>gzip</li>
@@ -631,7 +632,7 @@
 <li><p>将$proxy_protocol_addr添加到log_format中</p>
 </li>
 </ol>
-<h1 id="六、安全"><a href="#六、安全" class="headerlink" title="六、安全"></a>六、安全</h1><h2 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h2><p>安全地协商出一份对称加密秘钥<br>RSA算法流程</p>
+<h1 id="五、安全"><a href="#五、安全" class="headerlink" title="五、安全"></a>五、安全</h1><h2 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h2><p>安全地协商出一份对称加密秘钥<br>RSA算法流程</p>
 <ol>
 <li>客户端发送client hello，客户端随机数，带上可选加密参数信息</li>
 <li>服务端响应server hello，服务端随机数，已选加密参数信息</li>
@@ -655,11 +656,16 @@
 <li>satisfy allow deny 设置ip限制</li>
 <li>auth_request 可以指定认证location</li>
 </ol>
+<h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><ol>
+<li>limit_conn_zone limit_conn: 限制连接数，限制每个客户端的连接数也可以设置服务接收的连接数</li>
+<li>limit_req_zone limit_req: 限制某个location下，请求的频率；burst，如果请求超出限制区，则burst为队列长度，其他请求立即返回503</li>
+<li>limit_rate: 限制location下的带宽</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsk5vd7000083zzltskb43zu" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjstw79o20006snt97sev0jit" class="article-share-link">Share</a>
       
       
     </footer>
@@ -716,7 +722,7 @@
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
+            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
           </li>
         
           <li>
@@ -724,7 +730,7 @@
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
           </li>
         
           <li>

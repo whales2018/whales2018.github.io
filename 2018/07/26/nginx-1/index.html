@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="沧海一粟">
 <meta property="og:description" content="一、安装 安装文档 Ubuntu:除了文档列出的依赖，额外依赖12345sudo apt install libssl-devsudo apt install  libxml2-devsudo apt install libxslt1-devsudo apt install libgd-devsudo apt install libgeoip-dev   二、nginx管理 一个master进程和">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-21T11:42:54.714Z">
+<meta property="og:updated_time" content="2019-03-04T09:12:14.099Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx文档笔记">
 <meta name="twitter:description" content="一、安装 安装文档 Ubuntu:除了文档列出的依赖，额外依赖12345sudo apt install libssl-devsudo apt install  libxml2-devsudo apt install libxslt1-devsudo apt install libgd-devsudo apt install libgeoip-dev   二、nginx管理 一个master进程和">
@@ -106,6 +106,7 @@
 <li>proxy_pass: 请求发送到指定服务组</li>
 <li>proxy_bind：如果代理服务器有多个网卡，则与上游服务连接时可以指定ip地址</li>
 <li>proxy_set_header，proxy_buffer_size，proxy_timeout，proxy_connect_timeout等</li>
+<li>SSL: 基本原理与配置与https一致</li>
 </ol>
 <h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><ol>
 <li>gzip</li>
@@ -156,7 +157,7 @@
 <li><p>将$proxy_protocol_addr添加到log_format中</p>
 </li>
 </ol>
-<h1 id="六、安全"><a href="#六、安全" class="headerlink" title="六、安全"></a>六、安全</h1><h2 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h2><p>安全地协商出一份对称加密秘钥<br>RSA算法流程</p>
+<h1 id="五、安全"><a href="#五、安全" class="headerlink" title="五、安全"></a>五、安全</h1><h2 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h2><p>安全地协商出一份对称加密秘钥<br>RSA算法流程</p>
 <ol>
 <li>客户端发送client hello，客户端随机数，带上可选加密参数信息</li>
 <li>服务端响应server hello，服务端随机数，已选加密参数信息</li>
@@ -180,11 +181,16 @@
 <li>satisfy allow deny 设置ip限制</li>
 <li>auth_request 可以指定认证location</li>
 </ol>
+<h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><ol>
+<li>limit_conn_zone limit_conn: 限制连接数，限制每个客户端的连接数也可以设置服务接收的连接数</li>
+<li>limit_req_zone limit_req: 限制某个location下，请求的频率；burst，如果请求超出限制区，则burst为队列长度，其他请求立即返回503</li>
+<li>limit_rate: 限制location下的带宽</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsk5vd7000083zzltskb43zu" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjstw79o20006snt97sev0jit" class="article-share-link">Share</a>
       
       
     </footer>
@@ -193,11 +199,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/08/18/opsystem-1/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/08/18/opsystem-3/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          《现代操作系统》阅读笔记一
+          《现代操作系统》阅读笔记三
         
       </div>
     </a>
@@ -253,7 +259,7 @@
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
+            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
           </li>
         
           <li>
@@ -261,7 +267,7 @@
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
           </li>
         
           <li>
