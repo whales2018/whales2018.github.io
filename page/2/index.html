@@ -238,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjsvc1w2r000vbbt92xcwy0qj" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjsvf2zdy000vwft90vrx8bwo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -274,13 +274,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p><img src="https://whales2018.github.io/pic/pic3.png" alt="amqp包目录结构"></p>
+        <h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>python amqp 包的代码量小，有助于我们学习AMQP，首先我们了解一下包的目录结构。大致阅读整体代码后，我们能够了解到整体的分层设计大致如图。<br>之后我们再深入每一层的代码实现，由底至上，学习相关的知识点。阅读完整个的源码后，我们再尝试用golang重新撸一遍实现。</p>
+<p><img src="https://whales2018.github.io/pic/pic3.png" alt="amqp包目录结构"></p>
 <p><img src="https://whales2018.github.io/pic/pic2.png" alt="amqp源码分层"></p>
+<h3 id="Transport"><a href="#Transport" class="headerlink" title="Transport"></a>Transport</h3><p>这一层主要是基于TCP连接，实现带缓冲区套接字字节流的读写，协议数据报的读写</p>
+<p><img src="https://whales2018.github.io/pic/pic1.png" alt="transport"></p>
+<ul>
+<li><p>协议无关性：socket.getaddrinfo 将返回目标地址支持的套接字信息并返回已填入相关信息的网际套接字地址结构sa，可以直接conenct。<br>无需考虑IPv4还是IPv6</p>
+</li>
+<li><p>设置描述符cloexec，子进程fork之后调用exec函数成功后，会自动关闭文件描述符，避免父进程退出重启后因为端口占用无法重启：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def set_cloexec(fd, cloexec):</span><br><span class="line">    try:</span><br><span class="line">        FD_CLOEXEC = fcntl.FD_CLOEXEC</span><br><span class="line">    except AttributeError:</span><br><span class="line">        raise NotImplementedError(</span><br><span class="line">            &apos;close-on-exec flag not supported on this platform&apos;,</span><br><span class="line">        )</span><br><span class="line">    flags = fcntl.fcntl(fd, fcntl.F_GETFD)</span><br><span class="line">    if cloexec:</span><br><span class="line">        flags |= FD_CLOEXEC</span><br><span class="line">    else:</span><br><span class="line">        flags &amp;= ~FD_CLOEXEC</span><br><span class="line">    return fcntl.fcntl(fd, fcntl.F_SETFD, flags)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>套接字选项设置，详情可以参考《UNIX网络编程卷1》第7章</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)</span><br><span class="line">self.sock.setsockopt(SOL_TCP, socket.TCP_NODELAY, 1)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>套接字读写，TCPTransport和SSLTransport分别实现了抽象类的套接字读写方法。<br>SSLTransport使用ssl库包裹了当前套接字并使用ssl的读写方法。读数据时，可能出现的异常</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">errno.ENOENT：recv收到对端发送的RST产生的错误</span><br><span class="line">errno.EAGAIN：如果设置成非阻塞读，没有数据可读时，返回该错误</span><br><span class="line">errno.EINTR：慢系统调用中断，常见于子进程终止时传递信号给父进程</span><br></pre></td></tr></table></figure>
+<ul>
+<li>协议数据报读写，从读取的方法，我们可以得到协议数据报的格式 帧类型1字节 + 2字节信道id + 4字节payload size + size字节payload + 1字节结束标志<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def read_frame(self, unpack=unpack):</span><br><span class="line">    ...</span><br><span class="line">    frame_header = read(7, True)</span><br><span class="line">    read_frame_buffer += frame_header</span><br><span class="line">    frame_type, channel, size = unpack(&apos;&gt;BHI&apos;, frame_header)</span><br><span class="line">    payload = read(size)</span><br><span class="line">    read_frame_buffer += payload</span><br><span class="line">    ch = ord(read(1))</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">def write_frame(self, frame_type, channel, payload)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjsvc1w1n0000bbt9jvdr00hm" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjsvf2zcw0000wft9nf815t7z" class="article-share-link">Share</a>
       
       
     </footer>
@@ -439,7 +461,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjsvc1w2x0010bbt9h5d0urvm" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjsvf2ze30010wft9hxetw5zh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -562,7 +584,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjsvc1w23000dbbt9zukdoc6u" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjsvf2zdd000dwft9k6l1iuph" class="article-share-link">Share</a>
       
       
     </footer>
@@ -740,7 +762,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjsvc1w1w0005bbt94piugrtq" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjsvf2zd50005wft9150lpld2" class="article-share-link">Share</a>
       
       
     </footer>
