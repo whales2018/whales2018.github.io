@@ -238,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjsvf2zdy000vwft90vrx8bwo" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjsvglldo000v4pt9a7e2q2rt" class="article-share-link">Share</a>
       
       
     </footer>
@@ -298,11 +298,16 @@
 <li>协议数据报读写，从读取的方法，我们可以得到协议数据报的格式 帧类型1字节 + 2字节信道id + 4字节payload size + size字节payload + 1字节结束标志<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def read_frame(self, unpack=unpack):</span><br><span class="line">    ...</span><br><span class="line">    frame_header = read(7, True)</span><br><span class="line">    read_frame_buffer += frame_header</span><br><span class="line">    frame_type, channel, size = unpack(&apos;&gt;BHI&apos;, frame_header)</span><br><span class="line">    payload = read(size)</span><br><span class="line">    read_frame_buffer += payload</span><br><span class="line">    ch = ord(read(1))</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">def write_frame(self, frame_type, channel, payload)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<h3 id="数据协议层"><a href="#数据协议层" class="headerlink" title="数据协议层"></a>数据协议层</h3><p>这一层主要提供了字节流与上层数据类型的转换工具AMQPReader/AMQPWriter，不同帧类型的数据报的组装和读取解析工具MethodWriter/MethodReader。<br>我们先研究一个具体使用的场景如声明exchange_declare。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">class Channel(AbstractChannel):</span><br><span class="line">    def exchange_declare(self, exchange, type, passive=False, durable=False,</span><br><span class="line">                         auto_delete=True, nowait=False, arguments=None):</span><br><span class="line">                arguments = &#123;&#125; if arguments is None else arguments</span><br><span class="line">        args = AMQPWriter()</span><br><span class="line">        args.write_short(0)</span><br><span class="line">        args.write_shortstr(exchange)</span><br><span class="line">        args.write_shortstr(type)</span><br><span class="line">        args.write_bit(passive)</span><br><span class="line">        args.write_bit(durable)</span><br><span class="line">        args.write_bit(auto_delete)</span><br><span class="line">        args.write_bit(False)  # internal: deprecated</span><br><span class="line">        args.write_bit(nowait)</span><br><span class="line">        args.write_table(arguments)</span><br><span class="line">        self._send_method((40, 10), args)</span><br><span class="line"></span><br><span class="line">        if auto_delete:</span><br><span class="line">            warn(VDeprecationWarning(EXCHANGE_AUTODELETE_DEPRECATED))</span><br><span class="line"></span><br><span class="line">        if not nowait:</span><br><span class="line">            return self.wait(allowed_methods=[</span><br><span class="line">                (40, 11),  # Channel.exchange_declare_ok</span><br><span class="line">            ])</span><br></pre></td></tr></table></figure>
+<p>通过AMQPWriter，将exchange_declare的参数序列化为字节流args，通过查看_send_method可以知道最后由MethodWriter.write_method执行组装发送,<br>这里的write_frame则由底层的transport提供</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class MethodWriter(object):</span><br><span class="line">    def write_method(self, channel, method_sig, args, content=None):</span><br><span class="line">        write_frame = self.dest.write_frame</span><br><span class="line">        payload = pack(&apos;&gt;HH&apos;, method_sig[0], method_sig[1]) + args</span><br><span class="line">        ...</span><br><span class="line">        write_frame(1, channel, payload)</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>至此我们已经初步了解了从上层抽象的操作接口到底层字节流的转换进行通信的过程。<br>而上述只是一个基本的包含参数的操作，对于带有消息内容的发布与接收操作，则增加两种类型：消息头部和消息实体。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjsvf2zcw0000wft9nf815t7z" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjsvgllcf00004pt9vxg82ik5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -461,7 +466,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjsvf2ze30010wft9hxetw5zh" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjsvglldv00104pt9xe1jbnyx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -584,7 +589,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjsvf2zdd000dwft9k6l1iuph" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjsvgllcz000d4pt9m0y3tnxr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -762,7 +767,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjsvf2zd50005wft9150lpld2" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjsvgllcp00054pt97ir0ovoe" class="article-share-link">Share</a>
       
       
     </footer>
