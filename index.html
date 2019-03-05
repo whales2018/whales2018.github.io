@@ -88,7 +88,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjsvbgdpe000q45t9dy31iuul" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjsvc0tz3000ga3t9vy2pkfc5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -262,131 +262,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjsvbgdp6000h45t95v8cgi8r" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-opsystem-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/18/opsystem-3/" class="article-date">
-  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="五、死锁"><a href="#五、死锁" class="headerlink" title="五、死锁"></a>五、死锁</h1><h3 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h3><ol>
-<li>可抢占资源：如存储器，两个进出互相等待对方占有的资源时，其中一方可以释放可抢占性资源，另一方可以顺利执行</li>
-<li>不可抢占资源：无法把资源从占有它的进程抢占过来</li>
-</ol>
-<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><ol>
-<li>如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，该进程集合就是死锁</li>
-<li>死锁条件：互斥条件，占有和等待条件，不可抢占条件，环路等待条件</li>
-<li>处理死锁策略：检测恢复，仔细对资源分配动态避免，破坏死锁条件之一</li>
-<li>检测：需要查阅相关检测算法</li>
-<li>恢复：利用抢占恢复，回滚恢复，杀死进程</li>
-</ol>
-<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><ol>
-<li>尽量做到尽可能少的进程可以真正请求资源</li>
-<li>破坏占有和等待条件：进程在开始执行前一次性请求所需全部资源，另一种，是进程请求资源时先释放已经持有，再一次性请求</li>
-<li>破坏不可抢占条件：对资源进行虚拟化，由底层进行实际的调用。不适用于操作系统或数据库的记录</li>
-<li>避免出现环路等待：对资源进行编号，每个进程请求需要按照资源的顺序提出</li>
-<li>两阶段加锁：第一阶段将所需记录加锁，如果遇到已经被加锁记录，则释放所有记录，重新第一阶段，第二阶段修改数据然后释放</li>
-<li>通信死锁：超时</li>
-<li>活锁：进程在临界区进行轮询，则可能出现没有进程阻塞，但进程一直尝试失败，常见于资源不足</li>
-<li>饥饿：资源分配迟迟没有轮到该进程</li>
-</ol>
-<h1 id="六、多媒体操作系统"><a href="#六、多媒体操作系统" class="headerlink" title="六、多媒体操作系统"></a>六、多媒体操作系统</h1><h2 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h2><ol>
-<li>特征：使用极高的数据率，多媒体要求实时回放</li>
-<li>要求：存储量大需要进行压缩，实时数据传输</li>
-<li>视频压缩：编码算法和解码算法的速度根据场景不同考量，不必100%可逆，允许有损</li>
-<li>音频压缩：波形编码傅里叶变换，感知编码</li>
-</ol>
-<h1 id="七、多处理机系统"><a href="#七、多处理机系统" class="headerlink" title="七、多处理机系统"></a>七、多处理机系统</h1><h2 id="多处理机操作系统"><a href="#多处理机操作系统" class="headerlink" title="多处理机操作系统"></a>多处理机操作系统</h2><ol>
-<li>每个CPU有自己的操作系统：无法充分利用资源，任务分配均衡等</li>
-<li>主从多处理机：主处理机容易成为瓶颈过载</li>
-<li>对称多处理机：把操作系统分割成多个临界区，每个临界区由其互斥信号量保护</li>
-</ol>
-<h2 id="多处理机同步，调度"><a href="#多处理机同步，调度" class="headerlink" title="多处理机同步，调度"></a>多处理机同步，调度</h2><ol>
-<li>分时</li>
-<li>空间共享：多个CPU上同时调度多个线程</li>
-<li>群调度：一组相关线程作为一个单位调度，一个群的成员在不同的CPU上同时进行，群中所有成员共同开始和结束时间片</li>
-</ol>
-<h1 id="八、安全"><a href="#八、安全" class="headerlink" title="八、安全"></a>八、安全</h1><h2 id="目标与威胁"><a href="#目标与威胁" class="headerlink" title="目标与威胁"></a>目标与威胁</h2><ol>
-<li>数据机密性–数据暴露</li>
-<li>数据完整性–数据篡改，数据遗失</li>
-<li>系统可用性–拒绝服务</li>
-<li>排外性–病毒控制</li>
-</ol>
-<h2 id="密码学原理"><a href="#密码学原理" class="headerlink" title="密码学原理"></a>密码学原理</h2><ol>
-<li>密钥：算法的加密参数</li>
-<li>加密算法公开，加密安全性由独立于算法的密钥决定</li>
-<li>公钥加密：加密运算比较简单，没有密钥的解密运算十分繁琐。公钥是加密密钥，私钥用于解密</li>
-<li>单向函数：f(x)可容易计算出y值，给定y值不能计算x，也称作加密散列函数</li>
-<li>数字签名：对文档运行单向散列函数如MD5，文档拥有者用私钥计算得到D(散列值)，接收方用发送方公钥计算得到E(D(散列值))得到实际散列值，再比较</li>
-</ol>
-<h2 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h2><ol>
-<li>域：一对组合，指定一个对象和一些可在其上运行的操作子集</li>
-<li>基本原则：最低权限原则，每个域拥有最少对象和满足其完成工作的最少权限，安全性最好</li>
-<li>unix：进程的域由(UID,GID)定义，每个进程分为用户部分和核心部分，执行系统调用时，从用户态切换到内核态，核心部分可以访问与用户部分不同的对象集，这样系统调用引发域切换</li>
-<li>访问控制表与权能字</li>
-<li>隐写术：如将实际信息隐藏在图片中等</li>
-</ol>
-<h2 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h2><ol>
-<li>口令</li>
-<li>一次性口令，如网上银行银盾等</li>
-<li>挑战响应认证，密码问题等</li>
-<li>实物认证</li>
-<li>生物识别认证</li>
-</ol>
-<h2 id="内部安全"><a href="#内部安全" class="headerlink" title="内部安全"></a>内部安全</h2><ol>
-<li>逻辑炸弹</li>
-<li>后门陷阱</li>
-<li>登录欺骗</li>
-</ol>
-<h2 id="代码漏洞"><a href="#代码漏洞" class="headerlink" title="代码漏洞"></a>代码漏洞</h2><ol>
-<li>缓冲区溢出</li>
-<li>代码注入：系统调用时，如命令行</li>
-<li>权限提升攻击：利用计划任务进行攻击等</li>
-</ol>
-<h2 id="恶意软件"><a href="#恶意软件" class="headerlink" title="恶意软件"></a>恶意软件</h2><ol>
-<li>木马攻击</li>
-<li>病毒</li>
-<li>蠕虫</li>
-</ol>
-<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
-<li>防火墙</li>
-<li>反病毒扫描，完整性检查，行为检查捕捉系统调用</li>
-<li>代码签名</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjsvbgdpa000k45t9nvg8qa8a" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjsvc0tys0008a3t9gmft82o1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -525,7 +401,131 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjsvbgdpb000m45t9ra59b388" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjsvc0tyu0009a3t9zjontil0" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-opsystem-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/18/opsystem-3/" class="article-date">
+  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/《现代操作系统》阅读笔记/">《现代操作系统》阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="五、死锁"><a href="#五、死锁" class="headerlink" title="五、死锁"></a>五、死锁</h1><h3 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h3><ol>
+<li>可抢占资源：如存储器，两个进出互相等待对方占有的资源时，其中一方可以释放可抢占性资源，另一方可以顺利执行</li>
+<li>不可抢占资源：无法把资源从占有它的进程抢占过来</li>
+</ol>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><ol>
+<li>如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，该进程集合就是死锁</li>
+<li>死锁条件：互斥条件，占有和等待条件，不可抢占条件，环路等待条件</li>
+<li>处理死锁策略：检测恢复，仔细对资源分配动态避免，破坏死锁条件之一</li>
+<li>检测：需要查阅相关检测算法</li>
+<li>恢复：利用抢占恢复，回滚恢复，杀死进程</li>
+</ol>
+<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><ol>
+<li>尽量做到尽可能少的进程可以真正请求资源</li>
+<li>破坏占有和等待条件：进程在开始执行前一次性请求所需全部资源，另一种，是进程请求资源时先释放已经持有，再一次性请求</li>
+<li>破坏不可抢占条件：对资源进行虚拟化，由底层进行实际的调用。不适用于操作系统或数据库的记录</li>
+<li>避免出现环路等待：对资源进行编号，每个进程请求需要按照资源的顺序提出</li>
+<li>两阶段加锁：第一阶段将所需记录加锁，如果遇到已经被加锁记录，则释放所有记录，重新第一阶段，第二阶段修改数据然后释放</li>
+<li>通信死锁：超时</li>
+<li>活锁：进程在临界区进行轮询，则可能出现没有进程阻塞，但进程一直尝试失败，常见于资源不足</li>
+<li>饥饿：资源分配迟迟没有轮到该进程</li>
+</ol>
+<h1 id="六、多媒体操作系统"><a href="#六、多媒体操作系统" class="headerlink" title="六、多媒体操作系统"></a>六、多媒体操作系统</h1><h2 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h2><ol>
+<li>特征：使用极高的数据率，多媒体要求实时回放</li>
+<li>要求：存储量大需要进行压缩，实时数据传输</li>
+<li>视频压缩：编码算法和解码算法的速度根据场景不同考量，不必100%可逆，允许有损</li>
+<li>音频压缩：波形编码傅里叶变换，感知编码</li>
+</ol>
+<h1 id="七、多处理机系统"><a href="#七、多处理机系统" class="headerlink" title="七、多处理机系统"></a>七、多处理机系统</h1><h2 id="多处理机操作系统"><a href="#多处理机操作系统" class="headerlink" title="多处理机操作系统"></a>多处理机操作系统</h2><ol>
+<li>每个CPU有自己的操作系统：无法充分利用资源，任务分配均衡等</li>
+<li>主从多处理机：主处理机容易成为瓶颈过载</li>
+<li>对称多处理机：把操作系统分割成多个临界区，每个临界区由其互斥信号量保护</li>
+</ol>
+<h2 id="多处理机同步，调度"><a href="#多处理机同步，调度" class="headerlink" title="多处理机同步，调度"></a>多处理机同步，调度</h2><ol>
+<li>分时</li>
+<li>空间共享：多个CPU上同时调度多个线程</li>
+<li>群调度：一组相关线程作为一个单位调度，一个群的成员在不同的CPU上同时进行，群中所有成员共同开始和结束时间片</li>
+</ol>
+<h1 id="八、安全"><a href="#八、安全" class="headerlink" title="八、安全"></a>八、安全</h1><h2 id="目标与威胁"><a href="#目标与威胁" class="headerlink" title="目标与威胁"></a>目标与威胁</h2><ol>
+<li>数据机密性–数据暴露</li>
+<li>数据完整性–数据篡改，数据遗失</li>
+<li>系统可用性–拒绝服务</li>
+<li>排外性–病毒控制</li>
+</ol>
+<h2 id="密码学原理"><a href="#密码学原理" class="headerlink" title="密码学原理"></a>密码学原理</h2><ol>
+<li>密钥：算法的加密参数</li>
+<li>加密算法公开，加密安全性由独立于算法的密钥决定</li>
+<li>公钥加密：加密运算比较简单，没有密钥的解密运算十分繁琐。公钥是加密密钥，私钥用于解密</li>
+<li>单向函数：f(x)可容易计算出y值，给定y值不能计算x，也称作加密散列函数</li>
+<li>数字签名：对文档运行单向散列函数如MD5，文档拥有者用私钥计算得到D(散列值)，接收方用发送方公钥计算得到E(D(散列值))得到实际散列值，再比较</li>
+</ol>
+<h2 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h2><ol>
+<li>域：一对组合，指定一个对象和一些可在其上运行的操作子集</li>
+<li>基本原则：最低权限原则，每个域拥有最少对象和满足其完成工作的最少权限，安全性最好</li>
+<li>unix：进程的域由(UID,GID)定义，每个进程分为用户部分和核心部分，执行系统调用时，从用户态切换到内核态，核心部分可以访问与用户部分不同的对象集，这样系统调用引发域切换</li>
+<li>访问控制表与权能字</li>
+<li>隐写术：如将实际信息隐藏在图片中等</li>
+</ol>
+<h2 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h2><ol>
+<li>口令</li>
+<li>一次性口令，如网上银行银盾等</li>
+<li>挑战响应认证，密码问题等</li>
+<li>实物认证</li>
+<li>生物识别认证</li>
+</ol>
+<h2 id="内部安全"><a href="#内部安全" class="headerlink" title="内部安全"></a>内部安全</h2><ol>
+<li>逻辑炸弹</li>
+<li>后门陷阱</li>
+<li>登录欺骗</li>
+</ol>
+<h2 id="代码漏洞"><a href="#代码漏洞" class="headerlink" title="代码漏洞"></a>代码漏洞</h2><ol>
+<li>缓冲区溢出</li>
+<li>代码注入：系统调用时，如命令行</li>
+<li>权限提升攻击：利用计划任务进行攻击等</li>
+</ol>
+<h2 id="恶意软件"><a href="#恶意软件" class="headerlink" title="恶意软件"></a>恶意软件</h2><ol>
+<li>木马攻击</li>
+<li>病毒</li>
+<li>蠕虫</li>
+</ol>
+<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
+<li>防火墙</li>
+<li>反病毒扫描，完整性检查，行为检查捕捉系统调用</li>
+<li>代码签名</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjsvc0tyx000ca3t9zbs2vc7a" class="article-share-link">Share</a>
       
       
     </footer>
@@ -665,7 +665,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsvbgdp5000f45t9dnluz1ek" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsvc0tyr0006a3t9pob4yd32" class="article-share-link">Share</a>
       
       
     </footer>
@@ -726,11 +726,11 @@
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
+            <a href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
+            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
           </li>
         
           <li>
