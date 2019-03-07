@@ -5,15 +5,19 @@
   
 
   
-  <title>Archives: 2018/7 | 沧海一粟</title>
+  <title>Docker文档与实践二 | 沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="沧海一粟">
-<meta property="og:url" content="https://whales2018.github.io/archives/2018/07/index.html">
+  <meta name="description" content="网络配置网络驱动 可插拔 bridge: 独立容器通信使用，适用于同一个宿主不同容器通信 host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离 overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信 macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker文档与实践二">
+<meta property="og:url" content="https://whales2018.github.io/2018/08/17/docker-2/index.html">
 <meta property="og:site_name" content="沧海一粟">
+<meta property="og:description" content="网络配置网络驱动 可插拔 bridge: 独立容器通信使用，适用于同一个宿主不同容器通信 host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离 overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信 macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-07T10:26:04.328Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="沧海一粟">
+<meta name="twitter:title" content="Docker文档与实践二">
+<meta name="twitter:description" content="网络配置网络驱动 可插拔 bridge: 独立容器通信使用，适用于同一个宿主不同容器通信 host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离 overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信 macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址">
   
   
     <link rel="icon" href="/favicon.png">
@@ -56,78 +60,72 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/07/26/nginx-1/" class="archive-article-date">
-  <time datetime="2018-07-26T03:21:11.000Z" itemprop="datePublished">Jul 26</time>
+        <section id="main"><article id="post-docker-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/17/docker-2/" class="article-date">
+  <time datetime="2018-08-17T14:44:38.000Z" itemprop="datePublished">2018-08-17</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Docker/">Docker</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/26/nginx-1/">Nginx文档笔记</a>
+    <h1 class="article-title" itemprop="name">
+      Docker文档与实践二
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/07/20/http-1/" class="archive-article-date">
-  <time datetime="2018-07-20T03:21:11.000Z" itemprop="datePublished">Jul 20</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/20/http-1/">《HTTP权威指南》阅读笔记一</a>
-    </h1>
-  
+        <h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><h2 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h2><ul>
+<li>可插拔</li>
+<li>bridge: 独立容器通信使用，适用于同一个宿主不同容器通信</li>
+<li>host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离</li>
+<li>overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信</li>
+<li>macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址路由。适用于从虚拟机迁移</li>
+<li>none: 禁用网络</li>
+</ul>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/07/17/amqp/" class="archive-article-date">
-  <time datetime="2018-07-17T14:44:38.000Z" itemprop="datePublished">Jul 17</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/07/17/amqp/">amqp源码阅读</a>
-    </h1>
-  
-
-    </header>
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/08/17/docker-2/" data-id="cjsyhx1v70004gat92eh4ii6o" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
-</article>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/17/docker-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Docker文档与实践一
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2018/07/26/nginx-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Nginx文档笔记</div>
+    </a>
   
+</nav>
 
+  
+</article>
 
 </section>
         
