@@ -5,11 +5,11 @@
   
 
   
-  <title>Archives: 2018/9 | 沧海一粟</title>
+  <title>沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="沧海一粟">
-<meta property="og:url" content="https://whales2018.github.io/archives/2018/09/index.html">
+<meta property="og:url" content="https://whales2018.github.io/page/4/index.html">
 <meta property="og:site_name" content="沧海一粟">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
@@ -58,38 +58,73 @@
       <div class="outer">
         <section id="main">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/09/18/tcpip-1/" class="archive-article-date">
-  <time datetime="2018-09-18T03:21:11.000Z" itemprop="datePublished">Sep 18</time>
+    <article id="post-mysql-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-1/" class="article-date">
+  <time datetime="2018-06-30T03:21:11.000Z" itemprop="datePublished">2018-06-30</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/《高性能MySQL》阅读笔记/">《高性能MySQL》阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+      <a class="article-title" href="/2018/06/30/mysql-1/">《高性能MySQL》阅读笔记一</a>
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-MySQL服务器逻辑架构"><a href="#1-MySQL服务器逻辑架构" class="headerlink" title="1. MySQL服务器逻辑架构"></a>1. MySQL服务器逻辑架构</h1><p>连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等.</p>
+<p>查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等.</p>
+<p>存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信.</p>
+<h1 id="2-并发控制"><a href="#2-并发控制" class="headerlink" title="2. 并发控制"></a>2. 并发控制</h1><p>每种存储引擎有不同的锁策略和锁粒度</p>
+<p>表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表的读写操作.写锁比读锁有更高的优先级.</p>
+<p>行级锁: InnoDB和[XtraDB][1],行级锁只在存储引擎实现</p>
+<p>事务: ACID, 原子性,一致性,隔离性(isolation),持久性(durability).</p>
+<p>MySQL默认的[事务隔离级别][2]为可重复读(REPEATABLE READ)</p>
+<p>死锁: 不同引擎处理方式不同.InnoDB 处理死锁方法,将持有最少行级排他锁的事务进行回滚</p>
+<p>多版本并发控制(MVCC): 如InnoDB, 通过在每行记录后面保存两个列存储创建和删除时的系统版本号.</p>
+<h1 id="3-存储引擎"><a href="#3-存储引擎" class="headerlink" title="3. 存储引擎"></a>3. 存储引擎</h1><p>创建表时,MySQL会在数据库子目录下创建一个同名.frm文件保存表的定义</p>
+<p>InnoDB: 处理大量的短期事务, 通过间隙锁锁定查询涉及的行和索引中的间隙进行锁定,防止幻影行的插入, 基于聚簇索引创建表.通过一些机制和工具支持真正的热备份.**一般优先考虑InnoDB存储引擎**</p>
+<p>MyISAM: 包括全文索引,压缩,空间函数,延迟更新索引键等特性,不支持事务和行级锁,崩溃后无法安全恢复.对于只读数据,表小可以忍受修复操作可以使用该引擎.</p>
+<p>如果要使用全文索引,建议用InnoDB加上Sphinx组合替换MyISAM</p>
+<p>使用引擎考虑:事务,备份,崩溃恢复,特有特性</p>
+<p>日志型应用: MyISAM 或者Archive,因为开销低插入速度快更为适合</p>
+<p>对于大数据量需要建立数据仓库,[Infobright][3]和[TokuDB][4]是比较好的解决方案</p>
+<p>[1]: <a href="https://mariadb.com/kb/zh-cn/about-xtradb/" target="_blank" rel="noopener">https://mariadb.com/kb/zh-cn/about-xtradb/</a></p>
+<p>[2]: <a href="https://zh.wikipedia.org/wiki/事務隔離" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/事務隔離</a></p>
+<p>[3]: <a href="http://www.csdn.net/article/2014-08-26/2821379" target="_blank" rel="noopener">http://www.csdn.net/article/2014-08-26/2821379</a></p>
+<p>[4]: <a href="http://blog.jobbole.com/109104/" target="_blank" rel="noopener">http://blog.jobbole.com/109104/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-1/" data-id="cjsygsq8m00027nt97z02mulm" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
+  
 </article>
-  
-  
-    </div></section>
+
+
   
 
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+  </nav>
 
 </section>
         
