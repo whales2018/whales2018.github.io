@@ -58,9 +58,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-docker-1" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-docker-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/08/17/docker-1/" class="article-date">
+    <a href="/2018/08/17/docker-2/" class="article-date">
   <time datetime="2018-08-17T14:44:38.000Z" itemprop="datePublished">2018-08-17</time>
 </a>
     
@@ -76,7 +76,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/17/docker-1/">Docker文档与实践一</a>
+      <a class="article-title" href="/2018/08/17/docker-2/">Docker文档与实践二</a>
     </h1>
   
 
@@ -84,61 +84,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h2 id="镜像与容器"><a href="#镜像与容器" class="headerlink" title="镜像与容器"></a>镜像与容器</h2><ul>
-<li>通过<a href="https://docs.docker.com/get-started/part2/" target="_blank" rel="noopener">官网文档</a>例子构建镜像，可以用镜像运行多个容器。</li>
-<li>镜像的发布与拉取，类似于github操作</li>
-</ul>
-<h2 id="服务组"><a href="#服务组" class="headerlink" title="服务组"></a>服务组</h2><ul>
-<li>大的系统往往需要拆分成多个服务，每个服务构建成独立的镜像。而一个服务组可以统一管理各个服务的部署</li>
-<li>通过docker-compose.yml配置，可以配置服务组，包含不同服务使用的镜像，容器数量，资源分配，重启策略，端口，网络</li>
-<li>docker stack deploy -c docker-compose.yml $services_name</li>
-<li>这里的部署前提是docker swarm init，启动集群管理，当前机器为其中的一个节点</li>
-<li>部署之前需要确认节点有配置所需要的镜像</li>
-</ul>
-<h2 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h2><ul>
-<li>docker swarm init 将当前节点作为管理节点</li>
-<li>其他机器可以通过docker swarm join 加入集群，作为其中的一个节点，服务组部署启动的容器将被分布在集群的节点上</li>
-</ul>
-<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><ul>
-<li>docker-compose.yml 引入可视化服务，redis服务</li>
-<li>volumes: 在redis容器内文件系统创建/data，通过映射到宿主系统的实际文件目录，redis数据将可以持久保存在宿主而不会因为容器删除而被删除</li>
-<li>通过可视化我们可以直观地看到不同节点运行的服务</li>
-</ul>
-<h1 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h1><h2 id="开发最佳实践"><a href="#开发最佳实践" class="headerlink" title="开发最佳实践"></a>开发最佳实践</h2><ul>
-<li>选择合适的基础镜像，避免构建的镜像太大</li>
-<li>多阶段构建，如果不使用多阶段构建，则尽量减少层数</li>
-<li>创建一个公共基础镜像，docker只需要加载一次并缓存它</li>
-<li>需要考虑基于生产镜像构建用于debug的镜像</li>
-<li>添加有意义的镜像tag，包含版本信息，运行环境等</li>
-<li>避免在容器存储层写数据，将会使容器膨胀，IO也不如使用数据卷高效</li>
-<li>敏感数据使用secrets，非敏感使用configs</li>
-<li>尽量使用swarm方式部署，可扩展，配置化，优雅重启，具备一些额外功能如secrets，configs，可以自动获取需要的镜像不需要手动拉取</li>
-<li>使用CI/CD自动构建，打tag，测试</li>
-</ul>
-<h2 id="Dockerfile最佳实践"><a href="#Dockerfile最佳实践" class="headerlink" title="Dockerfile最佳实践"></a>Dockerfile最佳实践</h2><ul>
-<li>FROM: 从指定的镜像创建一层，COPY: 从Docker客户端当前目录拷贝文件，RUN: 执行命令，CMD: 容器启动执行命令，容器启动时，添加一层可写容器层在镜像基础上，所有的修改仅发生在这一层</li>
-<li>执行docker build时，指定目录为build context，上下文会发送给Docker daemon</li>
-<li>.dockerignore 类似.gitignore</li>
-<li>多阶段构建有助于减小镜像大小和层数，不需要的包不装，构建下一层前清除当前层不需要的东西</li>
-<li>应用解耦: 尽可能一个容器一个进程，通过容器间通信配置可以解决依赖</li>
-<li>减少层次: RUN，COPY，ADD创建实际的层，其他指令创建临时中间层</li>
-<li>构建时指令顺序执行时会检查现有镜像的缓存</li>
-<li>从已经缓存的基础镜像开始，下一个指令检查基础镜像的子镜像是否有匹配</li>
-<li>ADD，COPY是否使用缓存会通过比较文件指纹</li>
-</ul>
-<h2 id="创建基础镜像"><a href="#创建基础镜像" class="headerlink" title="创建基础镜像"></a>创建基础镜像</h2><ul>
-<li>FROM scratch</li>
-</ul>
-<h2 id="多阶段构建"><a href="#多阶段构建" class="headerlink" title="多阶段构建"></a>多阶段构建</h2><ul>
-<li>同一个Dockerfile</li>
-<li>多个FROM，通过–from，下一阶段可以通过引用上一阶段构建好的镜像临时容器中获取需要的文件或程序</li>
-<li>可以只构建指定阶段，也可以直接引用其他镜像</li>
+        <h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><h2 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h2><ul>
+<li>可插拔</li>
+<li>bridge: 独立容器通信使用，适用于同一个宿主不同容器通信</li>
+<li>host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离</li>
+<li>overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信</li>
+<li>macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址路由。适用于从虚拟机迁移</li>
+<li>none: 禁用网络</li>
 </ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/17/docker-1/" data-id="cjsykt7z7000228t9sr7fxyvu" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/17/docker-2/" data-id="cjszfrhh10002r2t9u0k6hn6m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -278,7 +236,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjsykt7zh000928t94xe8r94n" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjszfrhhb0008r2t9200b7qar" class="article-share-link">Share</a>
       
       
     </footer>
@@ -468,7 +426,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjsykt807000z28t9cw1zbz1a" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjszfrhhy000zr2t9cfk4wg0b" class="article-share-link">Share</a>
       
       
     </footer>
@@ -560,7 +518,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjsykt807000y28t97vnyt85g" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjszfrhhx000yr2t9yae3nv3c" class="article-share-link">Share</a>
       
       
     </footer>
@@ -719,7 +677,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjsykt80c001528t9n0ama3p1" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjszfrhi30015r2t9w48y1hws" class="article-share-link">Share</a>
       
       
     </footer>
@@ -780,15 +738,15 @@
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
-          </li>
-        
-          <li>
             <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
           </li>
         
           <li>
-            <a href="/2018/08/17/docker-2/">Docker文档与实践二</a>
+            <a href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/17/docker-1/">Docker文档与实践一</a>
           </li>
         
       </ul>
