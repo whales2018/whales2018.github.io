@@ -5,18 +5,18 @@
   
 
   
-  <title>Docker文档与实践一 | 沧海一粟</title>
+  <title>Docker文档与实践 | 沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="入门镜像与容器 通过官网文档例子构建镜像，可以用镜像运行多个容器。 镜像的发布与拉取，类似于github操作  服务组 大的系统往往需要拆分成多个服务，每个服务构建成独立的镜像。而一个服务组可以统一管理各个服务的部署 通过docker-compose.yml配置，可以配置服务组，包含不同服务使用的镜像，容器数量，资源分配，重启策略，端口，网络 docker stack deploy -c dock">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker文档与实践一">
+<meta property="og:title" content="Docker文档与实践">
 <meta property="og:url" content="https://whales2018.github.io/2018/08/17/docker-1/index.html">
 <meta property="og:site_name" content="沧海一粟">
 <meta property="og:description" content="入门镜像与容器 通过官网文档例子构建镜像，可以用镜像运行多个容器。 镜像的发布与拉取，类似于github操作  服务组 大的系统往往需要拆分成多个服务，每个服务构建成独立的镜像。而一个服务组可以统一管理各个服务的部署 通过docker-compose.yml配置，可以配置服务组，包含不同服务使用的镜像，容器数量，资源分配，重启策略，端口，网络 docker stack deploy -c dock">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-07T10:12:55.914Z">
+<meta property="og:updated_time" content="2019-03-08T09:03:39.704Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker文档与实践一">
+<meta name="twitter:title" content="Docker文档与实践">
 <meta name="twitter:description" content="入门镜像与容器 通过官网文档例子构建镜像，可以用镜像运行多个容器。 镜像的发布与拉取，类似于github操作  服务组 大的系统往往需要拆分成多个服务，每个服务构建成独立的镜像。而一个服务组可以统一管理各个服务的部署 通过docker-compose.yml配置，可以配置服务组，包含不同服务使用的镜像，容器数量，资源分配，重启策略，端口，网络 docker stack deploy -c dock">
   
   
@@ -78,7 +78,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Docker文档与实践一
+      Docker文档与实践
     </h1>
   
 
@@ -136,11 +136,71 @@
 <li>多个FROM，通过–from，下一阶段可以通过引用上一阶段构建好的镜像临时容器中获取需要的文件或程序</li>
 <li>可以只构建指定阶段，也可以直接引用其他镜像</li>
 </ul>
+<h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><h2 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h2><ul>
+<li>可插拔</li>
+<li>bridge: 独立容器通信使用，适用于同一个宿主不同容器通信</li>
+<li>host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离</li>
+<li>overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信</li>
+<li>macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址路由。适用于从虚拟机迁移</li>
+<li>none: 禁用网络</li>
+<li>docker network ls 可以看见已有的网络及对应的驱动类型</li>
+</ul>
+<h2 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a>bridge</h2><ul>
+<li>分为默认和自定义</li>
+<li>使用默认时，每个容器都需要打开指定端口。使用自定义网络时，处于同一网络的容器间端口是相互暴露，而只需要供外部访问的容器打开端口即可</li>
+<li>使用自定义网络，容器可以加入和移出自定义网络</li>
+<li>自定义网络有单独的配置文件</li>
+<li>默认网络使用–link参数可以使容器间共享环境变量，自定义网络则需要考虑从共享数据卷，docker-compose，swarm services实现环境变量共享</li>
+<li>自定义网络通过-p参数指定对其他网络的暴露端口</li>
+<li>容器创建时可以指定加入的网络，已经运行的可以通过docker network connect加入</li>
+<li>docker attach 将连接宿主与容器的标准输入输出错误流</li>
+<li>实践可以参考<a href="https://docs.docker.com/network/network-tutorial-standalone/" target="_blank" rel="noopener">https://docs.docker.com/network/network-tutorial-standalone/</a></li>
+</ul>
+<h2 id="host"><a href="#host" class="headerlink" title="host"></a>host</h2><ul>
+<li>容器与宿主没有隔离，容器的端口直接使用宿主的端口</li>
+<li>可以用于swarm services，如果容器绑定指定端口，则一个节点只能启动一个容器</li>
+</ul>
+<h2 id="overlay"><a href="#overlay" class="headerlink" title="overlay"></a>overlay</h2><ul>
+<li>用于创建分布式网络连接多个docker daemon，路由转发数据包</li>
+<li>docker swarm init 初始化时，docker network ls 可以查看到，默认网络ingress</li>
+<li>同一个docker daemon下的container通信用默认的bridge网络docker_gwbridge</li>
+<li>每一个docker daemon 需要开放系列端口：TCP2377用于集群的管理通信，TCP7946和UDP7946用于节点间通信，UDP4789用于overlay网络转发</li>
+<li>自定义overlay网络，可以–opt encrypted加密节点数据传输</li>
+<li>可以自定义默认ingress的配置，需要通过移除和重建的方式</li>
+<li>修改docker_gwbridge配置时，需要停止docker，也是通过移除和重建的方式</li>
+</ul>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><ul>
+<li>外部访问容器：通过端口映射将容器端口暴露</li>
+<li>容器互联：基础服务容器不对外暴露端口，只供应用层服务容器访问，则传统方式通过–link手动互联，更好的方式是自定义网络，将容器加入同一个网络。Docker通过提供环境变量和更新host文件提供基础服务容器连接信息。</li>
+</ul>
+<h1 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h1><h2 id="持久化存储"><a href="#持久化存储" class="headerlink" title="持久化存储"></a>持久化存储</h2><h3 id="volumes"><a href="#volumes" class="headerlink" title="volumes"></a>volumes</h3><ul>
+<li>数据卷作为宿主文件系统的一部分，由docker管理，非docker进程无法修改，官方推荐最佳数据持久化方式</li>
+<li>可以同时挂载到多个容器，可以同时读写</li>
+<li>可以存储数据到云端</li>
+<li>可以方便的进行数据迁移</li>
+</ul>
+<h3 id="bind-mounts"><a href="#bind-mounts" class="headerlink" title="bind mounts"></a>bind mounts</h3><ul>
+<li>可以在宿主任何位置存储，非docker进程可以修改</li>
+<li>直接将宿主的文件或文件夹挂载到容器，不利于管理</li>
+<li>使用场景：共享配置文件如dns，在开发环境容器进行打包时可以生成包到指定路径，</li>
+</ul>
+<h3 id="tmpfs-mounts"><a href="#tmpfs-mounts" class="headerlink" title="tmpfs mounts"></a>tmpfs mounts</h3><ul>
+<li>存在宿主内存，而不是容器可写存储层</li>
+<li>主要基于性能考虑，如大量数据写时</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>文档帮助我们快速入门及对docker的整体有个大体了解。通过官网的实践例子，我们对docker不再陌生，剩下的则是实际开发生产解决具体问题，以下的几个问题还需要在实际应用过程中进行总结。</li>
+<li>如何更快构建更小的镜像，需要了解Dockerfile各个指令，多阶段构建，构建缓存使用等</li>
+<li>如何利用集群使服务高效便捷地扩展，如何编排服务组，分配资源等</li>
+<li>如何利用网络通信，使不同容器，服务，节点间进行解耦合作</li>
+<li>如何解决不同容器，服务，节点间数据持久化，共享</li>
+<li>实际生产监控与报警</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/17/docker-1/" data-id="cjszrfxqv0000knt9bxixqydn" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/17/docker-1/" data-id="cjszu2rk90000gst9yc1xidv2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -159,9 +219,9 @@
     </a>
   
   
-    <a href="/2018/08/17/docker-2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/07/26/nginx-1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Docker文档与实践二</div>
+      <div class="article-nav-title">Nginx文档笔记</div>
     </a>
   
 </nav>
@@ -221,7 +281,7 @@
           </li>
         
           <li>
-            <a href="/2018/08/17/docker-1/">Docker文档与实践一</a>
+            <a href="/2018/08/17/docker-1/">Docker文档与实践</a>
           </li>
         
       </ul>

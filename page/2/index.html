@@ -58,98 +58,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-docker-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/17/docker-2/" class="article-date">
-  <time datetime="2018-08-17T14:44:38.000Z" itemprop="datePublished">2018-08-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/17/docker-2/">Docker文档与实践二</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><h2 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h2><ul>
-<li>可插拔</li>
-<li>bridge: 独立容器通信使用，适用于同一个宿主不同容器通信</li>
-<li>host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离</li>
-<li>overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信</li>
-<li>macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址路由。适用于从虚拟机迁移</li>
-<li>none: 禁用网络</li>
-<li>docker network ls 可以看见已有的网络及对应的驱动类型</li>
-</ul>
-<h2 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a>bridge</h2><ul>
-<li>分为默认和自定义</li>
-<li>使用默认时，每个容器都需要打开指定端口。使用自定义网络时，处于同一网络的容器间端口是相互暴露，而只需要供外部访问的容器打开端口即可</li>
-<li>使用自定义网络，容器可以加入和移出自定义网络</li>
-<li>自定义网络有单独的配置文件</li>
-<li>默认网络使用–link参数可以使容器间共享环境变量，自定义网络则需要考虑从共享数据卷，docker-compose，swarm services实现环境变量共享</li>
-<li>自定义网络通过-p参数指定对其他网络的暴露端口</li>
-<li>容器创建时可以指定加入的网络，已经运行的可以通过docker network connect加入</li>
-<li>docker attach 将连接宿主与容器的标准输入输出错误流</li>
-<li>实践可以参考<a href="https://docs.docker.com/network/network-tutorial-standalone/" target="_blank" rel="noopener">https://docs.docker.com/network/network-tutorial-standalone/</a></li>
-</ul>
-<h2 id="host"><a href="#host" class="headerlink" title="host"></a>host</h2><ul>
-<li>容器与宿主没有隔离，容器的端口直接使用宿主的端口</li>
-<li>可以用于swarm services，如果容器绑定指定端口，则一个节点只能启动一个容器</li>
-</ul>
-<h2 id="overlay"><a href="#overlay" class="headerlink" title="overlay"></a>overlay</h2><ul>
-<li>用于创建分布式网络连接多个docker daemon，路由转发数据包</li>
-<li>docker swarm init 初始化时，docker network ls 可以查看到，默认网络ingress</li>
-<li>同一个docker daemon下的container通信用默认的bridge网络docker_gwbridge</li>
-<li>每一个docker daemon 需要开放系列端口：TCP2377用于集群的管理通信，TCP7946和UDP7946用于节点间通信，UDP4789用于overlay网络转发</li>
-<li>自定义overlay网络，可以–opt encrypted加密节点数据传输</li>
-<li>可以自定义默认ingress的配置，需要通过移除和重建的方式</li>
-<li>修改docker_gwbridge配置时，需要停止docker，也是通过移除和重建的方式</li>
-</ul>
-<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><ul>
-<li>外部访问容器：通过端口映射将容器端口暴露</li>
-<li>容器互联：基础服务容器不对外暴露端口，只供应用层服务容器访问，则传统方式通过–link手动互联，更好的方式是自定义网络，将容器加入同一个网络。Docker通过提供环境变量和更新host文件提供基础服务容器连接信息。</li>
-</ul>
-<h1 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h1><h2 id="持久化存储"><a href="#持久化存储" class="headerlink" title="持久化存储"></a>持久化存储</h2><h3 id="volumes"><a href="#volumes" class="headerlink" title="volumes"></a>volumes</h3><ul>
-<li>数据卷作为宿主文件系统的一部分，由docker管理，非docker进程无法修改，官方推荐最佳数据持久化方式</li>
-<li>可以同时挂载到多个容器，可以同时读写</li>
-<li>可以存储数据到云端</li>
-<li>可以方便的进行数据迁移</li>
-</ul>
-<h3 id="bind-mounts"><a href="#bind-mounts" class="headerlink" title="bind mounts"></a>bind mounts</h3><ul>
-<li>可以在宿主任何位置存储，非docker进程可以修改</li>
-<li>直接将宿主的文件或文件夹挂载到容器，不利于管理</li>
-<li>使用场景：共享配置文件如dns，在开发环境容器进行打包时可以生成包到指定路径，</li>
-</ul>
-<h3 id="tmpfs-mounts"><a href="#tmpfs-mounts" class="headerlink" title="tmpfs mounts"></a>tmpfs mounts</h3><ul>
-<li>存在宿主内存，而不是容器可写存储层</li>
-<li>主要基于性能考虑，如大量数据写时</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/17/docker-2/" data-id="cjszrfxr00002knt9irdzegsd" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-nginx-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/26/nginx-1/" class="article-date">
@@ -280,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjszrfxr90008knt9iijfcck4" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjszu2rkj0005gst9desxmcp1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -470,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjszrfxs3000zknt94br7x2zc" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjszu2rlc000wgst917tb9yia" class="article-share-link">Share</a>
       
       
     </footer>
@@ -562,7 +470,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjszrfxs2000yknt9zkvgor6w" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/07/17/amqp/" data-id="cjszu2rla000ugst9fnumjwrf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -721,7 +629,130 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjszrfxs90015knt9k3mjk2n1" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-2/" data-id="cjszu2rlg0012gst9rdvggtez" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-redis-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/redis-1/" class="article-date">
+  <time datetime="2018-06-30T06:41:04.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/redis-1/">Redis文档阅读笔记一</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-Pipelining"><a href="#1-Pipelining" class="headerlink" title="1. Pipelining"></a>1. Pipelining</h1><ol>
+<li>Redis是一个TCPServer,使用CS模型</li>
+<li>1次请求将命令集合发送,Redis执行命令后将结果队列化后,再写入返回</li>
+<li>队列化执行结果需要使用内存,如果多次大批量操作需要注意内存的使用</li>
+<li>使用Redis脚本能够处理更快处理批量命令.管道无法在脚本中使用,因为使用管道时在写入之前需要返回响应给客户端(需要注意:这里个人理解可能存在偏差).反之,管道可以使用脚本</li>
+</ol>
+<h1 id="2-Redis-Pub-Sub"><a href="#2-Redis-Pub-Sub" class="headerlink" title="2. Redis Pub/Sub"></a>2. Redis Pub/Sub</h1><ol>
+<li>发布订阅模式: 发布者发布消息到Channel,订阅者订阅Channel接收消息</li>
+<li>Redis客户端一旦为订阅模式,不能接收其他命令</li>
+<li>redis-cli命令行客户端时进入订阅模式之后只能通过ctrl-c取消订阅,因为此时客户端阻塞等待接收订阅消息</li>
+<li>发布订阅无关于key所在空间,db10发布的,db1订阅仍能接收</li>
+<li>可用模式匹配发布多个channel 和订阅多个channel</li>
+</ol>
+<h1 id="3-Redis-Lua-scripting"><a href="#3-Redis-Lua-scripting" class="headerlink" title="3. Redis Lua scripting"></a>3. Redis Lua scripting</h1><ol>
+<li>EVAL,EVALSHA命令执行Lua脚本</li>
+<li>Lua 脚本可以使用redis.call 或redis.pcall执行redis命令</li>
+<li>redis.call执行遇到错误时直接抛出Lua异常结果,redis.pcall则会把异常处理成Lua table返回</li>
+<li>Lua调用redis命令时把数据转成redis对应数据类型,脚本执行结果返回给客户端时Lua的数据类型转成redis对应数据类型</li>
+<li>使用Lua脚本时对于浮点数最好使用字符串替代</li>
+<li>如果Lua返回数组中包含nil,则数据转换终止,最终只能返回nil之前的结果</li>
+<li>redis.error_reply,redis.status_reply 在Lua脚本中是比较有用的按redis数据类型返回结果的方法</li>
+<li>执行Lua脚本时,其他客户端的命令和脚本将无法执行</li>
+<li>redis内部缓存机制会缓存脚本,使用EVALSHA,如果redis通过匹配SHA1文摘匹配到脚本,则执行脚本,否则返回错误信息通知使用EVAL代替</li>
+<li>使用SCRIPT FLUSH或重启redis实例会刷新脚本缓存</li>
+<li>脚本自身会被从库复制或写入AOF文件,而不是脚本的结果命令.不过从3.2版本开始,已经可选设置复制结果命令</li>
+<li>脚本不允许设置全局变量</li>
+</ol>
+<h1 id="4-Debugging-Lua-scripts"><a href="#4-Debugging-Lua-scripts" class="headerlink" title="4. Debugging Lua scripts"></a>4. Debugging Lua scripts</h1><ol>
+<li>Redis Lua debugger默认,每一个新的Debug session是一个forked session,这意味着当脚本在debug中时,不会阻塞redis server执行其他命令,同时也意味着debug结束后会回滚脚本执行的结果</li>
+<li>官网有视频详解<a href="https://redis.io/topics/ldb" target="_blank" rel="noopener">https://redis.io/topics/ldb</a></li>
+</ol>
+<h1 id="5-Memory-optimization"><a href="#5-Memory-optimization" class="headerlink" title="5. Memory optimization"></a>5. Memory optimization</h1><ol>
+<li>通过修改redis.conf调整每一种数据类型的最大数量和最大空间</li>
+<li>RDB和AOF文件兼容32位和64位,之间可以互转</li>
+<li>合理利用bit和byte操作</li>
+<li>尽可能使用hash结构存储数据</li>
+<li>每个hash最多存储100个field是cpu和内存之间的最佳妥协</li>
+<li>redis根据配置文件maxmemory分配内存</li>
+<li>被删除的key实际上并不会立刻释放内存,例如在同一页中存在其他的key未被删除,需要根据峰值内存使用量限定内存使用</li>
+<li>redis底层内存分配器会尽可能重复利用被删除key的内存,所以也不用太担心被删除key没有及时释放的问题</li>
+<li>如果不设置maxmemory,所有的内存将可能被吃光</li>
+<li>当超过最大内存限制时,导致写入时out of memory error,但不会因此导致整个机器挂掉</li>
+</ol>
+<h1 id="6-Expires"><a href="#6-Expires" class="headerlink" title="6. Expires"></a>6. Expires</h1><ol>
+<li>过期时间只针对key不针对值</li>
+<li>过期时间可以通过persist命令清除</li>
+<li>通过rename重命名key,原key的过期时间仍然有效,如果由别的key rename覆盖,则该key具有别的key的特性</li>
+<li>如果设置的过期时间为过去时间,则key相当于del 而不是expired</li>
+<li>消极检查: 当客户端获取该key时才检查该key是否过期</li>
+<li>积极检查: redis 1秒内执行10个检查过期,每次随机选取20个key,发现过期的则清除,如果发现超过25%过期,则继续下一个检查</li>
+<li>过期执行删除的命令会传递给从库和AOF文件同步执行.从库不会检查key过期,当切换为主库时才会去检查</li>
+</ol>
+<h1 id="7-Redis-as-an-LRU-Less-Recently-Used-cache"><a href="#7-Redis-as-an-LRU-Less-Recently-Used-cache" class="headerlink" title="7. Redis as an LRU (Less Recently Used) cache"></a>7. Redis as an LRU (Less Recently Used) cache</h1><h2 id="7-1-Redis达到最大内存限制时策略"><a href="#7-1-Redis达到最大内存限制时策略" class="headerlink" title="7.1 Redis达到最大内存限制时策略"></a>7.1 Redis达到最大内存限制时策略</h2><ol>
+<li>noeviction: 直接抛出异常</li>
+<li>allkeys-lru: 将最近不常用的key清除腾出空间</li>
+<li>volatile-lru: 将带有过期时间的最近不常用的key清除腾出空间</li>
+<li>allkeys-random: 随机将key清除腾出空间</li>
+<li>volatile-random: 随机将带有过期时间的key清除腾出空间</li>
+<li>volatile-ttl: 将较小剩余存活时间的key清除腾出空间</li>
+<li>如果不确定使用哪种策略,allkeys-lru是一个较好选择</li>
+<li>volatile-lru和volatile-random比较适用于只用单个实例,混用缓存和持久key</li>
+</ol>
+<h2 id="7-2-近似LRU算法"><a href="#7-2-近似LRU算法" class="headerlink" title="7.2 近似LRU算法"></a>7.2 近似LRU算法</h2><ol>
+<li>redis使用的并不是实际的LRU算法,而是大致评估一定样本量中选取最符合的key</li>
+<li>可以通过设置配置样本量参数maxmemory-samples调节精度</li>
+</ol>
+<h2 id="7-3-LFU-Least-Frequently-Used"><a href="#7-3-LFU-Least-Frequently-Used" class="headerlink" title="7.3 LFU (Least Frequently Used)"></a>7.3 LFU (Least Frequently Used)</h2><ol>
+<li>4.0版本以后新增了新策略,根据命中的频率决定清除哪些key</li>
+<li>lfu-log-factor和lfu-decay-time是两项主要调节参数</li>
+</ol>
+<h1 id="8-Redis-transactions"><a href="#8-Redis-transactions" class="headerlink" title="8. Redis transactions"></a>8. Redis transactions</h1><ol>
+<li>事务中的所有命令会序列化并串行化执行,在事务过程中,其他客户端发起的请求不会被处理</li>
+<li>所有命令要么全部被处理或不处理(这里的处理并不表示一定执行成功),保证了原子性</li>
+<li>如果使用append-only file,在发生崩溃或强制关闭redis时有可能导致执行事务中部分命令.redis重启后会检测到直接退出.使用redis-check-aof tool修复</li>
+<li>MULTI开启事务,命令存储到队列,命令EXEC执行事务所有命令</li>
+<li>执行EXEC检测到命令错误时,会在EXEC直接返回错误信息,并丢弃所有命令</li>
+<li>执行EXEC后,部分命令执行失败,对应的命令返回错误信息,其他命令执行成功</li>
+<li>redis不支持回滚:因为官方认为不需要,语法上的错误,在命令队列化时就能检测到,而编码错误导致命令执行失败redis表示不背这个锅,redis追求更简单,更快</li>
+<li>使用WATCH命令实现乐观锁,如果多个客户端对同一个key进行操作并存储时,被观察的key被改变后,其他客户端对该key的修改的事务则会失败,实现了对该key的原子操作</li>
+<li>需要注意的一点,当WATCH某个key之后,key过期了,那EXEC就会正常执行</li>
+<li>使用WATCH可以实现对有序集合操作的原子性</li>
+<li>对事务的操作在脚本中也能实现,而且脚本可以更简单更快</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjszu2rkr000cgst9rpgf3mqs" class="article-share-link">Share</a>
       
       
     </footer>
@@ -790,7 +821,7 @@
           </li>
         
           <li>
-            <a href="/2018/08/17/docker-1/">Docker文档与实践一</a>
+            <a href="/2018/08/17/docker-1/">Docker文档与实践</a>
           </li>
         
       </ul>
