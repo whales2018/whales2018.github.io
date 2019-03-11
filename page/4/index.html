@@ -58,6 +58,522 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-redis-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/redis-1/" class="article-date">
+  <time datetime="2018-06-30T06:41:04.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Redis/">Redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/redis-1/">Redis文档阅读笔记一</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-Pipelining"><a href="#1-Pipelining" class="headerlink" title="1. Pipelining"></a>1. Pipelining</h1><ol>
+<li>Redis是一个TCPServer,使用CS模型</li>
+<li>1次请求将命令集合发送,Redis执行命令后将结果队列化后,再写入返回</li>
+<li>队列化执行结果需要使用内存,如果多次大批量操作需要注意内存的使用</li>
+<li>使用Redis脚本能够处理更快处理批量命令.管道无法在脚本中使用,因为使用管道时在写入之前需要返回响应给客户端(需要注意:这里个人理解可能存在偏差).反之,管道可以使用脚本</li>
+</ol>
+<h1 id="2-Redis-Pub-Sub"><a href="#2-Redis-Pub-Sub" class="headerlink" title="2. Redis Pub/Sub"></a>2. Redis Pub/Sub</h1><ol>
+<li>发布订阅模式: 发布者发布消息到Channel,订阅者订阅Channel接收消息</li>
+<li>Redis客户端一旦为订阅模式,不能接收其他命令</li>
+<li>redis-cli命令行客户端时进入订阅模式之后只能通过ctrl-c取消订阅,因为此时客户端阻塞等待接收订阅消息</li>
+<li>发布订阅无关于key所在空间,db10发布的,db1订阅仍能接收</li>
+<li>可用模式匹配发布多个channel 和订阅多个channel</li>
+</ol>
+<h1 id="3-Redis-Lua-scripting"><a href="#3-Redis-Lua-scripting" class="headerlink" title="3. Redis Lua scripting"></a>3. Redis Lua scripting</h1><ol>
+<li>EVAL,EVALSHA命令执行Lua脚本</li>
+<li>Lua 脚本可以使用redis.call 或redis.pcall执行redis命令</li>
+<li>redis.call执行遇到错误时直接抛出Lua异常结果,redis.pcall则会把异常处理成Lua table返回</li>
+<li>Lua调用redis命令时把数据转成redis对应数据类型,脚本执行结果返回给客户端时Lua的数据类型转成redis对应数据类型</li>
+<li>使用Lua脚本时对于浮点数最好使用字符串替代</li>
+<li>如果Lua返回数组中包含nil,则数据转换终止,最终只能返回nil之前的结果</li>
+<li>redis.error_reply,redis.status_reply 在Lua脚本中是比较有用的按redis数据类型返回结果的方法</li>
+<li>执行Lua脚本时,其他客户端的命令和脚本将无法执行</li>
+<li>redis内部缓存机制会缓存脚本,使用EVALSHA,如果redis通过匹配SHA1文摘匹配到脚本,则执行脚本,否则返回错误信息通知使用EVAL代替</li>
+<li>使用SCRIPT FLUSH或重启redis实例会刷新脚本缓存</li>
+<li>脚本自身会被从库复制或写入AOF文件,而不是脚本的结果命令.不过从3.2版本开始,已经可选设置复制结果命令</li>
+<li>脚本不允许设置全局变量</li>
+</ol>
+<h1 id="4-Debugging-Lua-scripts"><a href="#4-Debugging-Lua-scripts" class="headerlink" title="4. Debugging Lua scripts"></a>4. Debugging Lua scripts</h1><ol>
+<li>Redis Lua debugger默认,每一个新的Debug session是一个forked session,这意味着当脚本在debug中时,不会阻塞redis server执行其他命令,同时也意味着debug结束后会回滚脚本执行的结果</li>
+<li>官网有视频详解<a href="https://redis.io/topics/ldb" target="_blank" rel="noopener">https://redis.io/topics/ldb</a></li>
+</ol>
+<h1 id="5-Memory-optimization"><a href="#5-Memory-optimization" class="headerlink" title="5. Memory optimization"></a>5. Memory optimization</h1><ol>
+<li>通过修改redis.conf调整每一种数据类型的最大数量和最大空间</li>
+<li>RDB和AOF文件兼容32位和64位,之间可以互转</li>
+<li>合理利用bit和byte操作</li>
+<li>尽可能使用hash结构存储数据</li>
+<li>每个hash最多存储100个field是cpu和内存之间的最佳妥协</li>
+<li>redis根据配置文件maxmemory分配内存</li>
+<li>被删除的key实际上并不会立刻释放内存,例如在同一页中存在其他的key未被删除,需要根据峰值内存使用量限定内存使用</li>
+<li>redis底层内存分配器会尽可能重复利用被删除key的内存,所以也不用太担心被删除key没有及时释放的问题</li>
+<li>如果不设置maxmemory,所有的内存将可能被吃光</li>
+<li>当超过最大内存限制时,导致写入时out of memory error,但不会因此导致整个机器挂掉</li>
+</ol>
+<h1 id="6-Expires"><a href="#6-Expires" class="headerlink" title="6. Expires"></a>6. Expires</h1><ol>
+<li>过期时间只针对key不针对值</li>
+<li>过期时间可以通过persist命令清除</li>
+<li>通过rename重命名key,原key的过期时间仍然有效,如果由别的key rename覆盖,则该key具有别的key的特性</li>
+<li>如果设置的过期时间为过去时间,则key相当于del 而不是expired</li>
+<li>消极检查: 当客户端获取该key时才检查该key是否过期</li>
+<li>积极检查: redis 1秒内执行10个检查过期,每次随机选取20个key,发现过期的则清除,如果发现超过25%过期,则继续下一个检查</li>
+<li>过期执行删除的命令会传递给从库和AOF文件同步执行.从库不会检查key过期,当切换为主库时才会去检查</li>
+</ol>
+<h1 id="7-Redis-as-an-LRU-Less-Recently-Used-cache"><a href="#7-Redis-as-an-LRU-Less-Recently-Used-cache" class="headerlink" title="7. Redis as an LRU (Less Recently Used) cache"></a>7. Redis as an LRU (Less Recently Used) cache</h1><h2 id="7-1-Redis达到最大内存限制时策略"><a href="#7-1-Redis达到最大内存限制时策略" class="headerlink" title="7.1 Redis达到最大内存限制时策略"></a>7.1 Redis达到最大内存限制时策略</h2><ol>
+<li>noeviction: 直接抛出异常</li>
+<li>allkeys-lru: 将最近不常用的key清除腾出空间</li>
+<li>volatile-lru: 将带有过期时间的最近不常用的key清除腾出空间</li>
+<li>allkeys-random: 随机将key清除腾出空间</li>
+<li>volatile-random: 随机将带有过期时间的key清除腾出空间</li>
+<li>volatile-ttl: 将较小剩余存活时间的key清除腾出空间</li>
+<li>如果不确定使用哪种策略,allkeys-lru是一个较好选择</li>
+<li>volatile-lru和volatile-random比较适用于只用单个实例,混用缓存和持久key</li>
+</ol>
+<h2 id="7-2-近似LRU算法"><a href="#7-2-近似LRU算法" class="headerlink" title="7.2 近似LRU算法"></a>7.2 近似LRU算法</h2><ol>
+<li>redis使用的并不是实际的LRU算法,而是大致评估一定样本量中选取最符合的key</li>
+<li>可以通过设置配置样本量参数maxmemory-samples调节精度</li>
+</ol>
+<h2 id="7-3-LFU-Least-Frequently-Used"><a href="#7-3-LFU-Least-Frequently-Used" class="headerlink" title="7.3 LFU (Least Frequently Used)"></a>7.3 LFU (Least Frequently Used)</h2><ol>
+<li>4.0版本以后新增了新策略,根据命中的频率决定清除哪些key</li>
+<li>lfu-log-factor和lfu-decay-time是两项主要调节参数</li>
+</ol>
+<h1 id="8-Redis-transactions"><a href="#8-Redis-transactions" class="headerlink" title="8. Redis transactions"></a>8. Redis transactions</h1><ol>
+<li>事务中的所有命令会序列化并串行化执行,在事务过程中,其他客户端发起的请求不会被处理</li>
+<li>所有命令要么全部被处理或不处理(这里的处理并不表示一定执行成功),保证了原子性</li>
+<li>如果使用append-only file,在发生崩溃或强制关闭redis时有可能导致执行事务中部分命令.redis重启后会检测到直接退出.使用redis-check-aof tool修复</li>
+<li>MULTI开启事务,命令存储到队列,命令EXEC执行事务所有命令</li>
+<li>执行EXEC检测到命令错误时,会在EXEC直接返回错误信息,并丢弃所有命令</li>
+<li>执行EXEC后,部分命令执行失败,对应的命令返回错误信息,其他命令执行成功</li>
+<li>redis不支持回滚:因为官方认为不需要,语法上的错误,在命令队列化时就能检测到,而编码错误导致命令执行失败redis表示不背这个锅,redis追求更简单,更快</li>
+<li>使用WATCH命令实现乐观锁,如果多个客户端对同一个key进行操作并存储时,被观察的key被改变后,其他客户端对该key的修改的事务则会失败,实现了对该key的原子操作</li>
+<li>需要注意的一点,当WATCH某个key之后,key过期了,那EXEC就会正常执行</li>
+<li>使用WATCH可以实现对有序集合操作的原子性</li>
+<li>对事务的操作在脚本中也能实现,而且脚本可以更简单更快</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/redis-1/" data-id="cjt4aa56n000rtyt9oiig4kzu" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-mysql-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-6/" class="article-date">
+  <time datetime="2018-06-30T06:21:03.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/mysql-6/">《高性能MySQL》阅读笔记六</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-可扩展的Mysql"><a href="#1-可扩展的Mysql" class="headerlink" title="1. 可扩展的Mysql"></a>1. 可扩展的Mysql</h1><p>可扩展性: 通过增加资源提升容量的能力</p>
+<h2 id="1-1-考虑负载"><a href="#1-1-考虑负载" class="headerlink" title="1.1 考虑负载"></a>1.1 考虑负载</h2><p>容量可以简单地认为是处理负载的能力,考虑负载可从以下几个角度</p>
+<ol>
+<li>数据量: 很多应用从不物理删除任何数据,应用所积累的数据量是可扩展的普遍挑战</li>
+<li>用户量: 更多的用户意味着更多的事务,更多的复杂查询</li>
+<li>用户活跃度</li>
+<li>相关数据集的大小</li>
+</ol>
+<h2 id="1-2-规划可扩展性"><a href="#1-2-规划可扩展性" class="headerlink" title="1.2 规划可扩展性"></a>1.2 规划可扩展性</h2><ol>
+<li>估算需要承担的负载到底有多少</li>
+<li>大致正确地估计日程表</li>
+<li>应用的功能完成多少</li>
+<li>预期的最大负载是多少</li>
+<li>如果依赖系统的每个部分分担负载,某个部分失效时会发生什么</li>
+</ol>
+<h2 id="1-3-向上扩展-垂直扩展"><a href="#1-3-向上扩展-垂直扩展" class="headerlink" title="1.3 向上扩展(垂直扩展)"></a>1.3 向上扩展(垂直扩展)</h2><ol>
+<li>单台服务器增加各种高性能硬件</li>
+<li>烧钱有效的方法</li>
+<li>不应该无限制向上扩展</li>
+</ol>
+<h2 id="1-4-向外扩展"><a href="#1-4-向外扩展" class="headerlink" title="1.4 向外扩展"></a>1.4 向外扩展</h2><ol>
+<li>策略: 复制,拆分,数据分片</li>
+<li>按功能拆分: 常见做法,根据功能将应用部署在不同服务器,并使用专用的数据库服务器</li>
+</ol>
+<h3 id="1-4-1-数据分片"><a href="#1-4-1-数据分片" class="headerlink" title="1.4.1 数据分片"></a>1.4.1 数据分片</h3><p>数据分片是目前扩展大型MySQL最通用且最成功的方法</p>
+<ol>
+<li>应用设计初期考虑到,后期实现就比较容易,否则很难将应用从单一数据存储转换为分片架构</li>
+<li>文中举例: 通过用户id来对文章和评论进行分片,而将用户的信息保留在单个节点上</li>
+<li>数据库访问抽象层,降低应用和分片数据之间通信的复杂度</li>
+<li>如非必要尽量不分片</li>
+<li>数据分片最大的挑战就是查找和获取数据</li>
+<li>类似于表分区,选择分区键和数据分片方式是关键,具体请细查</li>
+</ol>
+<h2 id="1-5-通过集群扩展"><a href="#1-5-通过集群扩展" class="headerlink" title="1.5 通过集群扩展"></a>1.5 通过集群扩展</h2><ol>
+<li>可以使用集群或数据库分布式技术根据场景适当解决一些问题</li>
+<li>书中提到技术: NDB Cluster, Clustrix等技术</li>
+</ol>
+<h2 id="1-6-向内扩展"><a href="#1-6-向内扩展" class="headerlink" title="1.6 向内扩展"></a>1.6 向内扩展</h2><ol>
+<li>对不再需要的数据进行归档和清理</li>
+<li>需要考虑对应用的影响</li>
+<li>需要考虑数据逻辑的一致性,例如清理A表历史数据时需要考虑所有关联数据的处理</li>
+<li>冷热数据分离</li>
+</ol>
+<h2 id="1-7-负载均衡"><a href="#1-7-负载均衡" class="headerlink" title="1.7 负载均衡"></a>1.7 负载均衡</h2><h3 id="1-7-1-目的"><a href="#1-7-1-目的" class="headerlink" title="1.7.1 目的"></a>1.7.1 目的</h3><ol>
+<li>可扩展性: 如读写分离时从备库读数据</li>
+<li>高效性: 把更多工作分配给更好的机器</li>
+<li>可用性: 使用时刻保持可用的服务器</li>
+<li>透明性: 客户端无需知道服务器</li>
+<li>一致性: 如果应用是有状态的,负载均衡器就应该将相关的查询指向同一个服务器</li>
+</ol>
+<h3 id="1-7-2-直接连接"><a href="#1-7-2-直接连接" class="headerlink" title="1.7.2 直接连接"></a>1.7.2 直接连接</h3><h4 id="1-7-2-1-复制上的读写分离"><a href="#1-7-2-1-复制上的读写分离" class="headerlink" title="1.7.2.1 复制上的读写分离"></a>1.7.2.1 复制上的读写分离</h4><ol>
+<li>基于查询分离: 将不能容忍脏数据的查询分配到主库,其他分配到备库</li>
+<li>基于脏数据分离: 让应用检查复制延迟,许多报表类应用使用这个策略</li>
+<li>基于会话分离: 可以在会话层做一个标记,如果用户修改了数据,则一段时间内总是指向主库</li>
+<li>基于版本分离: 给用户的操作增加版本号,检查版本号决定从主库还是备库读取数据</li>
+</ol>
+<h4 id="1-7-2-3-修改DNS名"><a href="#1-7-2-3-修改DNS名" class="headerlink" title="1.7.2.3 修改DNS名"></a>1.7.2.3 修改DNS名</h4><ol>
+<li>通过变更DNS名指定的服务器实现</li>
+<li>缺点很多,不建议</li>
+</ol>
+<h4 id="1-7-2-4-转移IP地址"><a href="#1-7-2-4-转移IP地址" class="headerlink" title="1.7.2.4 转移IP地址"></a>1.7.2.4 转移IP地址</h4><ol>
+<li>在服务器之间转移虚拟地址</li>
+<li>给服务器分配固定的ip地址,为每个逻辑上的服务使用一个虚拟ip地址</li>
+</ol>
+<h3 id="1-7-3-引入中间件"><a href="#1-7-3-引入中间件" class="headerlink" title="1.7.3 引入中间件"></a>1.7.3 引入中间件</h3><ol>
+<li>负载均衡器,如HAproxy</li>
+<li>负载均衡算法: 随机, 轮询,最少连接数,最快响应,哈希,权重</li>
+<li>服务器池中增加或移除服务器: 在配置连接池中的服务器时,要保证有足够多未使用的容量</li>
+</ol>
+<h1 id="2-高可用性"><a href="#2-高可用性" class="headerlink" title="2. 高可用性"></a>2. 高可用性</h1><ol>
+<li>高可用性意味着更少的宕机时间<h2 id="2-1-宕机原因"><a href="#2-1-宕机原因" class="headerlink" title="2.1 宕机原因"></a>2.1 宕机原因</h2></li>
+<li>磁盘空间不足</li>
+<li>糟糕的sql或者服务器bug引起</li>
+<li>糟糕的表和索引设计</li>
+<li>复制问题通常由于主备数据不一致导致</li>
+</ol>
+<h2 id="2-2-高可用性实现"><a href="#2-2-高可用性实现" class="headerlink" title="2.2 高可用性实现"></a>2.2 高可用性实现</h2><ol>
+<li>衡量指标: 平均失效时间(MTBF), 平均恢复时间(MTTR)</li>
+<li>避免问题: 适当的配置,监控和规范</li>
+<li>保证在宕机时能快速恢复,系统制造冗余,具备故障转移能力</li>
+</ol>
+<h3 id="2-2-1-避免单点失效"><a href="#2-2-1-避免单点失效" class="headerlink" title="2.2.1 避免单点失效"></a>2.2.1 避免单点失效</h3><ol>
+<li>通过增加冗余避免</li>
+<li>共享存储或磁盘复制,如果服务器挂了,备用服务器可以挂载相同的文件系统执行需要的恢复操作</li>
+<li>MySQL同步复制</li>
+</ol>
+<h3 id="2-2-2-故障转移和故障恢复"><a href="#2-2-2-故障转移和故障恢复" class="headerlink" title="2.2.2 故障转移和故障恢复"></a>2.2.2 故障转移和故障恢复</h3><ol>
+<li>提升备库或切换角色</li>
+<li>虚拟IP地址或IP接管: 当MySQL实例失效时可以将IP地址转移到另一台MySQL服务器上</li>
+<li>使用中间件解决方案</li>
+</ol>
+<h1 id="3-备份与恢复"><a href="#3-备份与恢复" class="headerlink" title="3. 备份与恢复"></a>3. 备份与恢复</h1><h2 id="3-1-设计MySQL备份方案考虑点"><a href="#3-1-设计MySQL备份方案考虑点" class="headerlink" title="3.1 设计MySQL备份方案考虑点"></a>3.1 设计MySQL备份方案考虑点</h2><ol>
+<li>在线备份还是离线备份</li>
+<li>逻辑备份还是物理备份</li>
+<li>非显著数据: 如二进制日志和InnoDB事务日志</li>
+<li>代码: 存储过程,触发器</li>
+<li>服务器配置和复制配置</li>
+<li>外部配置,管理脚本</li>
+<li>增量备份和差异备份</li>
+<li>存储引擎和数据一致性</li>
+</ol>
+<h2 id="3-2-备份数据方式"><a href="#3-2-备份数据方式" class="headerlink" title="3.2 备份数据方式"></a>3.2 备份数据方式</h2><ol>
+<li>文件系统中或SAN快照中直接复制数据文件</li>
+<li>Percona XtraBackup 做热备份</li>
+</ol>
+<h2 id="3-3-InnoDB崩溃恢复"><a href="#3-3-InnoDB崩溃恢复" class="headerlink" title="3.3 InnoDB崩溃恢复"></a>3.3 InnoDB崩溃恢复</h2><ol>
+<li>二级索引损坏: 使用OPTIMIZE TABLE修复损坏的二级索引,此外可以通过构建一个新表重建受影响的索引</li>
+<li>聚簇索引损坏: innodb_force_recovery导出表</li>
+<li>损坏系统结构: 系统结构包括事务日志等,可能需要做整个数据库的导出和还原,因为InnoDB内部绝大部分的工作可能受影响</li>
+</ol>
+<h1 id="4-MySQL用户工具"><a href="#4-MySQL用户工具" class="headerlink" title="4. MySQL用户工具"></a>4. MySQL用户工具</h1><p>工欲善其事,必先利其器</p>
+<h2 id="4-1-接口工具"><a href="#4-1-接口工具" class="headerlink" title="4.1 接口工具"></a>4.1 接口工具</h2><ol>
+<li>MySQL Workbench: 一站式的工具</li>
+<li>SQLyog: 可视化工具之一</li>
+</ol>
+<h2 id="4-2-命令行工具集"><a href="#4-2-命令行工具集" class="headerlink" title="4.2 命令行工具集"></a>4.2 命令行工具集</h2><ol>
+<li>Percona Toolkit</li>
+<li>MySQL Workbench 工具集</li>
+</ol>
+<h2 id="4-3-SQL实用集"><a href="#4-3-SQL实用集" class="headerlink" title="4.3 SQL实用集"></a>4.3 SQL实用集</h2><ol>
+<li>common_schema</li>
+<li>MySQL Forge</li>
+</ol>
+<h2 id="4-4-监测工具"><a href="#4-4-监测工具" class="headerlink" title="4.4 监测工具"></a>4.4 监测工具</h2><ol>
+<li>Nagios</li>
+<li>Zabbix: 同时支持监控和指标收集的完整系统</li>
+<li>Zenoss: Python写的</li>
+<li>Hyperic HQ: 基于Java</li>
+</ol>
+<h2 id="4-5-Innotop命令行监控"><a href="#4-5-Innotop命令行监控" class="headerlink" title="4.5 Innotop命令行监控"></a>4.5 Innotop命令行监控</h2><p>主要包括以下功能</p>
+<ol>
+<li>事务列表</li>
+<li>当前运行的查询</li>
+<li>当前锁和锁等待列表</li>
+<li>服务器状态和变量汇总信息</li>
+<li>InnoDB内部信息</li>
+<li>复制监控</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-6/" data-id="cjt4aa56h000gtyt9momda5sc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-mysql-5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-5/" class="article-date">
+  <time datetime="2018-06-30T06:15:53.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/mysql-5/">《高性能MySQL》阅读笔记五</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-优化服务器设置"><a href="#1-优化服务器设置" class="headerlink" title="1. 优化服务器设置"></a>1. 优化服务器设置</h1><ol>
+<li>MySQL有大量的可以修改的参数,但不应该随便修改.应该将更多时间花在schema的优化,索引,查询设计上</li>
+<li>配置文件路径: 通常在/etc/my.cnf</li>
+<li>不建议动态修改变量,因为可能导致意外的副作用</li>
+<li>通过基准测试迭代优化</li>
+<li>具体配置项设置请参照官网手册,这里只提及部分</li>
+</ol>
+<h2 id="1-1-配置内存使用"><a href="#1-1-配置内存使用" class="headerlink" title="1.1 配置内存使用"></a>1.1 配置内存使用</h2><ol>
+<li>确定可使用内存上限</li>
+<li>每个连接使用多少内存,如排序缓冲和临时表</li>
+<li>确定操作系统内存使用量</li>
+<li>把剩下的分配给缓存,如InnoDB缓存池</li>
+</ol>
+<h2 id="1-2-配置MySQL的I-O行为"><a href="#1-2-配置MySQL的I-O行为" class="headerlink" title="1.2 配置MySQL的I/O行为"></a>1.2 配置MySQL的I/O行为</h2><ol>
+<li>有些配置项影响如何同步数据到磁盘及如何恢复操作,这对性能影响很大,而且表现了性能和数据安全之间的平衡<h3 id="1-2-1-InnoDB-I-O配置"><a href="#1-2-1-InnoDB-I-O配置" class="headerlink" title="1.2.1 InnoDB I/O配置"></a>1.2.1 InnoDB I/O配置</h3></li>
+<li>重要配置: InnoDB日志文件大小,InnoDB怎样刷新日志缓冲,InnoDB怎样执行I/O</li>
+<li>InnoDB使用日志减少提交事务时开销,不用每个事务提交时把缓冲池的脏块刷到磁盘中</li>
+<li>事务日志可以把随机IO变成顺序IO,同时如果发生断电,InnoDB可以重放日志恢复已经提交的事务</li>
+<li>sync_binlog选项控制MySQL怎么刷新二进制日志到磁盘</li>
+<li>把二进制日志放到一个带有电池保护的写缓存的RAID卷可以极大的提升性能</li>
+</ol>
+<h3 id="1-2-2-MyISAM的I-O配置"><a href="#1-2-2-MyISAM的I-O配置" class="headerlink" title="1.2.2 MyISAM的I/O配置"></a>1.2.2 MyISAM的I/O配置</h3><ol>
+<li>因为MyISAM表每次写入都会将索引变更刷新到磁盘</li>
+<li>批量操作时,通过设置delay_key_write可以延迟索引写入,可以提升性能</li>
+<li>配置MyISAM怎样尝试从损坏中恢复</li>
+</ol>
+<h2 id="1-3-配置MySQL并发"><a href="#1-3-配置MySQL并发" class="headerlink" title="1.3 配置MySQL并发"></a>1.3 配置MySQL并发</h2><h3 id="1-3-1-InnoDB并发配置"><a href="#1-3-1-InnoDB并发配置" class="headerlink" title="1.3.1 InnoDB并发配置"></a>1.3.1 InnoDB并发配置</h3><ol>
+<li>如果在InnoDB并发方面有问题,解决方案通常是升级服务器</li>
+<li>innodb_thread_concurrency: 限制一次性可以有多少线程进入内核(根据实践取合适值)</li>
+<li>innodb_thread_sleep_delay: 线程第一次进入内核失败等的时间,如果还不能进入则放入等待线程队列</li>
+<li>innodb_commit_concurrency: 控制有多少线程可以在同一时间提交</li>
+<li>使用线程池限制并发: MariaDB已经实现</li>
+</ol>
+<h3 id="1-3-2-MyISAM并发配置"><a href="#1-3-2-MyISAM并发配置" class="headerlink" title="1.3.2 MyISAM并发配置"></a>1.3.2 MyISAM并发配置</h3><ol>
+<li>concurrency_insert: 配置MyISAM打开并发插入</li>
+</ol>
+<h2 id="1-4-其他"><a href="#1-4-其他" class="headerlink" title="1.4 其他"></a>1.4 其他</h2><ol>
+<li>基于工作负载的配置: 利用工具分析并调整配置</li>
+<li>max_connections: 保证服务器不会因应用程序激增的连接而不堪重负</li>
+<li>安全和稳定的设置: 感兴趣者请自行google</li>
+<li>高级InnoDB设置: 感兴趣者请自行google</li>
+<li>InnoDB两个重要配置: innodb_buffer_pool_size和innodb_log_file_size</li>
+</ol>
+<h1 id="2-复制"><a href="#2-复制" class="headerlink" title="2. 复制"></a>2. 复制</h1><p>MySQL内建的复制功能是构建基于MySQL的大规模,高性能应用的基础.同时也是高可用性,可扩展性,灾难恢复,备份及数据仓库等工作的基础</p>
+<h2 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h2><ol>
+<li>解决问题: 让一台服务器的数据与其他服务器保持同步.主库可以同步到多台备库,备库本身也可以配置为另一台服务器的主库</li>
+<li>复制原理: 通过在主库上记录二进制日志,在备库重放日志的方式实现异步的数据复制</li>
+<li>复制方式: 基于行的复制和基于语句的复制</li>
+<li>向后兼容: 新版本只能作为老版本的备库,反之不行</li>
+</ol>
+<h2 id="2-2-用途"><a href="#2-2-用途" class="headerlink" title="2.2 用途"></a>2.2 用途</h2><ol>
+<li>数据分布: 在不同地理位置分布数据备份,可以随意停止或开始复制.基于行比基于语句带宽压力更大</li>
+<li>负载均衡: 将读操作分布到多个服务器上</li>
+<li>备份: 复制是备份的一项有意义的技术补充</li>
+<li>高可用性和故障切换: 避免单点失败</li>
+<li>MySQL升级测试: 一种普遍做法是使用一个更高版本的MySQL作为备库保证实例升级前查询能够在备库按照预期执行</li>
+</ol>
+<h2 id="2-3-过程"><a href="#2-3-过程" class="headerlink" title="2.3 过程"></a>2.3 过程</h2><ol>
+<li>主库把数据更改记录到二进制日志(Binary Log)</li>
+<li>备库将主库上的日志复制到自己的中继日志(Relay Log)</li>
+<li>备库读取中继日志中的事件,将其重放到备库数据上</li>
+<li>局限: 主库上并发运行的查询在备库只能串行化执行,因为只有一个sql线程重放中继日志事件,这是很多工作负载的性能瓶颈</li>
+</ol>
+<h2 id="2-4-复制配置"><a href="#2-4-复制配置" class="headerlink" title="2.4 复制配置"></a>2.4 复制配置</h2><ol>
+<li>在每台服务器上创建复制账号: 需要REPLICATION SLAVE权限</li>
+<li>配置主库和备库: 每个服务器的ID需要唯一不能冲突</li>
+<li>通知备库连接到主库并从主库复制数据</li>
+<li>CHANGE MASTER TO: 指定备库连接的主库设置</li>
+<li>SHOW SLAVE STATUS: 检查复制是否正确执行</li>
+<li>START SLAVE: 开始复制</li>
+<li>SHOW PROCESSLIST: 查看复制线程,IO线程(发送或获取日志),SQL线程(重放日志)</li>
+<li>推荐配置: 开启sync_binlog</li>
+</ol>
+<h2 id="2-5-从另一个服务器开始复制"><a href="#2-5-从另一个服务器开始复制" class="headerlink" title="2.5 从另一个服务器开始复制"></a>2.5 从另一个服务器开始复制</h2><p>问题: 主库已经运行一段时间,用一台新安装的备库与之同步<br>保持同步条件:</p>
+<ol>
+<li>某个时间点的主库的数据快照</li>
+<li>主库当前的二进制日志文件,和获得数据快照时在该二进制日志文件中的偏移量.通过这两个可以确定二进制日志的位置</li>
+<li>从快照时间到现在的二进制日志</li>
+</ol>
+<p>克隆备库方法:</p>
+<ol>
+<li>冷备份: 关闭主库,复制数据.主库重启后会使用新的二进制文件,在备库指向这个文件的起始处</li>
+<li>热备份:如果只有MyISAM,可以通过mysqlhotcopy或rsync来复制数据</li>
+<li>如果只包含InnoDB: 可以使用mysqldump转储主库数据并加载到备库,然后设置相应的二进制日志坐标</li>
+<li>使用快照或备份: 使用主库的快照或者备份初始化备库,然后指定二进制日志坐标</li>
+<li>使用Percona Xtrabackup: 备份时不阻塞服务器操作,可以在不影响主库情况下设置备库</li>
+<li>使用另外的备库: 实质就是把另外的备库当成主库进行数据克隆</li>
+</ol>
+<h2 id="2-6-复制的原理"><a href="#2-6-复制的原理" class="headerlink" title="2.6 复制的原理"></a>2.6 复制的原理</h2><h3 id="2-6-1-基于语句的复制"><a href="#2-6-1-基于语句的复制" class="headerlink" title="2.6.1 基于语句的复制"></a>2.6.1 基于语句的复制</h3><ol>
+<li>主库会记录那些造成数据更改的查询</li>
+<li>MySQL5.0之前只支持基于语句的复制</li>
+<li>对于函数,存储过程和触发器在基于语句的复制模式可能存在问题</li>
+<li>更新必须是串行,需要更多的锁</li>
+</ol>
+<h3 id="2-6-2-基于行的复制"><a href="#2-6-2-基于行的复制" class="headerlink" title="2.6.2 基于行的复制"></a>2.6.2 基于行的复制</h3><ol>
+<li>将实际的数据记录在二进制日志</li>
+<li>能够更高效复制数据</li>
+<li>基于行的复制事件格式,对人不可读,可以使用mysqlbinlog</li>
+<li>很难进行时间点恢复</li>
+<li>有些操作,如全表更新(update)复制开销会很大</li>
+</ol>
+<h2 id="2-7-复制拓扑"><a href="#2-7-复制拓扑" class="headerlink" title="2.7 复制拓扑"></a>2.7 复制拓扑</h2><h3 id="2-7-1-基本原则"><a href="#2-7-1-基本原则" class="headerlink" title="2.7.1 基本原则"></a>2.7.1 基本原则</h3><ol>
+<li>一个MySQL备库实例只能有一个主库</li>
+<li>每个备库必须有一个唯一的服务器id</li>
+<li>一个主库可以有多个备库</li>
+<li>如果打开log_slave_update一个备库可以把其主库上的数据变化传播到其他备库</li>
+</ol>
+<h3 id="2-7-2-一主多备"><a href="#2-7-2-一主多备" class="headerlink" title="2.7.2 一主多备"></a>2.7.2 一主多备</h3><ol>
+<li>适用于少量写和大量读,可以把读分摊到多个备库上</li>
+<li>当作待用的主库</li>
+<li>放到远程数据中心,用作灾难恢复</li>
+<li>作为备份,培训,开发或测试服务器</li>
+</ol>
+<h3 id="2-7-3-双主复制"><a href="#2-7-3-双主复制" class="headerlink" title="2.7.3 双主复制"></a>2.7.3 双主复制</h3><ol>
+<li>个数据库互为主库和备库</li>
+<li>容易造成数据不同步</li>
+<li>通常并不建议使用这种模式</li>
+</ol>
+<h3 id="2-7-4-主动被动的双主模式"><a href="#2-7-4-主动被动的双主模式" class="headerlink" title="2.7.4 主动被动的双主模式"></a>2.7.4 主动被动的双主模式</h3><ol>
+<li>类似双主复制,把其中一台配置为只读</li>
+<li>类似于创建一个热备份</li>
+<li>可以用作执行读操作,备份,离线维护及升级</li>
+</ol>
+<h3 id="2-7-5-有备库的双主模式"><a href="#2-7-5-有备库的双主模式" class="headerlink" title="2.7.5 有备库的双主模式"></a>2.7.5 有备库的双主模式</h3><ol>
+<li>双主模式下,各自有备库</li>
+</ol>
+<h3 id="2-7-6-主库-分发主库和备库"><a href="#2-7-6-主库-分发主库和备库" class="headerlink" title="2.7.6 主库,分发主库和备库"></a>2.7.6 主库,分发主库和备库</h3><ol>
+<li>问题: 备库足够多时会对主库造成很大的负载</li>
+<li>方案: 将其中部分备库当成主库,分发给更多的备库</li>
+<li>通过分发主库,可以对二进制日志事件执行过滤和重写规则</li>
+</ol>
+<h2 id="2-8-复制管理和维护"><a href="#2-8-复制管理和维护" class="headerlink" title="2.8 复制管理和维护"></a>2.8 复制管理和维护</h2><ol>
+<li>监控复制: SHOW MASTER STATUS查看主库状态, SHOW BINLOG EVENTS查看复制事件</li>
+<li>测量备库延迟: 可以使用Percona Toolkit里的pt-hearbeat</li>
+<li>确定主备是否一致</li>
+<li>备库换主库: 难点在于获取新主库合适的二进制日志位置</li>
+<li>备库提升为主库分为计划内提升和计划外提升<h3 id="2-8-1-计划内提升"><a href="#2-8-1-计划内提升" class="headerlink" title="2.8.1 计划内提升"></a>2.8.1 计划内提升</h3></li>
+<li>停止向老的主库写入</li>
+<li>备库赶上主库</li>
+<li>备库设置为主库</li>
+<li>将备库和写操作指向新主库,然后开启主库的写入</li>
+</ol>
+<h3 id="2-8-2-计划外提升"><a href="#2-8-2-计划外提升" class="headerlink" title="2.8.2 计划外提升"></a>2.8.2 计划外提升</h3><p>当主库崩溃时,需要提升一台备库替代</p>
+<ol>
+<li>确定最新的备库</li>
+<li>让所有备库执行完从崩溃前主库获得的中继日志,如果未完成则更换主库,会丢失原先的日志事件</li>
+<li>重新完成主备的配置</li>
+</ol>
+<h2 id="2-9-复制的问题和解决方案"><a href="#2-9-复制的问题和解决方案" class="headerlink" title="2.9 复制的问题和解决方案"></a>2.9 复制的问题和解决方案</h2><h3 id="2-9-1-数据损坏或丢失"><a href="#2-9-1-数据损坏或丢失" class="headerlink" title="2.9.1 数据损坏或丢失"></a>2.9.1 数据损坏或丢失</h3><ol>
+<li>主库意外关闭: 主库开启sync_binlog避免事件丢失,使用Percona Toolkit中的pt-table-checksum检查主备一致性</li>
+<li>备库意外关闭: 重启后观察MySQL错误日志,想方法获取备库指向主库的日志偏移量</li>
+<li>主库上的二进制日志损坏: 跳过所有损坏的事件,手动找到一个完好的事件开始</li>
+<li>备库上的中继日志损坏: MySQL5.5后能在崩溃后自动重新获取中继日志</li>
+<li>二进制日志于InnoDB事务日志不同步: 除非备库中继日志有保存,否则自求多福</li>
+</ol>
+<h3 id="2-9-2-其他"><a href="#2-9-2-其他" class="headerlink" title="2.9.2 其他"></a>2.9.2 其他</h3><ol>
+<li>如果使用myisam,在关闭Mysql前需要确保已经运行了stop slave,否则在服务器关闭时会kill所有正在运行的查询. </li>
+<li>如果是事务型,失败的更新会在主库上回滚而且不会记录到二进制日志</li>
+<li>避免混用事务和非事务: 如果备库发生死锁而主库没有,事务型会回滚而非事务型则不会造成不同步</li>
+<li>主库和备库使用不同存储引擎容易导致问题</li>
+<li>不唯一和未定义备库服务器id</li>
+<li>避免在主库上创建备库上没有的表,因为复制可能中断</li>
+<li>基于语句复制时,主库上没有安全使用临时表的方法.丢失临时表: 备库崩溃时,任何复制线程拥有的临时表都会丢失,重启备库后所有依赖临时表的语句都会失败</li>
+<li>InnoDB加锁读引起的锁争用: 将大命令拆成小命令可以有效减少锁竞争</li>
+<li>过大的复制延迟: 定位执行慢的语句,改善机器配置</li>
+<li>其他: 查看官网手册</li>
+</ol>
+<h2 id="2-10-复制高级特性"><a href="#2-10-复制高级特性" class="headerlink" title="2.10 复制高级特性"></a>2.10 复制高级特性</h2><ol>
+<li>半同步复制: 当提交事务,客户端收到查询结束反馈前必须保证二进制日志已经传输到至少一台备库上,主库将事务提交到磁盘上之后会增加一些延迟</li>
+<li>复制心跳: 保证备库一直与主库相联系,如果出现断开的网络连接,备库会注意到丢失的心跳数据</li>
+</ol>
+<h2 id="2-11-其他复制技术"><a href="#2-11-其他复制技术" class="headerlink" title="2.11 其他复制技术"></a>2.11 其他复制技术</h2><ol>
+<li>Percona XtraDB Cluster的同步复制</li>
+<li>Tungsten</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-5/" data-id="cjt4aa572001ftyt9gohc71ab" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-mysql-4" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/30/mysql-4/" class="article-date">
@@ -327,7 +843,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-4/" data-id="cjt40fj4o0016itt9m0esjn8j" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-4/" data-id="cjt4aa573001gtyt9c2w3nsna" class="article-share-link">Share</a>
       
       
     </footer>
@@ -597,192 +1113,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-3/" data-id="cjt40fj4n0015itt9xywysr73" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-mysql-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/30/mysql-2/" class="article-date">
-  <time datetime="2018-06-30T05:52:39.000Z" itemprop="datePublished">2018-06-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/30/mysql-2/">《高性能MySQL》阅读笔记二</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-基准测试"><a href="#1-基准测试" class="headerlink" title="1. 基准测试"></a>1. 基准测试</h3><h4 id="1-1-应用"><a href="#1-1-应用" class="headerlink" title="1.1 应用"></a>1.1 应用</h4><p>验证系统的一些假设</p>
-<p>重现系统异常</p>
-<p>测试系统当前的运行情况</p>
-<p>模拟更高的负载</p>
-<p>规划业务增长</p>
-<p>测试应用适应可变环境的能力</p>
-<p>测试不同硬件,软件和操作系统的配置</p>
-<h4 id="1-2-策略"><a href="#1-2-策略" class="headerlink" title="1.2 策略"></a>1.2 策略</h4><p>针对整个系统的整体测试, 集成式</p>
-<p>单独测试MySQL, 单组件式</p>
-<h4 id="1-3-测试指标"><a href="#1-3-测试指标" class="headerlink" title="1.3 测试指标"></a>1.3 测试指标</h4><ol>
-<li><p>吞吐量: 在线事务处理(OLTP),单位为每秒事务数TPS</p>
-</li>
-<li><p>响应时间或延迟: 百分比响应时间较为代表性</p>
-</li>
-<li><p>并发性: 任意时间有多少同时发生的并发请求. 关注的是正在工作中的并发操作; 通常是为了测试应用在不同并发下的性能(吞吐量和响应时间)</p>
-</li>
-<li><p>可扩展性</p>
-</li>
-</ol>
-<h4 id="1-4-方法"><a href="#1-4-方法" class="headerlink" title="1.4 方法"></a>1.4 方法</h4><p>避免常见错误</p>
-<p>设计和规划基准测试</p>
-<p>基准测试的运行时间设置</p>
-<p>获取系统的性能和状态</p>
-<p>收集分析绘图</p>
-<h4 id="1-5-工具"><a href="#1-5-工具" class="headerlink" title="1.5 工具"></a>1.5 工具</h4><p>集成式测试工具</p>
-<ol>
-<li><p>ab: Apache http服务器基准测试工具,测试服务器qps, 针对单个url进行尽可能快的压力测试</p>
-</li>
-<li><p>http_load: 对Web服务器,可以通过输入文件对多个url进行随机测试</p>
-</li>
-<li><p>JMeter: 测试Web应用和其他入FTP服务器或通过JDBC进行数据库查询测试</p>
-</li>
-</ol>
-<p>单组件式测试工具</p>
-<ol>
-<li><p>mysqlslap: 模拟服务器负载并输出计时信息</p>
-</li>
-<li><p>sqlbench: 测试服务器执行查询的速度</p>
-</li>
-<li><p>super smack: mysql 和postgresql的基准测试工具</p>
-</li>
-<li><p>database test suite</p>
-</li>
-<li><p>sysbench: 多线程系统压测工具, 支持mysql,操作系统,和硬件测试</p>
-</li>
-</ol>
-<h3 id="2-服务器性能剖析"><a href="#2-服务器性能剖析" class="headerlink" title="2. 服务器性能剖析"></a>2. 服务器性能剖析</h3><h4 id="2-1-原则"><a href="#2-1-原则" class="headerlink" title="2.1 原则"></a>2.1 原则</h4><ol>
-<li><p>性能即响应时间无法;</p>
-</li>
-<li><p>无法测量就无法有效优化</p>
-</li>
-</ol>
-<h4 id="2-2-书中推荐工具"><a href="#2-2-书中推荐工具" class="headerlink" title="2.2 书中推荐工具"></a>2.2 书中推荐工具</h4><ol>
-<li><p>New Relic: 收集分析数据,提供web界面</p>
-</li>
-<li><p>xhprof: Facebook开源的轻量级PHP性能分析工具</p>
-</li>
-<li><p>Percona Toolkit: pt-query-digest 生成慢查询日志分析报告</p>
-</li>
-</ol>
-<h4 id="2-3-剖析查询"><a href="#2-3-剖析查询" class="headerlink" title="2.3 剖析查询"></a>2.3 剖析查询</h4><ol>
-<li><p>SHOW PROFILE: 将profiling开启后,执行的sql的剖析信息会被记录到临时表, 通过 show profile from query (index)命令即可以获取到执行的过程信息</p>
-</li>
-<li><p>SHOW STATUS: 非剖析工具,主要用在对于执行完后观察某些计数器的值</p>
-</li>
-<li><p>使用慢查询日志</p>
-</li>
-</ol>
-<h4 id="2-4-诊断间歇性问题"><a href="#2-4-诊断间歇性问题" class="headerlink" title="2.4 诊断间歇性问题"></a>2.4 诊断间歇性问题</h4><ol>
-<li><p>show global status: 通过某些计数器的”尖刺”或”凹陷”分析问题</p>
-</li>
-<li><p>show processlist: 观察是否有大量线程处于不正常的状态或其他不正常特征</p>
-</li>
-<li><p>使用innotop: 实时地展示服务器正在发生的事情，监控innodb,监控多个MySQL实例</p>
-</li>
-<li><p>使用慢查询日志</p>
-</li>
-</ol>
-<h4 id="2-5-其他剖析工具"><a href="#2-5-其他剖析工具" class="headerlink" title="2.5 其他剖析工具"></a>2.5 其他剖析工具</h4><ol>
-<li><p>自带的一些INFORMATION_SCHEMA统计表</p>
-</li>
-<li><p>使用strace工具,pt-iopfofile工具生成I/O活动报告</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-2/" data-id="cjt40fj3g0005itt9234i5oel" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-mysql-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/06/30/mysql-1/" class="article-date">
-  <time datetime="2018-06-30T03:21:11.000Z" itemprop="datePublished">2018-06-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/06/30/mysql-1/">《高性能MySQL》阅读笔记一</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-MySQL服务器逻辑架构"><a href="#1-MySQL服务器逻辑架构" class="headerlink" title="1. MySQL服务器逻辑架构"></a>1. MySQL服务器逻辑架构</h1><p>连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等.</p>
-<p>查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等.</p>
-<p>存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信.</p>
-<h1 id="2-并发控制"><a href="#2-并发控制" class="headerlink" title="2. 并发控制"></a>2. 并发控制</h1><p>每种存储引擎有不同的锁策略和锁粒度</p>
-<p>表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表的读写操作.写锁比读锁有更高的优先级.</p>
-<p>行级锁: InnoDB和[XtraDB][1],行级锁只在存储引擎实现</p>
-<p>事务: ACID, 原子性,一致性,隔离性(isolation),持久性(durability).</p>
-<p>MySQL默认的[事务隔离级别][2]为可重复读(REPEATABLE READ)</p>
-<p>死锁: 不同引擎处理方式不同.InnoDB 处理死锁方法,将持有最少行级排他锁的事务进行回滚</p>
-<p>多版本并发控制(MVCC): 如InnoDB, 通过在每行记录后面保存两个列存储创建和删除时的系统版本号.</p>
-<h1 id="3-存储引擎"><a href="#3-存储引擎" class="headerlink" title="3. 存储引擎"></a>3. 存储引擎</h1><p>创建表时,MySQL会在数据库子目录下创建一个同名.frm文件保存表的定义</p>
-<p>InnoDB: 处理大量的短期事务, 通过间隙锁锁定查询涉及的行和索引中的间隙进行锁定,防止幻影行的插入, 基于聚簇索引创建表.通过一些机制和工具支持真正的热备份.**一般优先考虑InnoDB存储引擎**</p>
-<p>MyISAM: 包括全文索引,压缩,空间函数,延迟更新索引键等特性,不支持事务和行级锁,崩溃后无法安全恢复.对于只读数据,表小可以忍受修复操作可以使用该引擎.</p>
-<p>如果要使用全文索引,建议用InnoDB加上Sphinx组合替换MyISAM</p>
-<p>使用引擎考虑:事务,备份,崩溃恢复,特有特性</p>
-<p>日志型应用: MyISAM 或者Archive,因为开销低插入速度快更为适合</p>
-<p>对于大数据量需要建立数据仓库,[Infobright][3]和[TokuDB][4]是比较好的解决方案</p>
-<p>[1]: <a href="https://mariadb.com/kb/zh-cn/about-xtradb/" target="_blank" rel="noopener">https://mariadb.com/kb/zh-cn/about-xtradb/</a></p>
-<p>[2]: <a href="https://zh.wikipedia.org/wiki/事務隔離" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/事務隔離</a></p>
-<p>[3]: <a href="http://www.csdn.net/article/2014-08-26/2821379" target="_blank" rel="noopener">http://www.csdn.net/article/2014-08-26/2821379</a></p>
-<p>[4]: <a href="http://blog.jobbole.com/109104/" target="_blank" rel="noopener">http://blog.jobbole.com/109104/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-1/" data-id="cjt40fj3i0007itt98bcbqqpp" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-3/" data-id="cjt4aa570001etyt9lw80n2a8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -796,7 +1127,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -835,23 +1166,23 @@
       <ul>
         
           <li>
-            <a href="/2018/09/20/ds-1/">1. 数组</a>
+            <a href="/2018/09/20/ds-4/">4. 字符串</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-3/">3. 栈</a>
+            <a href="/2018/09/20/ds-1/">1. 链表</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-2/">2. 链表</a>
+            <a href="/2018/09/20/ds-2/">2. 栈</a>
           </li>
         
           <li>
-            <a href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+            <a href="/2018/09/20/ds-3/">3. 队列</a>
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+            <a href="/2018/09/20/ds-5/">5. 数组</a>
           </li>
         
       </ul>

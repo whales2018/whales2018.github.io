@@ -5,19 +5,15 @@
   
 
   
-  <title>《高性能MySQL》阅读笔记一 | 沧海一粟</title>
+  <title>沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1. MySQL服务器逻辑架构连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等. 查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等. 存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信. 2. 并发控制每种存储引擎有不同的锁策略和锁粒度 表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表">
-<meta property="og:type" content="article">
-<meta property="og:title" content="《高性能MySQL》阅读笔记一">
-<meta property="og:url" content="https://whales2018.github.io/2018/06/30/mysql-1/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="沧海一粟">
+<meta property="og:url" content="https://whales2018.github.io/page/5/index.html">
 <meta property="og:site_name" content="沧海一粟">
-<meta property="og:description" content="1. MySQL服务器逻辑架构连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等. 查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等. 存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信. 2. 并发控制每种存储引擎有不同的锁策略和锁粒度 表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-07T10:36:05.259Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《高性能MySQL》阅读笔记一">
-<meta name="twitter:description" content="1. MySQL服务器逻辑架构连接/线程处理: 基于C/S的工具类似,实现连接处理,授权认证,安全等. 查询缓存/解析器: 实现查询解析,分析,优化,缓存.内置函数和跨存储引擎如存储过程,触发器,视图等. 存储引擎: 数据的存储和提取.不会解析sql,独立与上层服务器通过api进行通信. 2. 并发控制每种存储引擎有不同的锁策略和锁粒度 表锁是MySQL中最基本,开销最小的策略,阻塞其他用户对该表">
+<meta name="twitter:title" content="沧海一粟">
   
   
     <link rel="icon" href="/favicon.png">
@@ -60,7 +56,133 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-mysql-1" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-mysql-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-2/" class="article-date">
+  <time datetime="2018-06-30T05:52:39.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/mysql-2/">《高性能MySQL》阅读笔记二</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-基准测试"><a href="#1-基准测试" class="headerlink" title="1. 基准测试"></a>1. 基准测试</h3><h4 id="1-1-应用"><a href="#1-1-应用" class="headerlink" title="1.1 应用"></a>1.1 应用</h4><p>验证系统的一些假设</p>
+<p>重现系统异常</p>
+<p>测试系统当前的运行情况</p>
+<p>模拟更高的负载</p>
+<p>规划业务增长</p>
+<p>测试应用适应可变环境的能力</p>
+<p>测试不同硬件,软件和操作系统的配置</p>
+<h4 id="1-2-策略"><a href="#1-2-策略" class="headerlink" title="1.2 策略"></a>1.2 策略</h4><p>针对整个系统的整体测试, 集成式</p>
+<p>单独测试MySQL, 单组件式</p>
+<h4 id="1-3-测试指标"><a href="#1-3-测试指标" class="headerlink" title="1.3 测试指标"></a>1.3 测试指标</h4><ol>
+<li><p>吞吐量: 在线事务处理(OLTP),单位为每秒事务数TPS</p>
+</li>
+<li><p>响应时间或延迟: 百分比响应时间较为代表性</p>
+</li>
+<li><p>并发性: 任意时间有多少同时发生的并发请求. 关注的是正在工作中的并发操作; 通常是为了测试应用在不同并发下的性能(吞吐量和响应时间)</p>
+</li>
+<li><p>可扩展性</p>
+</li>
+</ol>
+<h4 id="1-4-方法"><a href="#1-4-方法" class="headerlink" title="1.4 方法"></a>1.4 方法</h4><p>避免常见错误</p>
+<p>设计和规划基准测试</p>
+<p>基准测试的运行时间设置</p>
+<p>获取系统的性能和状态</p>
+<p>收集分析绘图</p>
+<h4 id="1-5-工具"><a href="#1-5-工具" class="headerlink" title="1.5 工具"></a>1.5 工具</h4><p>集成式测试工具</p>
+<ol>
+<li><p>ab: Apache http服务器基准测试工具,测试服务器qps, 针对单个url进行尽可能快的压力测试</p>
+</li>
+<li><p>http_load: 对Web服务器,可以通过输入文件对多个url进行随机测试</p>
+</li>
+<li><p>JMeter: 测试Web应用和其他入FTP服务器或通过JDBC进行数据库查询测试</p>
+</li>
+</ol>
+<p>单组件式测试工具</p>
+<ol>
+<li><p>mysqlslap: 模拟服务器负载并输出计时信息</p>
+</li>
+<li><p>sqlbench: 测试服务器执行查询的速度</p>
+</li>
+<li><p>super smack: mysql 和postgresql的基准测试工具</p>
+</li>
+<li><p>database test suite</p>
+</li>
+<li><p>sysbench: 多线程系统压测工具, 支持mysql,操作系统,和硬件测试</p>
+</li>
+</ol>
+<h3 id="2-服务器性能剖析"><a href="#2-服务器性能剖析" class="headerlink" title="2. 服务器性能剖析"></a>2. 服务器性能剖析</h3><h4 id="2-1-原则"><a href="#2-1-原则" class="headerlink" title="2.1 原则"></a>2.1 原则</h4><ol>
+<li><p>性能即响应时间无法;</p>
+</li>
+<li><p>无法测量就无法有效优化</p>
+</li>
+</ol>
+<h4 id="2-2-书中推荐工具"><a href="#2-2-书中推荐工具" class="headerlink" title="2.2 书中推荐工具"></a>2.2 书中推荐工具</h4><ol>
+<li><p>New Relic: 收集分析数据,提供web界面</p>
+</li>
+<li><p>xhprof: Facebook开源的轻量级PHP性能分析工具</p>
+</li>
+<li><p>Percona Toolkit: pt-query-digest 生成慢查询日志分析报告</p>
+</li>
+</ol>
+<h4 id="2-3-剖析查询"><a href="#2-3-剖析查询" class="headerlink" title="2.3 剖析查询"></a>2.3 剖析查询</h4><ol>
+<li><p>SHOW PROFILE: 将profiling开启后,执行的sql的剖析信息会被记录到临时表, 通过 show profile from query (index)命令即可以获取到执行的过程信息</p>
+</li>
+<li><p>SHOW STATUS: 非剖析工具,主要用在对于执行完后观察某些计数器的值</p>
+</li>
+<li><p>使用慢查询日志</p>
+</li>
+</ol>
+<h4 id="2-4-诊断间歇性问题"><a href="#2-4-诊断间歇性问题" class="headerlink" title="2.4 诊断间歇性问题"></a>2.4 诊断间歇性问题</h4><ol>
+<li><p>show global status: 通过某些计数器的”尖刺”或”凹陷”分析问题</p>
+</li>
+<li><p>show processlist: 观察是否有大量线程处于不正常的状态或其他不正常特征</p>
+</li>
+<li><p>使用innotop: 实时地展示服务器正在发生的事情，监控innodb,监控多个MySQL实例</p>
+</li>
+<li><p>使用慢查询日志</p>
+</li>
+</ol>
+<h4 id="2-5-其他剖析工具"><a href="#2-5-其他剖析工具" class="headerlink" title="2.5 其他剖析工具"></a>2.5 其他剖析工具</h4><ol>
+<li><p>自带的一些INFORMATION_SCHEMA统计表</p>
+</li>
+<li><p>使用strace工具,pt-iopfofile工具生成I/O活动报告</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-2/" data-id="cjt4aa56d000dtyt9ilqo2doi" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-mysql-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/30/mysql-1/" class="article-date">
   <time datetime="2018-06-30T03:21:11.000Z" itemprop="datePublished">2018-06-30</time>
@@ -77,8 +199,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      《高性能MySQL》阅读笔记一
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/mysql-1/">《高性能MySQL》阅读笔记一</a>
     </h1>
   
 
@@ -117,23 +239,16 @@
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2018/06/30/mysql-2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          《高性能MySQL》阅读笔记二
-        
-      </div>
-    </a>
-  
-  
-</nav>
+</article>
+
 
   
-</article>
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+  </nav>
 
 </section>
         

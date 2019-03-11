@@ -58,6 +58,261 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-ds-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-6/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-6/">6. 二叉树</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="二叉树常见问题"><a href="#二叉树常见问题" class="headerlink" title="二叉树常见问题"></a>二叉树常见问题</h1>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-6/" data-id="cjt4aa5680009tyt9wxxnd3ac" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tcpip-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/18/tcpip-1/" class="article-date">
+  <time datetime="2018-09-18T03:21:11.000Z" itemprop="datePublished">2018-09-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjt4aa56o000utyt9314pibnz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-opsystem-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/18/opsystem-1/" class="article-date">
+  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/操作系统/">操作系统</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一-进程与线程"><a href="#一-进程与线程" class="headerlink" title="一. 进程与线程"></a>一. 进程与线程</h1><h2 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h2><ol>
+<li>系统初始化</li>
+<li>正在进行的进程调用进程创建系统调用</li>
+<li>用户请求</li>
+<li>批处理作业初始化</li>
+</ol>
+<h2 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h2><ol>
+<li>正常退出</li>
+<li>出错退出，自愿</li>
+<li>严重错误，非自愿</li>
+<li>被其他进程杀死</li>
+</ol>
+<h2 id="进程层次结构"><a href="#进程层次结构" class="headerlink" title="进程层次结构"></a>进程层次结构</h2><ol>
+<li>系统启动初始化由init特殊进程运行</li>
+</ol>
+<h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><ol>
+<li>运行，就绪，阻塞</li>
+<li>进程中断处理，启动，停止由操作系统进程调度程序控制</li>
+</ol>
+<h2 id="进程的实现"><a href="#进程的实现" class="headerlink" title="进程的实现"></a>进程的实现</h2><ol>
+<li>操作系统维护一个进程表，每个进程占用一个进程表项（进程控制块PCB）</li>
+<li>PCB：包含了进程状态的重要信息，程序计数器，堆栈指针，内存分配状况，打开的文件，进程由运行状态转换到就绪或阻塞需要保存的信息等</li>
+<li>进程切换：保存寄存器值，设置新的堆栈，C中断服务程序运行，调度程序决定下一个进程运行，开始运行新的当前进程</li>
+<li>CPU利用率：进程等待IO操作时间与其停留在内存中时间的比对P，内存中同时有N个进程，则利用率=1-P的N次方</li>
+</ol>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><ol>
+<li>传统：每个进程有一个地址空间和一个控制线程</li>
+<li>对于大量IO操作，多线程允许这些活动重叠进行</li>
+<li>所有线程都有完全一样的地址空间</li>
+<li>线程共享进程内容：地址空间，全局变量，打开文件，子进程，信号与信号处理程序</li>
+<li>线程独有：程序计数器，寄存器，堆栈，状态</li>
+<li>线程创建的线程与当前线程平等，线程可以阻塞等待其他线程返回，线程也可以主动让出CPU</li>
+</ol>
+<h2 id="线程的实现"><a href="#线程的实现" class="headerlink" title="线程的实现"></a>线程的实现</h2><h3 id="用户级线程"><a href="#用户级线程" class="headerlink" title="用户级线程"></a>用户级线程</h3><ol>
+<li>线程的调度不需要内核，内核不知道多线程的存在，由用户程序自己控制内核切换，切换快</li>
+<li>可以在不支持线程的操作系统实现，允许进程定制调度算法</li>
+<li>同一个进程只能同时有一个线程在运行，如果有一个线程阻塞于系统调用，则整个进程阻塞</li>
+<li>执行系统调用时将导致所属进程被中断，而内核级线程只导致线程中断</li>
+</ol>
+<h3 id="内核级线程"><a href="#内核级线程" class="headerlink" title="内核级线程"></a>内核级线程</h3><ol>
+<li>多核机器，一个进程的多个线程可以同时处理</li>
+<li>线程用户态运行内核态调度切换</li>
+</ol>
+<h3 id="混合线程模型"><a href="#混合线程模型" class="headerlink" title="混合线程模型"></a>混合线程模型</h3><ol>
+<li>用户线程由运行时库调度器管理，内核线程由操作系统调度器管理</li>
+<li>一对一，多对一，多对多</li>
+</ol>
+<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>IPC问题</p>
+<ol>
+<li>进程传递信息给另一个</li>
+<li>多个进程在关键活动不会出现交叉</li>
+<li>正确的顺序</li>
+</ol>
+<h3 id="通信方法"><a href="#通信方法" class="headerlink" title="通信方法"></a>通信方法</h3><ol>
+<li>共享内存</li>
+<li>管道</li>
+<li>消息队列</li>
+<li>socket</li>
+<li>远程过程调用RPC</li>
+</ol>
+<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><ol>
+<li>对进程共享资源的程序片段称作临界区</li>
+<li>避免竞争条件：任何两个进程不能同时处于临界区，不对CPU作假设，临界区外运行的进程不能阻塞其他进程，不能使进程无限等待进入临界区</li>
+</ol>
+<h3 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a>进程同步</h3><ol>
+<li>互斥锁+条件变量</li>
+<li>信号量pv操作</li>
+</ol>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><ol>
+<li>衡量调度：吞吐量系统每小时完成的作业数，周转时间批处理到结束的平均统计时间，CPU利用率</li>
+</ol>
+<h1 id="二、存储管理"><a href="#二、存储管理" class="headerlink" title="二、存储管理"></a>二、存储管理</h1><h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ol>
+<li>地址空间：一个进程可用于寻址内存的一套地址集合</li>
+<li>每个进程的地址空间映射到物理内存的不同部分</li>
+<li>程序装载到内存中连续地址。程序的起始物理地址装载到基址寄存器，程序的长度装载到界限寄存器。进程寄存器相关值由内核维护</li>
+</ol>
+<h2 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h2><ol>
+<li>进程完整调入内存运行一段时间，存回磁盘</li>
+<li>被唤醒时重新装载到内存，由基址寄存器和界限寄存器重新映射物理内存</li>
+</ol>
+<h2 id="空闲内存管理"><a href="#空闲内存管理" class="headerlink" title="空闲内存管理"></a>空闲内存管理</h2><ol>
+<li>使用位图：每个分配单元对应1位，0表示空闲</li>
+<li>使用链表：每个节点代表一块内存，便于交换</li>
+</ol>
+<h2 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h2><p>每个程序有自己的地址空间，被分割成多个快，即页面，每一页有连续的地址范围。这些页被映射到物理内存，不一定需要在内存中才能运行，<br>当程序引用到一部分不在物理内存中的地址空间时，操作系统负责将缺失的部分装入物理内存并重新执行失败指令。当程序等待它的一部分读入内存时，可以让出CPU</p>
+<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><ol>
+<li>虚拟地址：没有虚拟内存时，系统直接将虚拟地址送到内存总线。使用虚拟内存，则送到内存管理单元MMU映射为物理地址</li>
+<li>页面：虚拟地址空间按照固定大小划分为固定大小的页面</li>
+<li>页框：物理内存对应页面的单元</li>
+<li>页面找无法映射物理内存时，CPU陷入缺页中断page fault，操作系统选择很少使用的页框，将内容写入磁盘，随后将页面对应的内容读入到内存，修改映射关系，重新执行指令</li>
+<li>MMU页表：虚拟地址分成虚拟页号和偏移量，虚拟页号作页表索引，由页表项找到页框号</li>
+<li>引入TLB快表加快虚拟地址到物理地址的转换</li>
+<li>引入多级页表，解决虚拟地址空间巨大的问题</li>
+<li>页面置换算法：最近未使用页面置换算法，先进先出等</li>
+<li>页面大小：小页面减少内存占用，但页表太大，磁盘与内存传输是按页进行，进程切换页表装入硬件寄存器也会变慢。大页面则容易产生更大碎片，浪费内存</li>
+</ol>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><ol>
+<li>静态链接：将被调用函数的库程序全部装载生成二进制可执行文件，耗空间，每次都需要重新编译</li>
+<li>动态链接：加载了一小段能够在运行时绑定被调用函数的存根例程，在第一次被调用时被装载</li>
+</ol>
+<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><ol>
+<li>机制思想：进程发起一个系统调用，将一个文件映射到其虚拟地址空间的一部分，在映射共享的页面时不会读入页面的内容，而是在访问页面时才读入。进程退出或解除文件映射时所有改动的页面会被写回到文件</li>
+<li>如果多个进程同时映射了同一份文件，它们就可以通过共享内存通信</li>
+</ol>
+<h3 id="清除策略"><a href="#清除策略" class="headerlink" title="清除策略"></a>清除策略</h3><ol>
+<li>分页守护进程定时检查内存状态，通过置换算法维护空闲页框</li>
+</ol>
+<h3 id="进程创建-1"><a href="#进程创建-1" class="headerlink" title="进程创建"></a>进程创建</h3><ol>
+<li>确定程序和数据初始大小，创建页表，内存中为页表分配空间初始化</li>
+<li>磁盘交换区中分配空间</li>
+<li>程序正文和数据对交换区空间初始化，以便进程缺页中断时可以调入需要的页面</li>
+<li>页表和磁盘交换区的信息存储在进程表中</li>
+</ol>
+<h3 id="进程执行"><a href="#进程执行" class="headerlink" title="进程执行"></a>进程执行</h3><ol>
+<li>重置MMU，刷新TLB，新进程页表成为当前页表</li>
+</ol>
+<h3 id="缺页中断"><a href="#缺页中断" class="headerlink" title="缺页中断"></a>缺页中断</h3><ol>
+<li>确定缺页的虚拟地址</li>
+<li>确定缺失的页面，确定磁盘上的位置</li>
+<li>找到合适的页框，读入页面</li>
+<li>备份指令，重新执行</li>
+<li>正在进行IO操作的页面不会被移出内存</li>
+</ol>
+<h3 id="进程退出"><a href="#进程退出" class="headerlink" title="进程退出"></a>进程退出</h3><ol>
+<li>最后一个进程退出时，释放页表，页面和页面在硬盘所占用的空间</li>
+</ol>
+<h3 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h3><ol>
+<li>每个段由一个从0到最大的线性地址序列构成，每个段都是独立地址空间</li>
+<li>寻址：段号+段内地址</li>
+<li>简化对长度经常变化的数据结构管理，有利于各个过程单独编译链接</li>
+<li>使程序和数据可以划分为逻辑上独立的地址空间，有助于共享，连接和保护</li>
+<li>内存段与段之间的空闲内存外部碎片可以通过内存紧缩</li>
+<li>分段和分页的结合：段内进行分页，提供二维的虚拟内存</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjt4aa56j000ltyt9f10us0hx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-opsystem-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/08/18/opsystem-2/" class="article-date">
@@ -187,7 +442,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjt40fj3o000fitt9m3eee2d3" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjt4aa56l000ntyt9gw8daex9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -311,487 +566,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjt40fj3s000gitt9psrwc0ha" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-docker-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/17/docker-1/" class="article-date">
-  <time datetime="2018-08-17T14:44:38.000Z" itemprop="datePublished">2018-08-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/17/docker-1/">Docker文档与实践</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h2 id="镜像与容器"><a href="#镜像与容器" class="headerlink" title="镜像与容器"></a>镜像与容器</h2><ul>
-<li>通过<a href="https://docs.docker.com/get-started/part2/" target="_blank" rel="noopener">官网文档</a>例子构建镜像，可以用镜像运行多个容器。</li>
-<li>镜像的发布与拉取，类似于github操作</li>
-</ul>
-<h2 id="服务组"><a href="#服务组" class="headerlink" title="服务组"></a>服务组</h2><ul>
-<li>大的系统往往需要拆分成多个服务，每个服务构建成独立的镜像。而一个服务组可以统一管理各个服务的部署</li>
-<li>通过docker-compose.yml配置，可以配置服务组，包含不同服务使用的镜像，容器数量，资源分配，重启策略，端口，网络</li>
-<li>docker stack deploy -c docker-compose.yml $services_name</li>
-<li>这里的部署前提是docker swarm init，启动集群管理，当前机器为其中的一个节点</li>
-<li>部署之前需要确认节点有配置所需要的镜像</li>
-</ul>
-<h2 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h2><ul>
-<li>docker swarm init 将当前节点作为管理节点</li>
-<li>其他机器可以通过docker swarm join 加入集群，作为其中的一个节点，服务组部署启动的容器将被分布在集群的节点上</li>
-</ul>
-<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><ul>
-<li>docker-compose.yml 引入可视化服务，redis服务</li>
-<li>volumes: 在redis容器内文件系统创建/data，通过映射到宿主系统的实际文件目录，redis数据将可以持久保存在宿主而不会因为容器删除而被删除</li>
-<li>通过可视化我们可以直观地看到不同节点运行的服务</li>
-</ul>
-<h1 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h1><h2 id="开发最佳实践"><a href="#开发最佳实践" class="headerlink" title="开发最佳实践"></a>开发最佳实践</h2><ul>
-<li>选择合适的基础镜像，避免构建的镜像太大</li>
-<li>多阶段构建，如果不使用多阶段构建，则尽量减少层数</li>
-<li>创建一个公共基础镜像，docker只需要加载一次并缓存它</li>
-<li>需要考虑基于生产镜像构建用于debug的镜像</li>
-<li>添加有意义的镜像tag，包含版本信息，运行环境等</li>
-<li>避免在容器存储层写数据，将会使容器膨胀，IO也不如使用数据卷高效</li>
-<li>敏感数据使用secrets，非敏感使用configs</li>
-<li>尽量使用swarm方式部署，可扩展，配置化，优雅重启，具备一些额外功能如secrets，configs，可以自动获取需要的镜像不需要手动拉取</li>
-<li>使用CI/CD自动构建，打tag，测试</li>
-</ul>
-<h2 id="Dockerfile最佳实践"><a href="#Dockerfile最佳实践" class="headerlink" title="Dockerfile最佳实践"></a>Dockerfile最佳实践</h2><ul>
-<li>FROM: 从指定的镜像创建一层，COPY: 从Docker客户端当前目录拷贝文件，RUN: 执行命令，CMD: 容器启动执行命令，容器启动时，添加一层可写容器层在镜像基础上，所有的修改仅发生在这一层</li>
-<li>执行docker build时，指定目录为build context，上下文会发送给Docker daemon</li>
-<li>.dockerignore 类似.gitignore</li>
-<li>多阶段构建有助于减小镜像大小和层数，不需要的包不装，构建下一层前清除当前层不需要的东西</li>
-<li>应用解耦: 尽可能一个容器一个进程，通过容器间通信配置可以解决依赖</li>
-<li>减少层次: RUN，COPY，ADD创建实际的层，其他指令创建临时中间层</li>
-<li>构建时指令顺序执行时会检查现有镜像的缓存</li>
-<li>从已经缓存的基础镜像开始，下一个指令检查基础镜像的子镜像是否有匹配</li>
-<li>ADD，COPY是否使用缓存会通过比较文件指纹</li>
-</ul>
-<h2 id="创建基础镜像"><a href="#创建基础镜像" class="headerlink" title="创建基础镜像"></a>创建基础镜像</h2><ul>
-<li>FROM scratch</li>
-</ul>
-<h2 id="多阶段构建"><a href="#多阶段构建" class="headerlink" title="多阶段构建"></a>多阶段构建</h2><ul>
-<li>同一个Dockerfile</li>
-<li>多个FROM，通过–from，下一阶段可以通过引用上一阶段构建好的镜像临时容器中获取需要的文件或程序</li>
-<li>可以只构建指定阶段，也可以直接引用其他镜像</li>
-</ul>
-<h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><h2 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h2><ul>
-<li>可插拔</li>
-<li>bridge: 独立容器通信使用，适用于同一个宿主不同容器通信</li>
-<li>host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离</li>
-<li>overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信</li>
-<li>macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址路由。适用于从虚拟机迁移</li>
-<li>none: 禁用网络</li>
-<li>docker network ls 可以看见已有的网络及对应的驱动类型</li>
-</ul>
-<h2 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a>bridge</h2><ul>
-<li>分为默认和自定义</li>
-<li>使用默认时，每个容器都需要打开指定端口。使用自定义网络时，处于同一网络的容器间端口是相互暴露，而只需要供外部访问的容器打开端口即可</li>
-<li>使用自定义网络，容器可以加入和移出自定义网络</li>
-<li>自定义网络有单独的配置文件</li>
-<li>默认网络使用–link参数可以使容器间共享环境变量，自定义网络则需要考虑从共享数据卷，docker-compose，swarm services实现环境变量共享</li>
-<li>自定义网络通过-p参数指定对其他网络的暴露端口</li>
-<li>容器创建时可以指定加入的网络，已经运行的可以通过docker network connect加入</li>
-<li>docker attach 将连接宿主与容器的标准输入输出错误流</li>
-<li>实践可以参考<a href="https://docs.docker.com/network/network-tutorial-standalone/" target="_blank" rel="noopener">https://docs.docker.com/network/network-tutorial-standalone/</a></li>
-</ul>
-<h2 id="host"><a href="#host" class="headerlink" title="host"></a>host</h2><ul>
-<li>容器与宿主没有隔离，容器的端口直接使用宿主的端口</li>
-<li>可以用于swarm services，如果容器绑定指定端口，则一个节点只能启动一个容器</li>
-</ul>
-<h2 id="overlay"><a href="#overlay" class="headerlink" title="overlay"></a>overlay</h2><ul>
-<li>用于创建分布式网络连接多个docker daemon，路由转发数据包</li>
-<li>docker swarm init 初始化时，docker network ls 可以查看到，默认网络ingress</li>
-<li>同一个docker daemon下的container通信用默认的bridge网络docker_gwbridge</li>
-<li>每一个docker daemon 需要开放系列端口：TCP2377用于集群的管理通信，TCP7946和UDP7946用于节点间通信，UDP4789用于overlay网络转发</li>
-<li>自定义overlay网络，可以–opt encrypted加密节点数据传输</li>
-<li>可以自定义默认ingress的配置，需要通过移除和重建的方式</li>
-<li>修改docker_gwbridge配置时，需要停止docker，也是通过移除和重建的方式</li>
-</ul>
-<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><ul>
-<li>外部访问容器：通过端口映射将容器端口暴露</li>
-<li>容器互联：基础服务容器不对外暴露端口，只供应用层服务容器访问，则传统方式通过–link手动互联，更好的方式是自定义网络，将容器加入同一个网络。Docker通过提供环境变量和更新host文件提供基础服务容器连接信息。</li>
-</ul>
-<h1 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h1><h2 id="持久化存储"><a href="#持久化存储" class="headerlink" title="持久化存储"></a>持久化存储</h2><h3 id="volumes"><a href="#volumes" class="headerlink" title="volumes"></a>volumes</h3><ul>
-<li>数据卷作为宿主文件系统的一部分，由docker管理，非docker进程无法修改，官方推荐最佳数据持久化方式</li>
-<li>可以同时挂载到多个容器，可以同时读写</li>
-<li>可以存储数据到云端</li>
-<li>可以方便的进行数据迁移</li>
-</ul>
-<h3 id="bind-mounts"><a href="#bind-mounts" class="headerlink" title="bind mounts"></a>bind mounts</h3><ul>
-<li>可以在宿主任何位置存储，非docker进程可以修改</li>
-<li>直接将宿主的文件或文件夹挂载到容器，不利于管理</li>
-<li>使用场景：共享配置文件如dns，在开发环境容器进行打包时可以生成包到指定路径，</li>
-</ul>
-<h3 id="tmpfs-mounts"><a href="#tmpfs-mounts" class="headerlink" title="tmpfs mounts"></a>tmpfs mounts</h3><ul>
-<li>存在宿主内存，而不是容器可写存储层</li>
-<li>主要基于性能考虑，如大量数据写时</li>
-</ul>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>文档帮助我们快速入门及对docker的整体有个大体了解。通过官网的实践例子，我们对docker不再陌生，剩下的则是实际开发生产解决具体问题，以下的几个问题还需要在实际应用过程中进行总结。</li>
-<li>如何更快构建更小的镜像，需要了解Dockerfile各个指令，多阶段构建，构建缓存使用等</li>
-<li>如何利用集群使服务高效便捷地扩展，如何编排服务组，分配资源等</li>
-<li>如何利用网络通信，使不同容器，服务，节点间进行解耦合作</li>
-<li>如何解决不同容器，服务，节点间数据持久化，共享</li>
-<li>实际生产监控与报警</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/17/docker-1/" data-id="cjt40fj3f0004itt90h7j8j3a" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-nginx-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/26/nginx-1/" class="article-date">
-  <time datetime="2018-07-26T03:21:11.000Z" itemprop="datePublished">2018-07-26</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Nginx/">Nginx</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/26/nginx-1/">Nginx文档笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><ol>
-<li><a href="https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/" target="_blank" rel="noopener">安装文档</a></li>
-<li>Ubuntu:除了文档列出的依赖，额外依赖<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libssl-dev</span><br><span class="line">sudo apt install  libxml2-dev</span><br><span class="line">sudo apt install libxslt1-dev</span><br><span class="line">sudo apt install libgd-dev</span><br><span class="line">sudo apt install libgeoip-dev</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="二、nginx管理"><a href="#二、nginx管理" class="headerlink" title="二、nginx管理"></a>二、nginx管理</h1><ol>
-<li>一个master进程和多个worker进程，如果缓存开启，则缓存加载和缓存管理两个进程也在初始化运行</li>
-<li>nginx通过信号管理，除了nginx -s quit/reload/reopen/stop 也可以通过kill 命令发送信号给master进程</li>
-</ol>
-<h1 id="三、Web服务器"><a href="#三、Web服务器" class="headerlink" title="三、Web服务器"></a>三、Web服务器</h1><h2 id="静态资源"><a href="#静态资源" class="headerlink" title="静态资源"></a>静态资源</h2><ol>
-<li>root 指定资源根目录</li>
-<li>location 匹配url， =普通字符串匹配，～表示正则匹配</li>
-<li>sendfile，sendfile_max_chunk：允许数据从一个文件描述符直接拷贝到另外一个，指定分片大小避免较快的连接长期占用worker进程</li>
-<li>tcp_nodelay：禁用nagle算法，避免延迟响应，配合keepalive</li>
-<li>backlog：支持更多连接，需要配合内核配置优化</li>
-</ol>
-<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><ol>
-<li>proxy_pass: 请求发送到指定服务组</li>
-<li>proxy_bind：如果代理服务器有多个网卡，则与上游服务连接时可以指定ip地址</li>
-<li>proxy_set_header，proxy_buffer_size，proxy_timeout，proxy_connect_timeout等</li>
-<li>SSL: 基本原理与配置与https一致</li>
-</ol>
-<h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><ol>
-<li>gzip</li>
-<li>gzip_types</li>
-<li>gzip_min_length：低于这个阈值不会进行压缩</li>
-<li>gzip_proxied：如果请求来自代理服务器，则不会进行压缩，所以通过检查请求的cache-control，符合条件的才进行压缩</li>
-<li>gzip_static：允许直接发送压缩文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_types      text/plain application/xml;</span><br><span class="line">    gzip_proxied    no-cache no-store private expired auth;</span><br><span class="line">    gzip_min_length 1000;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="四、负载均衡"><a href="#四、负载均衡" class="headerlink" title="四、负载均衡"></a>四、负载均衡</h1><h2 id="HTTP负载均衡"><a href="#HTTP负载均衡" class="headerlink" title="HTTP负载均衡"></a>HTTP负载均衡</h2><h3 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h3><ol>
-<li>设置一组上游服务 upstream， 默认使用round robin 算法</li>
-<li>通过proxy_pass 指定上游服务组</li>
-</ol>
-<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><ol>
-<li>round robin：通过server_weight 参数轮询</li>
-<li>least_conn：发送给最少连接的上游服务，server_weight 参数作为参考</li>
-<li>ip_hash：通过ip地址计算哈希值，如果需要移除一台服务，则可以设置为down，则请求将依规则发给下一台</li>
-<li>hash：用户定义的哈希值进行路由</li>
-<li>random：随机取出指定数量的服务，从中再根据least_conn算法路由</li>
-</ol>
-<h3 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h3><ol>
-<li>设置slow_start 避免服务刚恢复时，承载过多请求</li>
-</ol>
-<h3 id="服务失败检测"><a href="#服务失败检测" class="headerlink" title="服务失败检测"></a>服务失败检测</h3><ol>
-<li>max_fails：失败达到参数设置，则nginx认为服务不可用，默认1次</li>
-<li>fail_timeout：认为不可用的持续时间，即不再重试的时间，默认10s</li>
-</ol>
-<h3 id="数据共享"><a href="#数据共享" class="headerlink" title="数据共享"></a>数据共享</h3><ol>
-<li>设置zone可以使nginx多个worker进程共享相同的upstream 服务组设置及相关计数</li>
-</ol>
-<h3 id="使用DNS"><a href="#使用DNS" class="headerlink" title="使用DNS"></a>使用DNS</h3><ol>
-<li>设置resolver，valid为ttl时间，ipv6可以设置关闭</li>
-<li>upstream 下各服务为域名</li>
-</ol>
-<h2 id="TCP、UDP负载均衡"><a href="#TCP、UDP负载均衡" class="headerlink" title="TCP、UDP负载均衡"></a>TCP、UDP负载均衡</h2><ol>
-<li>与http负载均衡类似</li>
-</ol>
-<h2 id="反向代理时传递客户端的真实IP而非负载均衡器的IP地址"><a href="#反向代理时传递客户端的真实IP而非负载均衡器的IP地址" class="headerlink" title="反向代理时传递客户端的真实IP而非负载均衡器的IP地址"></a>反向代理时传递客户端的真实IP而非负载均衡器的IP地址</h2><ol>
-<li><p>配置nginx接受代理协议，则nginx将真实客户端ip和端口存储在变量$proxy_protocol_addr，$proxy_protocol_port</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    #...</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80   proxy_protocol;</span><br><span class="line">        listen 443  ssl proxy_protocol;</span><br><span class="line">        #...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">stream &#123;</span><br><span class="line">    #...</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 12345 proxy_protocol;</span><br><span class="line">        #...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>http修改当前server ip为当前实际客户端的ip</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        #...</span><br><span class="line">        real_ip_header proxy_protocol;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将ip地址传递给上游服务 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    proxy_set_header X-Real-IP       $proxy_protocol_addr;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_protocol_addr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将$proxy_protocol_addr添加到log_format中</p>
-</li>
-</ol>
-<h1 id="五、安全"><a href="#五、安全" class="headerlink" title="五、安全"></a>五、安全</h1><h2 id="SSL"><a href="#SSL" class="headerlink" title="SSL"></a>SSL</h2><p>安全地协商出一份对称加密秘钥<br>RSA算法流程</p>
-<ol>
-<li>客户端发送client hello，客户端随机数，带上可选加密参数信息</li>
-<li>服务端响应server hello，服务端随机数，已选加密参数信息</li>
-<li>服务端响应certificate，发送服务器证书，server hello done</li>
-<li>客户端发送证书公钥加密后的预主秘钥，客户端进一步用预主秘钥生成主秘钥，发送第一个用主密钥加密的数据</li>
-<li>服务端用证书私钥解密预主秘钥，生成主密钥，握手完成</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    ssl_session_cache   shared:SSL:10m;</span><br><span class="line">    ssl_session_timeout 10m;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen              443 ssl;</span><br><span class="line">        server_name         www.example.com;</span><br><span class="line">        keepalive_timeout   70;</span><br><span class="line"></span><br><span class="line">        ssl_certificate     www.example.com.crt;</span><br><span class="line">        ssl_certificate_key www.example.com.key;</span><br><span class="line">        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">        ssl_ciphers         HIGH:!aNULL:!MD5;</span><br><span class="line">        #...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="https优化"><a href="#https优化" class="headerlink" title="https优化"></a>https优化</h2><ol>
-<li>使用keepalive</li>
-<li>复用SSL会话参数，避免重复SSL握手</li>
-</ol>
-<h2 id="同一个IP支持多个https-server"><a href="#同一个IP支持多个https-server" class="headerlink" title="同一个IP支持多个https server"></a>同一个IP支持多个https server</h2><ol>
-<li>因为SSL先于浏览器发送http请求，所以，服务端只提供默认证书，致使请求都指向默认server</li>
-<li>最好的解决方法是，分ip部署https server</li>
-<li>另外可以通过使用多个域名公共证书，同时需要TLS SNI support enabled</li>
-</ol>
-<h2 id="HTTP基础认证"><a href="#HTTP基础认证" class="headerlink" title="HTTP基础认证"></a>HTTP基础认证</h2><ol>
-<li>auth_basic：对话框的用户区</li>
-<li>auth_basic_user_file：用户密码表的文件路径</li>
-<li>satisfy allow deny 设置ip限制</li>
-<li>auth_request 可以指定认证location</li>
-</ol>
-<h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><ol>
-<li>limit_conn_zone limit_conn: 限制连接数，限制每个客户端的连接数也可以设置服务接收的连接数</li>
-<li>limit_req_zone limit_req: 限制某个location下，请求的频率；burst，如果请求超出限制区，则burst为队列长度，其他请求立即返回503</li>
-<li>limit_rate: 限制location下的带宽</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/26/nginx-1/" data-id="cjt40fj3l000bitt9i795o7qf" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-http-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/20/http-1/" class="article-date">
-  <time datetime="2018-07-20T03:21:11.000Z" itemprop="datePublished">2018-07-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/HTTP/">HTTP</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/20/http-1/">《HTTP权威指南》阅读笔记一</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-常见概念"><a href="#1-常见概念" class="headerlink" title="1. 常见概念"></a>1. 常见概念</h1><ol>
-<li><p>MIME：Multipurpose Internet Mail Extension，电子邮件系统和HTTP用于描述标记多媒体内容</p>
-</li>
-<li><p>URI：统一资源标识符，可以有URL和URN两种形式</p>
-</li>
-<li><p>URL：协议+服务器地址+资源路径</p>
-</li>
-<li><p>事务：通过HTTP报文格式化数据块完成一次请求和响应</p>
-</li>
-</ol>
-<h1 id="2-URL与资源"><a href="#2-URL与资源" class="headerlink" title="2. URL与资源"></a>2. URL与资源</h1><ol>
-<li><p>大多数URL方案的语法建立在<scheme>://<user>:<password>@<host>:<port>/<path></path>;<params>?<query>#<frag></frag></query></params></port></host></password></user></scheme></p>
-</li>
-<li><p>设计URL使其可以通过任意因特网协议安全传输是很重要的，有些协议如SMTP的传输方法只能使用相对较小，通用的安全字母表中的字符</p>
-</li>
-<li><p>URL中包含如中文等非安全字母表二进制数据或字符时，则需要进行转义</p>
-</li>
-<li><p>转义：百分号+字符编码的十六进制数</p>
-</li>
-</ol>
-<h1 id="3-HTTP报文"><a href="#3-HTTP报文" class="headerlink" title="3. HTTP报文"></a>3. HTTP报文</h1><ol>
-<li>组成：对报文进行描述的起始行start line \r\n作为行结束，包含属性的首部块header，包含数据的body</li>
-</ol>
-<h2 id="常见HTTP方法"><a href="#常见HTTP方法" class="headerlink" title="常见HTTP方法"></a>常见HTTP方法</h2><ol>
-<li>GET，HEAD，POST，PUT，DELETE，TRACE(对可能经过代理服务器传送的报文进行追踪，服务响应会带上实际收到的请求原文)，OPTIONS(决定可以在服务器上执行哪些方法)</li>
-</ol>
-<h2 id="已定义状态码"><a href="#已定义状态码" class="headerlink" title="已定义状态码"></a>已定义状态码</h2><ol>
-<li>100-101：信息提示</li>
-<li>200-206：成功</li>
-<li>300-305：重定向</li>
-<li>400-415：客户端错误</li>
-<li>500-505：服务端错误</li>
-</ol>
-<h1 id="4-连接管理"><a href="#4-连接管理" class="headerlink" title="4. 连接管理"></a>4. 连接管理</h1><ol>
-<li>连接过程：解析主机名，dns查询ip，获取端口号，发起连接，发送请求报文，返回响应报文，关闭连接</li>
-<li>HTTP事务时延：DNS查询，连接，请求，处理，响应，关闭</li>
-<li>性能聚焦区域：TCP连接，TCP慢启动拥塞控制，数据聚集的Nagle算法+TCP延迟确认，TIME_WAIT时延和端口耗尽</li>
-<li>并行连接：由客户端的网络带宽限制并行连接数</li>
-<li>持久连接：HTTP/1.1及HTTP/1.0的增强版本 允许设备在事务处理结束时将连接保持打开状态，省去建立连接和慢启动的阶段，1.0可以通过Connection：keep-alive</li>
-<li>管道化连接：HTTP/1.1允许在持久连接上使用请求管道，响应到达前将请求放入队列，不能传送非幂等请求如POST</li>
-</ol>
-<h1 id="5-Web服务器"><a href="#5-Web服务器" class="headerlink" title="5. Web服务器"></a>5. Web服务器</h1><ol>
-<li>重定向使用场景：永久删除或临时删除的资源，负载均衡，服务器关联，规范目录名称</li>
-<li>对非持久连接，发送完响应关闭服务端连接；对持久连接，需要正确计算content-length首部</li>
-</ol>
-<h1 id="6-代理"><a href="#6-代理" class="headerlink" title="6. 代理"></a>6. 代理</h1><ol>
-<li>代理可以监视流量并对其进行修改</li>
-<li>应用场景：安全防火墙，Web缓存，反向代理，内容路由器，转码，匿名</li>
-<li>via： 列出了与报文途径的每个中间节点</li>
-</ol>
-<h1 id="7-缓存"><a href="#7-缓存" class="headerlink" title="7. 缓存"></a>7. 缓存</h1><h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><ol>
-<li>冗余的数据传输：服务器多次传输同一份文档，增大负担，消耗带宽</li>
-<li>带宽瓶颈：客户端会以路径上最慢的网速访问服务器，如果客户端能在局域网获取一份副本，将大大提升性能</li>
-<li>瞬间拥塞：使web服务器过载</li>
-<li>距离时延</li>
-</ol>
-<h2 id="缓存再验证"><a href="#缓存再验证" class="headerlink" title="缓存再验证"></a>缓存再验证</h2><ol>
-<li>大部分缓存只有在客户端发起请求，且副本时间需要再次检测才会进行再验证</li>
-<li>向原始服务器发送小请求，如果返回304，则缓存继续有效</li>
-<li>首部：if-modified-since，只有在缓存了对象的副本后又对其进行修改，才发送此对象</li>
-<li>商业代理缓存会在via首部附加额外信息以描述命中情况</li>
-</ol>
-<h2 id="HTTP缓存体系"><a href="#HTTP缓存体系" class="headerlink" title="HTTP缓存体系"></a>HTTP缓存体系</h2><ol>
-<li>缓存存储策略：决定http响应内容是否可缓存到客户端，Cache-Control</li>
-<li>缓存过期策略：决定客户端是否可以直接使用缓存数据，Expires</li>
-<li>缓存对比策略：将缓存在客户端的数据标识发往服务端，服务端会查看if-modified-since等请求头，对比判断标识是否有效，如果有效则返回304</li>
-</ol>
-<h2 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h2><ol>
-<li><a href="https://imweb.io/topic/5795dcb6fb312541492eda8c" target="_blank" rel="noopener">HTTP缓存控制小结</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/24467558" target="_blank" rel="noopener">彻底弄懂 Http 缓存机制</a></li>
-</ol>
-<h1 id="8-网关，隧道及中继"><a href="#8-网关，隧道及中继" class="headerlink" title="8. 网关，隧道及中继"></a>8. 网关，隧道及中继</h1><h2 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h2><p>如应用程序服务器，早期的CGI通用网关接口</p>
-<h2 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h2><ol>
-<li>web隧道允许用户通过http连接发送非http流量</li>
-<li>使用http方法CONNECT建立http隧道</li>
-<li>SSL隧道：最初的web隧道是为了通过防火墙传输SSL流量。发送CONNECT请求，返回认证请求，发送带有认证信息CONNECT请求，建立连接</li>
-</ol>
-<h2 id="中继"><a href="#中继" class="headerlink" title="中继"></a>中继</h2><ol>
-<li>盲转发</li>
-<li>无法处理Connection：keep-alive</li>
-</ol>
-<h1 id="9-爬虫"><a href="#9-爬虫" class="headerlink" title="9. 爬虫"></a>9. 爬虫</h1><ol>
-<li>链接提取及相对链接的标准化</li>
-<li>避免环路的出现</li>
-<li>广度优先</li>
-<li>节流</li>
-<li>内容指纹</li>
-</ol>
-<h1 id="10-客户端识别与cookie机制"><a href="#10-客户端识别与cookie机制" class="headerlink" title="10. 客户端识别与cookie机制"></a>10. 客户端识别与cookie机制</h1><h2 id="用户识别机制"><a href="#用户识别机制" class="headerlink" title="用户识别机制"></a>用户识别机制</h2><ol>
-<li>承载用户信息的HTTP首部：user-agent，cookie，referer，x-forward–for等</li>
-<li>客户端IP地址：并不能精确识别客户</li>
-<li>用户登录：通过www-authenticate，authorization首部</li>
-<li>cookie</li>
-</ol>
-<h1 id="11-基本认证机制"><a href="#11-基本认证机制" class="headerlink" title="11. 基本认证机制"></a>11. 基本认证机制</h1><ol>
-<li>实际使用并不安全，用户名和密码都是以明文形式传送，安全使用的唯一方式就是结合SSL</li>
-</ol>
-<h1 id="12-摘要认证"><a href="#12-摘要认证" class="headerlink" title="12. 摘要认证"></a>12. 摘要认证</h1><ol>
-<li>用摘要保护密码，不通过网络发送密码</li>
-<li>单向摘要，MD5输出的128位摘要被写成32个16进制字符</li>
-<li>用随机数防止重放攻击，服务器质询时返回给客户端一个随机数，客户端在计算摘要之前要加上这个随机数</li>
-</ol>
-<h1 id="13-安全HTTP"><a href="#13-安全HTTP" class="headerlink" title="13. 安全HTTP"></a>13. 安全HTTP</h1><ol>
-<li>对称秘钥加密：编码和解码使用相同的秘钥，流行算法：DES，RC2，RC4</li>
-<li>公开秘钥加密：使用非对称秘钥，只有接收端可以用私钥解密，RSA算法</li>
-<li>公开秘钥加密算法的计算可能会很慢，对称加密更快</li>
-<li>两个节点间通过公开秘钥加密建立安全通信，再用安全通道产生发送临时随机对称秘钥</li>
-<li>数字签名：附加在报文上的特殊加密校验码，可以证明是作者编写了这条报文，防止报文被篡改</li>
-<li>数字证书：对象，过期时间，发布者，公钥，数字签名等，常见标准格式X.509 v3</li>
-<li>浏览器收到服务器证书后，会对签名颁发机构进行检查</li>
-<li>SSL握手：交换协议版本号，选择一个两端都了解的密码，对两端的身份进行认证，生成临时会话秘钥。</li>
-<li>服务器可以要求客户端使用客户端证书，常见于组织机构内网</li>
-<li>站点证书有效性：日期检测，签名颁发者可信度检测，签名检测，站点身份检测检查证书域名与访问站点域名是否一致</li>
-<li>OpenSSL：SSL和TLS常见的开源实现，创建SSL本地上下文，建立443TCP连接，将SSL层附加到TCP连接，SSL握手</li>
-<li>HTTPS SSL隧道协议：http通过CONNECT方法告诉代理，建立一条直接到服务端的连接，以隧道协议传输数据</li>
-</ol>
-<h1 id="14-实体和编码"><a href="#14-实体和编码" class="headerlink" title="14. 实体和编码"></a>14. 实体和编码</h1><ol>
-<li>content-length：检测报文截尾，这对缓存服务器尤其重要；对于持久连接，客户端需要直到报文在哪里结束</li>
-<li>内容编码：如果主体进行编码，content-length说明的就是编码后的长度；编码后，增加content-encoding首部用户客户端解码；客户端通过accept-encoding告知服务端可以接受的编码方式</li>
-<li>实体摘要：发送方在生成初始主体时生成一个数据校验和，这样接收方就可以通过检查这个校验和捕获所有意外，相关首部content-md5</li>
-<li>传输编码：改变报文数据在网络中的传输方式，解决可靠传输存在的问题：未知尺寸，用传输编码发送数据，用特别的结束脚注表明数据结束；安全性（被SSL取代），扰乱报文内容</li>
-<li>Transfer-Encoding：传输编码类型，TE：告诉服务器可以使用哪些传输编码扩展</li>
-<li>分块编码：把报文分割为若干个小块紧挨着发送。非持久连接，客户端读取直到服务端关闭连接。持久连接，说明每块大小，最后用0块作为主体结束的信号</li>
-<li>传输编码规则：传输编码集合中要包含分块；必须最后一个作用于报文主体；不能多次作用到一个报文主体上；</li>
-<li>范围请求：允许客户端只请求文档的一部分，在点对点文件共享客户端应用广泛</li>
-<li>差异编码：客户端可以使用A-IM首部说明可以接受的实例操控类型，Delta-base用于计算差异的基线文档Etag，支持差异编码的服务器必须保持页面随时间变化的多个版本</li>
-</ol>
-<h1 id="15-国际化"><a href="#15-国际化" class="headerlink" title="15. 国际化"></a>15. 国际化</h1><ol>
-<li>charset参数和content-language：告知客户端文档的字母表和语言</li>
-<li>accept-language和accept-charset：告知服务端支持的字母表和语言及其优先顺序</li>
-</ol>
-<h1 id="16-内容协商与转码"><a href="#16-内容协商与转码" class="headerlink" title="16. 内容协商与转码"></a>16. 内容协商与转码</h1><ol>
-<li>Vary：响应首部列出客户端请求首部，服务端可用这些首部选择文档</li>
-<li>转码：格式转换，信息综合，内容注入</li>
-</ol>
-<h1 id="17-内容发布与分发"><a href="#17-内容发布与分发" class="headerlink" title="17. 内容发布与分发"></a>17. 内容发布与分发</h1><ol>
-<li>CDN：内容分发网络，节点可以是web服务器，反向代理，或缓存</li>
-</ol>
-<h1 id="18-重定向与负载均衡"><a href="#18-重定向与负载均衡" class="headerlink" title="18. 重定向与负载均衡"></a>18. 重定向与负载均衡</h1><ol>
-<li>HTTP重定向：增加时延</li>
-<li>DNS重定向：返回多个ip选中的ip，缺点时DNS会缓存</li>
-<li>任播寻址：地理上分散的web服务器拥有相同的ip地址，将地址广告给骨干网路由，则客户端的请求将通过最短路径路由给最近的服务器</li>
-<li>IP MAC转发：交换机将分组转发到指定MAC地址</li>
-<li>IP地址转发：修改目的IP地址，即NAT网络地址交换</li>
-<li>代理自动配置协议PAC：配置url使用代理</li>
-</ol>
-<h1 id="19-日志记录"><a href="#19-日志记录" class="headerlink" title="19. 日志记录"></a>19. 日志记录</h1><ol>
-<li>常用日志格式：参考nginx access.log</li>
-<li>对重要的页面进行缓存清除</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/07/20/http-1/" data-id="cjt40fj4j0012itt92ixwo2ii" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjt4aa56m000qtyt9hf3gnj86" class="article-share-link">Share</a>
       
       
     </footer>
@@ -805,7 +580,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -844,23 +619,23 @@
       <ul>
         
           <li>
-            <a href="/2018/09/20/ds-1/">1. 数组</a>
+            <a href="/2018/09/20/ds-4/">4. 字符串</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-3/">3. 栈</a>
+            <a href="/2018/09/20/ds-1/">1. 链表</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-2/">2. 链表</a>
+            <a href="/2018/09/20/ds-2/">2. 栈</a>
           </li>
         
           <li>
-            <a href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+            <a href="/2018/09/20/ds-3/">3. 队列</a>
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+            <a href="/2018/09/20/ds-5/">5. 数组</a>
           </li>
         
       </ul>

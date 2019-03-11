@@ -58,6 +58,65 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-ds-4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-4/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-4/">4. 字符串</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="字符串常见问题"><a href="#字符串常见问题" class="headerlink" title="字符串常见问题"></a>字符串常见问题</h1><ul>
+<li>字符串实质是byte数组，可以用数组的方法来解决字符串的问题，字符串数组可以看作二维数组来解决问题</li>
+<li>基础操作</li>
+<li>回文序列</li>
+<li>ASCII码，A-65，a-97，0-48</li>
+<li>滑动窗口</li>
+</ul>
+<h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><ul>
+<li>分割，替换，取子串</li>
+<li>929 过滤重复邮箱地址</li>
+</ul>
+<h2 id="回文序列"><a href="#回文序列" class="headerlink" title="回文序列"></a>回文序列</h2><ul>
+<li>125 筛选26字母和数字字符串，转为数组</li>
+<li>680 回文序列变种，允许删除一个元素。则还是按回文序列的规则进行比较，当不匹配时，比较i+1:j序列 或者 i:j-1序列</li>
+</ul>
+<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><ul>
+<li>28 子串定位，寻找给定字符串1在字符串2的位置，从字符串2滑动，寻找符合条件的位置直到边界</li>
+</ul>
+<h2 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-4/" data-id="cjt4aa55x0002tyt9ttw57ag4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-ds-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/09/20/ds-1/" class="article-date">
@@ -76,7 +135,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/20/ds-1/">1. 数组</a>
+      <a class="article-title" href="/2018/09/20/ds-1/">1. 链表</a>
     </h1>
   
 
@@ -84,8 +143,176 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
-<h1 id="数组常见题目"><a href="#数组常见题目" class="headerlink" title="数组常见题目"></a>数组常见题目</h1><ul>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="链表常见问题"><a href="#链表常见问题" class="headerlink" title="链表常见问题"></a>链表常见问题</h1><ul>
+<li>节点基础操作</li>
+<li>快慢指针</li>
+<li>链表合并</li>
+</ul>
+<h2 id="节点增删改查"><a href="#节点增删改查" class="headerlink" title="节点增删改查"></a>节点增删改查</h2><ul>
+<li>增删改查，反转</li>
+<li>237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的</li>
+<li>203 删除节点元素</li>
+<li>83 有序链表删除重复元素</li>
+<li>206 链表反转，画图辅助，临时节点存储，修改指针指向</li>
+</ul>
+<h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><ul>
+<li>876 链表中间节点，快指针两步，慢指针一步，则快指针遍历完即得到中间节点</li>
+<li>141 判断链表是否有环，当快指针追上慢指针，则链表有环</li>
+<li>234 判断链表是否回文序列，快慢指针找到链表中间节点，反转以中间节点为头节点的链表b，比较原链表和b，遍历到其中一个的尽头如果都相等则为回文序列</li>
+<li>160 两个链表交汇节点，两个链表分叉部分的节点数差值为x，双指针分别按1步，快指针在短链表，则快指针遍历完链表时，快指针回到慢链表从头遍历，慢指针遍历完之后回到快链表，则此时快慢指针到达交汇点的节点数相等。需要注意没有交汇点时的情况判断</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-1/" data-id="cjt4aa5620004tyt98w89o02x" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ds-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-2/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-2/">2. 栈</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="栈常见问题"><a href="#栈常见问题" class="headerlink" title="栈常见问题"></a>栈常见问题</h1><ul>
+<li>运算</li>
+<li>最小栈</li>
+<li>回溯法</li>
+<li>栈与递归</li>
+</ul>
+<h2 id="运算"><a href="#运算" class="headerlink" title="运算"></a>运算</h2><ul>
+<li>682 根据规则入栈出栈，最后求和</li>
+<li>842 根据规则入栈出栈，最后对比</li>
+<li>20 左符号入栈，遇到右符号出栈，最后查看栈是否为空</li>
+</ul>
+<h2 id="最小栈"><a href="#最小栈" class="headerlink" title="最小栈"></a>最小栈</h2><ul>
+<li>155 最小栈设计</li>
+</ul>
+<ol>
+<li>设计为节点包含每次入栈时的最小值</li>
+<li>栈维护最小值，压栈时，存x-min，出栈时如果值小于0，则返回最小值且更新最小值min=min-x，如果大于0，则返回x+min</li>
+</ol>
+<h2 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h2><ul>
+<li>迷宫求解</li>
+</ul>
+<h2 id="栈与递归"><a href="#栈与递归" class="headerlink" title="栈与递归"></a>栈与递归</h2><ul>
+<li>n皇后</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-2/" data-id="cjt4aa5630005tyt9peo99av6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ds-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-3/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-3/">3. 队列</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="队列常见问题"><a href="#队列常见问题" class="headerlink" title="队列常见问题"></a>队列常见问题</h1><ul>
+<li>事件驱动模拟</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-3/" data-id="cjt4aa5650006tyt9uhsv3075" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ds-5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-5/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-5/">5. 数组</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="数组常见问题"><a href="#数组常见问题" class="headerlink" title="数组常见问题"></a>数组常见问题</h1><ul>
 <li>对无序数组进行排序</li>
 <li>多维数组数组元素按规则变换</li>
 <li>数组按指定行列分组</li>
@@ -93,6 +320,7 @@
 <li>配合额外的数据结构如哈希表等</li>
 <li>滑动窗口</li>
 <li>动态规划</li>
+<li>矩阵</li>
 </ul>
 <h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><ul>
 <li>977 无序数组元素平方之后升序排序</li>
@@ -129,325 +357,11 @@
 <ul>
 <li>746 定义F(s)为选定坐标s时的最小和, F(s) = A(s) + min(F(s-1),F(s-2)),F(1) = A(1), F(2) = A(2), 结果为min(F(len(A)-1),F(len(A)-2))</li>
 </ul>
-
+<h2 id="todo"><a href="#todo" class="headerlink" title="todo"></a>todo</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/20/ds-1/" data-id="cjt40fj360000itt9wov8zrr7" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-ds-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/20/ds-3/" class="article-date">
-  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/20/ds-3/">3. 栈</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/20/ds-3/" data-id="cjt40fj3a0001itt9sdnwtckj" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-ds-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/20/ds-2/" class="article-date">
-  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/20/ds-2/">2. 链表</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
-<h1 id="链表常见题目"><a href="#链表常见题目" class="headerlink" title="链表常见题目"></a>链表常见题目</h1><ul>
-<li>节点基础操作</li>
-<li>快慢指针</li>
-<li>链表合并</li>
-</ul>
-<h2 id="节点增删改查"><a href="#节点增删改查" class="headerlink" title="节点增删改查"></a>节点增删改查</h2><ul>
-<li>增删改查，反转</li>
-<li>237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的</li>
-<li>203 删除节点元素</li>
-<li>83 有序链表删除重复元素</li>
-<li>206 链表反转，画图辅助，临时节点存储，修改指针指向</li>
-</ul>
-<h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><ul>
-<li>876 链表中间节点，快指针两步，慢指针一步，则快指针遍历完即得到中间节点</li>
-<li>141 判断链表是否有环，当快指针追上慢指针，则链表有环</li>
-<li>234 判断链表是否回文序列，快慢指针找到链表中间节点，反转以中间节点为头节点的链表b，比较原链表和b，遍历到其中一个的尽头如果都相等则为回文序列</li>
-<li>160 两个链表交汇节点，两个链表分叉部分的节点数差值为x，双指针分别按1步，快指针在短链表，则快指针遍历完链表时，快指针回到慢链表从头遍历，慢指针遍历完之后回到快链表，则此时快慢指针到达交汇点的节点数相等。需要注意没有交汇点时的情况判断</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/20/ds-2/" data-id="cjt40fj3e0003itt94y0dl1cl" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-tcpip-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/18/tcpip-1/" class="article-date">
-  <time datetime="2018-09-18T03:21:11.000Z" itemprop="datePublished">2018-09-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjt40fj4p0018itt99d8mge31" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-opsystem-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/18/opsystem-1/" class="article-date">
-  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/操作系统/">操作系统</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="一-进程与线程"><a href="#一-进程与线程" class="headerlink" title="一. 进程与线程"></a>一. 进程与线程</h1><h2 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h2><ol>
-<li>系统初始化</li>
-<li>正在进行的进程调用进程创建系统调用</li>
-<li>用户请求</li>
-<li>批处理作业初始化</li>
-</ol>
-<h2 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h2><ol>
-<li>正常退出</li>
-<li>出错退出，自愿</li>
-<li>严重错误，非自愿</li>
-<li>被其他进程杀死</li>
-</ol>
-<h2 id="进程层次结构"><a href="#进程层次结构" class="headerlink" title="进程层次结构"></a>进程层次结构</h2><ol>
-<li>系统启动初始化由init特殊进程运行</li>
-</ol>
-<h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><ol>
-<li>运行，就绪，阻塞</li>
-<li>进程中断处理，启动，停止由操作系统进程调度程序控制</li>
-</ol>
-<h2 id="进程的实现"><a href="#进程的实现" class="headerlink" title="进程的实现"></a>进程的实现</h2><ol>
-<li>操作系统维护一个进程表，每个进程占用一个进程表项（进程控制块PCB）</li>
-<li>PCB：包含了进程状态的重要信息，程序计数器，堆栈指针，内存分配状况，打开的文件，进程由运行状态转换到就绪或阻塞需要保存的信息等</li>
-<li>进程切换：保存寄存器值，设置新的堆栈，C中断服务程序运行，调度程序决定下一个进程运行，开始运行新的当前进程</li>
-<li>CPU利用率：进程等待IO操作时间与其停留在内存中时间的比对P，内存中同时有N个进程，则利用率=1-P的N次方</li>
-</ol>
-<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><ol>
-<li>传统：每个进程有一个地址空间和一个控制线程</li>
-<li>对于大量IO操作，多线程允许这些活动重叠进行</li>
-<li>所有线程都有完全一样的地址空间</li>
-<li>线程共享进程内容：地址空间，全局变量，打开文件，子进程，信号与信号处理程序</li>
-<li>线程独有：程序计数器，寄存器，堆栈，状态</li>
-<li>线程创建的线程与当前线程平等，线程可以阻塞等待其他线程返回，线程也可以主动让出CPU</li>
-</ol>
-<h2 id="线程的实现"><a href="#线程的实现" class="headerlink" title="线程的实现"></a>线程的实现</h2><h3 id="用户级线程"><a href="#用户级线程" class="headerlink" title="用户级线程"></a>用户级线程</h3><ol>
-<li>线程的调度不需要内核，内核不知道多线程的存在，由用户程序自己控制内核切换，切换快</li>
-<li>可以在不支持线程的操作系统实现，允许进程定制调度算法</li>
-<li>同一个进程只能同时有一个线程在运行，如果有一个线程阻塞于系统调用，则整个进程阻塞</li>
-<li>执行系统调用时将导致所属进程被中断，而内核级线程只导致线程中断</li>
-</ol>
-<h3 id="内核级线程"><a href="#内核级线程" class="headerlink" title="内核级线程"></a>内核级线程</h3><ol>
-<li>多核机器，一个进程的多个线程可以同时处理</li>
-<li>线程用户态运行内核态调度切换</li>
-</ol>
-<h3 id="混合线程模型"><a href="#混合线程模型" class="headerlink" title="混合线程模型"></a>混合线程模型</h3><ol>
-<li>用户线程由运行时库调度器管理，内核线程由操作系统调度器管理</li>
-<li>一对一，多对一，多对多</li>
-</ol>
-<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>IPC问题</p>
-<ol>
-<li>进程传递信息给另一个</li>
-<li>多个进程在关键活动不会出现交叉</li>
-<li>正确的顺序</li>
-</ol>
-<h3 id="通信方法"><a href="#通信方法" class="headerlink" title="通信方法"></a>通信方法</h3><ol>
-<li>共享内存</li>
-<li>管道</li>
-<li>消息队列</li>
-<li>socket</li>
-<li>远程过程调用RPC</li>
-</ol>
-<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><ol>
-<li>对进程共享资源的程序片段称作临界区</li>
-<li>避免竞争条件：任何两个进程不能同时处于临界区，不对CPU作假设，临界区外运行的进程不能阻塞其他进程，不能使进程无限等待进入临界区</li>
-</ol>
-<h3 id="进程同步"><a href="#进程同步" class="headerlink" title="进程同步"></a>进程同步</h3><ol>
-<li>互斥锁+条件变量</li>
-<li>信号量pv操作</li>
-</ol>
-<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><ol>
-<li>衡量调度：吞吐量系统每小时完成的作业数，周转时间批处理到结束的平均统计时间，CPU利用率</li>
-</ol>
-<h1 id="二、存储管理"><a href="#二、存储管理" class="headerlink" title="二、存储管理"></a>二、存储管理</h1><h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ol>
-<li>地址空间：一个进程可用于寻址内存的一套地址集合</li>
-<li>每个进程的地址空间映射到物理内存的不同部分</li>
-<li>程序装载到内存中连续地址。程序的起始物理地址装载到基址寄存器，程序的长度装载到界限寄存器。进程寄存器相关值由内核维护</li>
-</ol>
-<h2 id="交换"><a href="#交换" class="headerlink" title="交换"></a>交换</h2><ol>
-<li>进程完整调入内存运行一段时间，存回磁盘</li>
-<li>被唤醒时重新装载到内存，由基址寄存器和界限寄存器重新映射物理内存</li>
-</ol>
-<h2 id="空闲内存管理"><a href="#空闲内存管理" class="headerlink" title="空闲内存管理"></a>空闲内存管理</h2><ol>
-<li>使用位图：每个分配单元对应1位，0表示空闲</li>
-<li>使用链表：每个节点代表一块内存，便于交换</li>
-</ol>
-<h2 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h2><p>每个程序有自己的地址空间，被分割成多个快，即页面，每一页有连续的地址范围。这些页被映射到物理内存，不一定需要在内存中才能运行，<br>当程序引用到一部分不在物理内存中的地址空间时，操作系统负责将缺失的部分装入物理内存并重新执行失败指令。当程序等待它的一部分读入内存时，可以让出CPU</p>
-<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><ol>
-<li>虚拟地址：没有虚拟内存时，系统直接将虚拟地址送到内存总线。使用虚拟内存，则送到内存管理单元MMU映射为物理地址</li>
-<li>页面：虚拟地址空间按照固定大小划分为固定大小的页面</li>
-<li>页框：物理内存对应页面的单元</li>
-<li>页面找无法映射物理内存时，CPU陷入缺页中断page fault，操作系统选择很少使用的页框，将内容写入磁盘，随后将页面对应的内容读入到内存，修改映射关系，重新执行指令</li>
-<li>MMU页表：虚拟地址分成虚拟页号和偏移量，虚拟页号作页表索引，由页表项找到页框号</li>
-<li>引入TLB快表加快虚拟地址到物理地址的转换</li>
-<li>引入多级页表，解决虚拟地址空间巨大的问题</li>
-<li>页面置换算法：最近未使用页面置换算法，先进先出等</li>
-<li>页面大小：小页面减少内存占用，但页表太大，磁盘与内存传输是按页进行，进程切换页表装入硬件寄存器也会变慢。大页面则容易产生更大碎片，浪费内存</li>
-</ol>
-<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><ol>
-<li>静态链接：将被调用函数的库程序全部装载生成二进制可执行文件，耗空间，每次都需要重新编译</li>
-<li>动态链接：加载了一小段能够在运行时绑定被调用函数的存根例程，在第一次被调用时被装载</li>
-</ol>
-<h3 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h3><ol>
-<li>机制思想：进程发起一个系统调用，将一个文件映射到其虚拟地址空间的一部分，在映射共享的页面时不会读入页面的内容，而是在访问页面时才读入。进程退出或解除文件映射时所有改动的页面会被写回到文件</li>
-<li>如果多个进程同时映射了同一份文件，它们就可以通过共享内存通信</li>
-</ol>
-<h3 id="清除策略"><a href="#清除策略" class="headerlink" title="清除策略"></a>清除策略</h3><ol>
-<li>分页守护进程定时检查内存状态，通过置换算法维护空闲页框</li>
-</ol>
-<h3 id="进程创建-1"><a href="#进程创建-1" class="headerlink" title="进程创建"></a>进程创建</h3><ol>
-<li>确定程序和数据初始大小，创建页表，内存中为页表分配空间初始化</li>
-<li>磁盘交换区中分配空间</li>
-<li>程序正文和数据对交换区空间初始化，以便进程缺页中断时可以调入需要的页面</li>
-<li>页表和磁盘交换区的信息存储在进程表中</li>
-</ol>
-<h3 id="进程执行"><a href="#进程执行" class="headerlink" title="进程执行"></a>进程执行</h3><ol>
-<li>重置MMU，刷新TLB，新进程页表成为当前页表</li>
-</ol>
-<h3 id="缺页中断"><a href="#缺页中断" class="headerlink" title="缺页中断"></a>缺页中断</h3><ol>
-<li>确定缺页的虚拟地址</li>
-<li>确定缺失的页面，确定磁盘上的位置</li>
-<li>找到合适的页框，读入页面</li>
-<li>备份指令，重新执行</li>
-<li>正在进行IO操作的页面不会被移出内存</li>
-</ol>
-<h3 id="进程退出"><a href="#进程退出" class="headerlink" title="进程退出"></a>进程退出</h3><ol>
-<li>最后一个进程退出时，释放页表，页面和页面在硬盘所占用的空间</li>
-</ol>
-<h3 id="分段"><a href="#分段" class="headerlink" title="分段"></a>分段</h3><ol>
-<li>每个段由一个从0到最大的线性地址序列构成，每个段都是独立地址空间</li>
-<li>寻址：段号+段内地址</li>
-<li>简化对长度经常变化的数据结构管理，有利于各个过程单独编译链接</li>
-<li>使程序和数据可以划分为逻辑上独立的地址空间，有助于共享，连接和保护</li>
-<li>内存段与段之间的空闲内存外部碎片可以通过内存紧缩</li>
-<li>分段和分页的结合：段内进行分页，提供二维的虚拟内存</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjt40fj3n000citt934na4znw" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-5/" data-id="cjt4aa5670008tyt98h93wm03" class="article-share-link">Share</a>
       
       
     </footer>
@@ -461,7 +375,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -500,23 +414,23 @@
       <ul>
         
           <li>
-            <a href="/2018/09/20/ds-1/">1. 数组</a>
+            <a href="/2018/09/20/ds-4/">4. 字符串</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-3/">3. 栈</a>
+            <a href="/2018/09/20/ds-1/">1. 链表</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-2/">2. 链表</a>
+            <a href="/2018/09/20/ds-2/">2. 栈</a>
           </li>
         
           <li>
-            <a href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+            <a href="/2018/09/20/ds-3/">3. 队列</a>
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+            <a href="/2018/09/20/ds-5/">5. 数组</a>
           </li>
         
       </ul>

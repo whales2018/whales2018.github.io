@@ -5,19 +5,19 @@
   
 
   
-  <title>2. 链表 | 沧海一粟</title>
+  <title>2. 栈 | 沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见题目 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针指">
+  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 栈常见问题 运算 最小栈 回溯法 栈与递归  运算 682 根据规则入栈出栈，最后求和 842 根据规则入栈出栈，最后对比 20 左符号入栈，遇到右符号出栈，最后查看栈是否为空  最小栈 155 最小栈设计   设计为节点包含每次入栈时的最小值 栈维护最">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2. 链表">
+<meta property="og:title" content="2. 栈">
 <meta property="og:url" content="https://whales2018.github.io/2018/09/20/ds-2/index.html">
 <meta property="og:site_name" content="沧海一粟">
-<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见题目 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针指">
+<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 栈常见问题 运算 最小栈 回溯法 栈与递归  运算 682 根据规则入栈出栈，最后求和 842 根据规则入栈出栈，最后对比 20 左符号入栈，遇到右符号出栈，最后查看栈是否为空  最小栈 155 最小栈设计   设计为节点包含每次入栈时的最小值 栈维护最">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-11T07:10:48.959Z">
+<meta property="og:updated_time" content="2019-03-11T10:54:13.841Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2. 链表">
-<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见题目 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针指">
+<meta name="twitter:title" content="2. 栈">
+<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 栈常见问题 运算 最小栈 回溯法 栈与递归  运算 682 根据规则入栈出栈，最后求和 842 根据规则入栈出栈，最后对比 20 左符号入栈，遇到右符号出栈，最后查看栈是否为空  最小栈 155 最小栈设计   设计为节点包含每次入栈时的最小值 栈维护最">
   
   
     <link rel="icon" href="/favicon.png">
@@ -78,7 +78,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      2. 链表
+      2. 栈
     </h1>
   
 
@@ -86,30 +86,36 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
-<h1 id="链表常见题目"><a href="#链表常见题目" class="headerlink" title="链表常见题目"></a>链表常见题目</h1><ul>
-<li>节点基础操作</li>
-<li>快慢指针</li>
-<li>链表合并</li>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="栈常见问题"><a href="#栈常见问题" class="headerlink" title="栈常见问题"></a>栈常见问题</h1><ul>
+<li>运算</li>
+<li>最小栈</li>
+<li>回溯法</li>
+<li>栈与递归</li>
 </ul>
-<h2 id="节点增删改查"><a href="#节点增删改查" class="headerlink" title="节点增删改查"></a>节点增删改查</h2><ul>
-<li>增删改查，反转</li>
-<li>237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的</li>
-<li>203 删除节点元素</li>
-<li>83 有序链表删除重复元素</li>
-<li>206 链表反转，画图辅助，临时节点存储，修改指针指向</li>
+<h2 id="运算"><a href="#运算" class="headerlink" title="运算"></a>运算</h2><ul>
+<li>682 根据规则入栈出栈，最后求和</li>
+<li>842 根据规则入栈出栈，最后对比</li>
+<li>20 左符号入栈，遇到右符号出栈，最后查看栈是否为空</li>
 </ul>
-<h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><ul>
-<li>876 链表中间节点，快指针两步，慢指针一步，则快指针遍历完即得到中间节点</li>
-<li>141 判断链表是否有环，当快指针追上慢指针，则链表有环</li>
-<li>234 判断链表是否回文序列，快慢指针找到链表中间节点，反转以中间节点为头节点的链表b，比较原链表和b，遍历到其中一个的尽头如果都相等则为回文序列</li>
-<li>160 两个链表交汇节点，两个链表分叉部分的节点数差值为x，双指针分别按1步，快指针在短链表，则快指针遍历完链表时，快指针回到慢链表从头遍历，慢指针遍历完之后回到快链表，则此时快慢指针到达交汇点的节点数相等。需要注意没有交汇点时的情况判断</li>
+<h2 id="最小栈"><a href="#最小栈" class="headerlink" title="最小栈"></a>最小栈</h2><ul>
+<li>155 最小栈设计</li>
+</ul>
+<ol>
+<li>设计为节点包含每次入栈时的最小值</li>
+<li>栈维护最小值，压栈时，存x-min，出栈时如果值小于0，则返回最小值且更新最小值min=min-x，如果大于0，则返回x+min</li>
+</ol>
+<h2 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h2><ul>
+<li>迷宫求解</li>
+</ul>
+<h2 id="栈与递归"><a href="#栈与递归" class="headerlink" title="栈与递归"></a>栈与递归</h2><ul>
+<li>n皇后</li>
 </ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/20/ds-2/" data-id="cjt40fj3e0003itt94y0dl1cl" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-2/" data-id="cjt4aa5630005tyt9peo99av6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -118,19 +124,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/09/20/ds-3/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/09/20/ds-1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          3. 栈
+          1. 链表
         
       </div>
     </a>
   
   
-    <a href="/2018/09/18/tcpip-1/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/09/20/ds-3/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">《TCP/IP详解卷1》阅读笔记一</div>
+      <div class="article-nav-title">3. 队列</div>
     </a>
   
 </nav>
@@ -174,23 +180,23 @@
       <ul>
         
           <li>
-            <a href="/2018/09/20/ds-1/">1. 数组</a>
+            <a href="/2018/09/20/ds-4/">4. 字符串</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-3/">3. 栈</a>
+            <a href="/2018/09/20/ds-1/">1. 链表</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-2/">2. 链表</a>
+            <a href="/2018/09/20/ds-2/">2. 栈</a>
           </li>
         
           <li>
-            <a href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+            <a href="/2018/09/20/ds-3/">3. 队列</a>
           </li>
         
           <li>
-            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+            <a href="/2018/09/20/ds-5/">5. 数组</a>
           </li>
         
       </ul>

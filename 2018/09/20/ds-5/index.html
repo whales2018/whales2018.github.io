@@ -5,19 +5,19 @@
   
 
   
-  <title>1. 链表 | 沧海一粟</title>
+  <title>5. 数组 | 沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见问题 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针">
+  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 数组常见问题 对无序数组进行排序 多维数组数组元素按规则变换 数组按指定行列分组 利用数组作为以下标为key的哈希表 配合额外的数据结构如哈希表等 滑动窗口 动态规划 矩阵  排序 977 无序数组元素平方之后升序排序 905 无序数组元素按偶数奇数规则">
 <meta property="og:type" content="article">
-<meta property="og:title" content="1. 链表">
-<meta property="og:url" content="https://whales2018.github.io/2018/09/20/ds-1/index.html">
+<meta property="og:title" content="5. 数组">
+<meta property="og:url" content="https://whales2018.github.io/2018/09/20/ds-5/index.html">
 <meta property="og:site_name" content="沧海一粟">
-<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见问题 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针">
+<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 数组常见问题 对无序数组进行排序 多维数组数组元素按规则变换 数组按指定行列分组 利用数组作为以下标为key的哈希表 配合额外的数据结构如哈希表等 滑动窗口 动态规划 矩阵  排序 977 无序数组元素平方之后升序排序 905 无序数组元素按偶数奇数规则">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-11T10:54:13.845Z">
+<meta property="og:updated_time" content="2019-03-11T10:55:59.231Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="1. 链表">
-<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见问题 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针">
+<meta name="twitter:title" content="5. 数组">
+<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 数组常见问题 对无序数组进行排序 多维数组数组元素按规则变换 数组按指定行列分组 利用数组作为以下标为key的哈希表 配合额外的数据结构如哈希表等 滑动窗口 动态规划 矩阵  排序 977 无序数组元素平方之后升序排序 905 无序数组元素按偶数奇数规则">
   
   
     <link rel="icon" href="/favicon.png">
@@ -60,9 +60,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-ds-1" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-ds-5" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/09/20/ds-1/" class="article-date">
+    <a href="/2018/09/20/ds-5/" class="article-date">
   <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
 </a>
     
@@ -78,7 +78,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      1. 链表
+      5. 数组
     </h1>
   
 
@@ -87,29 +87,56 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
-<h1 id="链表常见问题"><a href="#链表常见问题" class="headerlink" title="链表常见问题"></a>链表常见问题</h1><ul>
-<li>节点基础操作</li>
-<li>快慢指针</li>
-<li>链表合并</li>
+<h1 id="数组常见问题"><a href="#数组常见问题" class="headerlink" title="数组常见问题"></a>数组常见问题</h1><ul>
+<li>对无序数组进行排序</li>
+<li>多维数组数组元素按规则变换</li>
+<li>数组按指定行列分组</li>
+<li>利用数组作为以下标为key的哈希表</li>
+<li>配合额外的数据结构如哈希表等</li>
+<li>滑动窗口</li>
+<li>动态规划</li>
+<li>矩阵</li>
 </ul>
-<h2 id="节点增删改查"><a href="#节点增删改查" class="headerlink" title="节点增删改查"></a>节点增删改查</h2><ul>
-<li>增删改查，反转</li>
-<li>237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的</li>
-<li>203 删除节点元素</li>
-<li>83 有序链表删除重复元素</li>
-<li>206 链表反转，画图辅助，临时节点存储，修改指针指向</li>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><ul>
+<li>977 无序数组元素平方之后升序排序</li>
+<li>905 无序数组元素按偶数奇数规则排序</li>
+<li>561 无序数组升序排序后，按step为2求和</li>
 </ul>
-<h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><ul>
-<li>876 链表中间节点，快指针两步，慢指针一步，则快指针遍历完即得到中间节点</li>
-<li>141 判断链表是否有环，当快指针追上慢指针，则链表有环</li>
-<li>234 判断链表是否回文序列，快慢指针找到链表中间节点，反转以中间节点为头节点的链表b，比较原链表和b，遍历到其中一个的尽头如果都相等则为回文序列</li>
-<li>160 两个链表交汇节点，两个链表分叉部分的节点数差值为x，双指针分别按1步，快指针在短链表，则快指针遍历完链表时，快指针回到慢链表从头遍历，慢指针遍历完之后回到快链表，则此时快慢指针到达交汇点的节点数相等。需要注意没有交汇点时的情况判断</li>
+<h2 id="多维数组数组元素按规则变换"><a href="#多维数组数组元素按规则变换" class="headerlink" title="多维数组数组元素按规则变换"></a>多维数组数组元素按规则变换</h2><ul>
+<li>解决思路：根据坐标寻找元素按规则变换的数学方程</li>
+<li>832 二维数组反转图片，F(i, j) = F(i, ~j) == 1 ? 0 : 1</li>
+<li>999 棋盘规则，可以列方程式 F(i, j) = (B(i, j+x) ? 0 : A(i, j+x)) + … F 表示位于该坐标的结果，B 表示某个坐标方向有没有阻隔, A 表示某个坐标方向有没有黑棋</li>
+<li>867 坐标转换，L = [[F(i,j),F(i+1,j)]\ …]</li>
+<li>766 遍历i,遍历j，需要满足F(i,j) == F(i+x,j+x) 直到F(i+x,j+x)不存在</li>
 </ul>
-
+<h2 id="利用数组作为以下标为key的哈希表"><a href="#利用数组作为以下标为key的哈希表" class="headerlink" title="利用数组作为以下标为key的哈希表"></a>利用数组作为以下标为key的哈希表</h2><ul>
+<li>448 把数值v对应的数组位置i = v 标记为0，标记为0的原先值v(i)对应的数组位置也标记为0，以此类推，最后遍历一遍数组，如果该位置对应的值不为0，则表明该值为缺失的连续值</li>
+</ul>
+<h2 id="配合额外的数据结构如哈希表等"><a href="#配合额外的数据结构如哈希表等" class="headerlink" title="配合额外的数据结构如哈希表等"></a>配合额外的数据结构如哈希表等</h2><ul>
+<li>217 检查数组是否存在重复</li>
+<li>914 计数公约数</li>
+</ul>
+<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><ul>
+<li>记录窗口起始点，窗口实时移动</li>
+<li>窗口起始点变换条件</li>
+<li>窗口记录值时机</li>
+<li>674 最长的递增子数组的大小，比较每个窗口的大小</li>
+<li>643 窗口大小为4在数组滑动，求每个窗口平均值，最后得出4元连续子数组最大平均值</li>
+</ul>
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>动态规划的套路一般可以分为三个步骤，跟多维数组数组元素按规则变换有点类似，本质都是找到对应的数学方程式：</p>
+<ol>
+<li>定义状态</li>
+<li>状态转移方程</li>
+<li>边界</li>
+</ol>
+<ul>
+<li>746 定义F(s)为选定坐标s时的最小和, F(s) = A(s) + min(F(s-1),F(s-2)),F(1) = A(1), F(2) = A(2), 结果为min(F(len(A)-1),F(len(A)-2))</li>
+</ul>
+<h2 id="todo"><a href="#todo" class="headerlink" title="todo"></a>todo</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/20/ds-1/" data-id="cjt4aa5620004tyt98w89o02x" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-5/" data-id="cjt4aa5670008tyt98h93wm03" class="article-share-link">Share</a>
       
       
     </footer>
@@ -118,19 +145,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/09/20/ds-4/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/09/20/ds-3/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          4. 字符串
+          3. 队列
         
       </div>
     </a>
   
   
-    <a href="/2018/09/20/ds-2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/09/20/ds-6/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">2. 栈</div>
+      <div class="article-nav-title">6. 二叉树</div>
     </a>
   
 </nav>
