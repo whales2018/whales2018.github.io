@@ -58,6 +58,191 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-ds-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-1/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-1/">1. 数组</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="数组常见题目"><a href="#数组常见题目" class="headerlink" title="数组常见题目"></a>数组常见题目</h1><ul>
+<li>对无序数组进行排序</li>
+<li>多维数组数组元素按规则变换</li>
+<li>数组按指定行列分组</li>
+<li>利用数组作为以下标为key的哈希表</li>
+<li>配合额外的数据结构如哈希表等</li>
+<li>滑动窗口</li>
+<li>动态规划</li>
+</ul>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><ul>
+<li>977 无序数组元素平方之后升序排序</li>
+<li>905 无序数组元素按偶数奇数规则排序</li>
+<li>561 无序数组升序排序后，按step为2求和</li>
+</ul>
+<h2 id="多维数组数组元素按规则变换"><a href="#多维数组数组元素按规则变换" class="headerlink" title="多维数组数组元素按规则变换"></a>多维数组数组元素按规则变换</h2><ul>
+<li>解决思路：根据坐标寻找元素按规则变换的数学方程</li>
+<li>832 二维数组反转图片，F(i, j) = F(i, ~j) == 1 ? 0 : 1</li>
+<li>999 棋盘规则，可以列方程式 F(i, j) = (B(i, j+x) ? 0 : A(i, j+x)) + … F 表示位于该坐标的结果，B 表示某个坐标方向有没有阻隔, A 表示某个坐标方向有没有黑棋</li>
+<li>867 坐标转换，L = [[F(i,j),F(i+1,j)]\ …]</li>
+<li>766 遍历i,遍历j，需要满足F(i,j) == F(i+x,j+x) 直到F(i+x,j+x)不存在</li>
+</ul>
+<h2 id="利用数组作为以下标为key的哈希表"><a href="#利用数组作为以下标为key的哈希表" class="headerlink" title="利用数组作为以下标为key的哈希表"></a>利用数组作为以下标为key的哈希表</h2><ul>
+<li>448 把数值v对应的数组位置i = v 标记为0，标记为0的原先值v(i)对应的数组位置也标记为0，以此类推，最后遍历一遍数组，如果该位置对应的值不为0，则表明该值为缺失的连续值</li>
+</ul>
+<h2 id="配合额外的数据结构如哈希表等"><a href="#配合额外的数据结构如哈希表等" class="headerlink" title="配合额外的数据结构如哈希表等"></a>配合额外的数据结构如哈希表等</h2><ul>
+<li>217 检查数组是否存在重复</li>
+<li>914 计数公约数</li>
+</ul>
+<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><ul>
+<li>记录窗口起始点，窗口实时移动</li>
+<li>窗口起始点变换条件</li>
+<li>窗口记录值时机</li>
+<li>674 最长的递增子数组的大小，比较每个窗口的大小</li>
+<li>643 窗口大小为4在数组滑动，求每个窗口平均值，最后得出4元连续子数组最大平均值</li>
+</ul>
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>动态规划的套路一般可以分为三个步骤，跟多维数组数组元素按规则变换有点类似，本质都是找到对应的数学方程式：</p>
+<ol>
+<li>定义状态</li>
+<li>状态转移方程</li>
+<li>边界</li>
+</ol>
+<ul>
+<li>746 定义F(s)为选定坐标s时的最小和, F(s) = A(s) + min(F(s-1),F(s-2)),F(1) = A(1), F(2) = A(2), 结果为min(F(len(A)-1),F(len(A)-2))</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-1/" data-id="cjt40fj360000itt9wov8zrr7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ds-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-3/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-3/">3. 栈</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-3/" data-id="cjt40fj3a0001itt9sdnwtckj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ds-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-2/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/20/ds-2/">2. 链表</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="链表常见题目"><a href="#链表常见题目" class="headerlink" title="链表常见题目"></a>链表常见题目</h1><ul>
+<li>节点基础操作</li>
+<li>快慢指针</li>
+<li>链表合并</li>
+</ul>
+<h2 id="节点增删改查"><a href="#节点增删改查" class="headerlink" title="节点增删改查"></a>节点增删改查</h2><ul>
+<li>增删改查，反转</li>
+<li>237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的</li>
+<li>203 删除节点元素</li>
+<li>83 有序链表删除重复元素</li>
+<li>206 链表反转，画图辅助，临时节点存储，修改指针指向</li>
+</ul>
+<h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><ul>
+<li>876 链表中间节点，快指针两步，慢指针一步，则快指针遍历完即得到中间节点</li>
+<li>141 判断链表是否有环，当快指针追上慢指针，则链表有环</li>
+<li>234 判断链表是否回文序列，快慢指针找到链表中间节点，反转以中间节点为头节点的链表b，比较原链表和b，遍历到其中一个的尽头如果都相等则为回文序列</li>
+<li>160 两个链表交汇节点，两个链表分叉部分的节点数差值为x，双指针分别按1步，快指针在短链表，则快指针遍历完链表时，快指针回到慢链表从头遍历，慢指针遍历完之后回到快链表，则此时快慢指针到达交汇点的节点数相等。需要注意没有交汇点时的情况判断</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-2/" data-id="cjt40fj3e0003itt94y0dl1cl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-tcpip-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/09/18/tcpip-1/" class="article-date">
@@ -88,7 +273,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjszu2rkt000fgst9randd9vl" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjt40fj4p0018itt99d8mge31" class="article-share-link">Share</a>
       
       
     </footer>
@@ -262,420 +447,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjszu2rkl0007gst91o943zt5" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-opsystem-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/18/opsystem-2/" class="article-date">
-  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/操作系统/">操作系统</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="三、文件系统"><a href="#三、文件系统" class="headerlink" title="三、文件系统"></a>三、文件系统</h1><h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><ol>
-<li>文件命名，文件结构，文件类型</li>
-<li>文件存取：顺序存取，随机存取</li>
-<li>文件属性：如权限，创建修改时间等</li>
-<li>文件操作：常用系统调用如创建，打开等；open：文件属性和磁盘地址装入内存</li>
-</ol>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
-<li>层次目录系统，路径名</li>
-<li>目录操作：常用系统调用如创建，打开等；硬连接：文件的节点技术器增加，修改同一份文件。软连接只是符号连接，快捷方式，可以跨越磁盘界限</li>
-</ol>
-<h2 id="文件系统的实现"><a href="#文件系统的实现" class="headerlink" title="文件系统的实现"></a>文件系统的实现</h2><ol>
-<li>主引导记录MBR：磁盘的0号扇区，引导计算机</li>
-<li>分区表：MBR后面，记录每个分区的起始结束地址</li>
-<li>分区结构：引导块，超级块，空闲管理，i节点，根目录，文件和目录</li>
-<li>过程：计算机被引导，BIOS读入并执行MBR，确定活动分区，读入并执行第一个块引导快boot block，引导块中的程序将装载该分区中的操作系统</li>
-<li>每个分区都从一个启动块开始</li>
-<li>超级块：启动块之后，包括文件系统类型用的魔数，文件系统中数据块的数量等</li>
-<li>空闲管理：超级块之后，位图或链表形式</li>
-</ol>
-<h2 id="文件的实现"><a href="#文件的实现" class="headerlink" title="文件的实现"></a>文件的实现</h2><ol>
-<li>连续分配：删除时会产生磁盘空洞，写入时需要先挑选合适大小的磁盘空洞，常见于CD-ROM</li>
-<li>链表分配：不利于随机存取，指针占了一些字节，致使存储数据不再是2的整数幂</li>
-<li>文件分配表FAT：把磁盘块的指针放在内存的一个表中，目录项中记录起始块号即可。缺点是需要将整个表放在内存中，不适用于大磁盘</li>
-<li>i节点：每个文件一个i节点数据结构，列出文件属性和文件块的磁盘地址，具有指针可以指向包含磁盘块地址的块的地址</li>
-</ol>
-<h2 id="日志文件系统"><a href="#日志文件系统" class="headerlink" title="日志文件系统"></a>日志文件系统</h2><ol>
-<li>如NTFS和Linux ext3</li>
-<li>基本思想：保存一个用于记录系统下一步将要做什么的日志，当系统崩溃重启时可以查看日志，完成未完成任务</li>
-<li>先写日志项列出要完成的动作，写入磁盘，完成动作后擦除日志项</li>
-</ol>
-<h2 id="虚拟文件系统"><a href="#虚拟文件系统" class="headerlink" title="虚拟文件系统"></a>虚拟文件系统</h2><ol>
-<li>和文件相关的系统调用POSIX接口指向虚拟文件系统，由虚拟文件系统调用底层实际的文件系统</li>
-</ol>
-<h2 id="文件系统管理和优化"><a href="#文件系统管理和优化" class="headerlink" title="文件系统管理和优化"></a>文件系统管理和优化</h2><ol>
-<li>选定块大小：性能和空间利用率不可兼得</li>
-<li>记录空闲块：位图，空闲列表</li>
-<li>磁盘配额：通过打开文件表中的配额指针，找到配额表中用户的配额表项。</li>
-<li>文件系统的一致性：块检查检查使用表和空闲表并进行校正，目录检查检查文件使用表和文件i节点的计数。rm操作只修改i节点，没有把磁盘块返回空闲表</li>
-</ol>
-<h2 id="文件系统性能"><a href="#文件系统性能" class="headerlink" title="文件系统性能"></a>文件系统性能</h2><p>如果只需要读一个字，内存比磁盘方位快百万数量级</p>
-<h3 id="高速缓存"><a href="#高速缓存" class="headerlink" title="高速缓存"></a>高速缓存</h3><ol>
-<li>逻辑上属于磁盘，实际保存在内存中。与分页类似，置换算法类似</li>
-<li>系统调用SYNC强制性把全部修改过的块写回磁盘，若没有SYNC就移动磁盘，则数据丢失</li>
-</ol>
-<h3 id="块提前读"><a href="#块提前读" class="headerlink" title="块提前读"></a>块提前读</h3><ol>
-<li>在需要用到块时，试图提前将其写入高速缓存，提高命中率，如完成k块操作时，预读k+1块到高速缓存</li>
-<li>不适用于随机存取文件</li>
-</ol>
-<h3 id="减少磁盘臂运动"><a href="#减少磁盘臂运动" class="headerlink" title="减少磁盘臂运动"></a>减少磁盘臂运动</h3><ol>
-<li>把有可能顺序存取的块放在一起，最好是同一个柱面，减少磁盘臂运动</li>
-<li>使用i节点的文件系统中，需要两次磁盘访问，访问i节点和访问块。所以将i节点存放在磁盘中部，可以减少寻道时间</li>
-</ol>
-<h3 id="磁盘碎片整理"><a href="#磁盘碎片整理" class="headerlink" title="磁盘碎片整理"></a>磁盘碎片整理</h3><ol>
-<li>通过移动或复制，使空闲空间连成一片</li>
-</ol>
-<h1 id="四、输入-输出"><a href="#四、输入-输出" class="headerlink" title="四、输入/输出"></a>四、输入/输出</h1><h2 id="IO硬件原理"><a href="#IO硬件原理" class="headerlink" title="IO硬件原理"></a>IO硬件原理</h2><h3 id="IO设备"><a href="#IO设备" class="headerlink" title="IO设备"></a>IO设备</h3><ol>
-<li>块设备：硬盘，CD-ROM，USB</li>
-<li>字符设备：不可寻址没有寻道操作，打印机，网路接口，鼠标等</li>
-<li>时钟，内存映射显示器等</li>
-</ol>
-<h3 id="设备控制器"><a href="#设备控制器" class="headerlink" title="设备控制器"></a>设备控制器</h3><ol>
-<li>有寄存器用来与CPU通信</li>
-<li>数据缓冲区</li>
-<li>内存映射IO：每个控制寄存器映射到内存空间中被分配唯一的内存地址</li>
-<li>避免对设备控制器进行高速缓存，操作系统必须管理选择性高速缓存</li>
-<li>DMA：直接存储器存取，调控多个设备的数据传送</li>
-<li>中断：设备中断发出信号，由中断控制器检测</li>
-</ol>
-<h3 id="IO软件原理"><a href="#IO软件原理" class="headerlink" title="IO软件原理"></a>IO软件原理</h3><ol>
-<li>设备独立性</li>
-<li>统一命名</li>
-<li>错误处理</li>
-<li>同步阻塞，异步中断驱动：大部分物理IO是异步的，CPU启动传输便去做别的</li>
-<li>缓冲</li>
-<li>共享设备和独占设备</li>
-<li>程序控制IO：轮询设备寄存器是否就绪，直到全部IO完成，一直占用CPU</li>
-<li>中断驱动IO：中断发生在每个字符上</li>
-<li>DMA控制IO：将中断的次数从每个字符减少的每个缓冲区</li>
-<li>设备驱动程序：为了访问设备的硬件，通常必须是操作系统内核的一部分</li>
-</ol>
-<h2 id="盘"><a href="#盘" class="headerlink" title="盘"></a>盘</h2><p>磁盘组织成柱面，每个柱面包含若干磁道，磁道数与垂直堆叠的磁头个数相同，磁道分成若干扇区</p>
-<ol>
-<li>SATA：磁盘驱动器包含微控制器，负责高速缓存，重叠寻道，坏块重映等</li>
-<li>RAID：将一个装满磁盘的盒子安装到计算机，用RAID控制器替换磁盘控制器</li>
-</ol>
-<h3 id="磁盘臂调度算法"><a href="#磁盘臂调度算法" class="headerlink" title="磁盘臂调度算法"></a>磁盘臂调度算法</h3><ol>
-<li>磁盘读写时间因素：寻道占主导，旋转延迟，实际数据传输</li>
-<li>磁盘驱动程序维护一张表，按柱面号索引，每个柱面未完成的请求组成一个链表</li>
-<li>SSF：最短寻道优先算法，获得最小响应时间与公平性有冲突</li>
-<li>电梯算法：上下移动完成未完成的请求</li>
-<li>磁盘控制器高速缓存：每次将邻近的扇区也读取</li>
-</ol>
-<h2 id="时钟"><a href="#时钟" class="headerlink" title="时钟"></a>时钟</h2><ol>
-<li>时钟负责维护时间，根据已知的时间间隔产生中断。防止进程垄断CPU等</li>
-<li>大多数计算机具有一个由电池供电的备份时钟</li>
-</ol>
-<h3 id="时钟软件"><a href="#时钟软件" class="headerlink" title="时钟软件"></a>时钟软件</h3><ol>
-<li>维护日时间，防止进程超时，记录CPU使用，处理alarm系统调用，监视定时器，统计信息收集</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-2/" data-id="cjszu2rkm0008gst930l2ni2o" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-opsystem-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/18/opsystem-3/" class="article-date">
-  <time datetime="2018-08-18T03:21:11.000Z" itemprop="datePublished">2018-08-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/操作系统/">操作系统</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="五、死锁"><a href="#五、死锁" class="headerlink" title="五、死锁"></a>五、死锁</h1><h3 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h3><ol>
-<li>可抢占资源：如存储器，两个进出互相等待对方占有的资源时，其中一方可以释放可抢占性资源，另一方可以顺利执行</li>
-<li>不可抢占资源：无法把资源从占有它的进程抢占过来</li>
-</ol>
-<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><ol>
-<li>如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，该进程集合就是死锁</li>
-<li>死锁条件：互斥条件，占有和等待条件，不可抢占条件，环路等待条件</li>
-<li>处理死锁策略：检测恢复，仔细对资源分配动态避免，破坏死锁条件之一</li>
-<li>检测：需要查阅相关检测算法</li>
-<li>恢复：利用抢占恢复，回滚恢复，杀死进程</li>
-</ol>
-<h3 id="预防"><a href="#预防" class="headerlink" title="预防"></a>预防</h3><ol>
-<li>尽量做到尽可能少的进程可以真正请求资源</li>
-<li>破坏占有和等待条件：进程在开始执行前一次性请求所需全部资源，另一种，是进程请求资源时先释放已经持有，再一次性请求</li>
-<li>破坏不可抢占条件：对资源进行虚拟化，由底层进行实际的调用。不适用于操作系统或数据库的记录</li>
-<li>避免出现环路等待：对资源进行编号，每个进程请求需要按照资源的顺序提出</li>
-<li>两阶段加锁：第一阶段将所需记录加锁，如果遇到已经被加锁记录，则释放所有记录，重新第一阶段，第二阶段修改数据然后释放</li>
-<li>通信死锁：超时</li>
-<li>活锁：进程在临界区进行轮询，则可能出现没有进程阻塞，但进程一直尝试失败，常见于资源不足</li>
-<li>饥饿：资源分配迟迟没有轮到该进程</li>
-</ol>
-<h1 id="六、多媒体操作系统"><a href="#六、多媒体操作系统" class="headerlink" title="六、多媒体操作系统"></a>六、多媒体操作系统</h1><h2 id="多媒体"><a href="#多媒体" class="headerlink" title="多媒体"></a>多媒体</h2><ol>
-<li>特征：使用极高的数据率，多媒体要求实时回放</li>
-<li>要求：存储量大需要进行压缩，实时数据传输</li>
-<li>视频压缩：编码算法和解码算法的速度根据场景不同考量，不必100%可逆，允许有损</li>
-<li>音频压缩：波形编码傅里叶变换，感知编码</li>
-</ol>
-<h1 id="七、多处理机系统"><a href="#七、多处理机系统" class="headerlink" title="七、多处理机系统"></a>七、多处理机系统</h1><h2 id="多处理机操作系统"><a href="#多处理机操作系统" class="headerlink" title="多处理机操作系统"></a>多处理机操作系统</h2><ol>
-<li>每个CPU有自己的操作系统：无法充分利用资源，任务分配均衡等</li>
-<li>主从多处理机：主处理机容易成为瓶颈过载</li>
-<li>对称多处理机：把操作系统分割成多个临界区，每个临界区由其互斥信号量保护</li>
-</ol>
-<h2 id="多处理机同步，调度"><a href="#多处理机同步，调度" class="headerlink" title="多处理机同步，调度"></a>多处理机同步，调度</h2><ol>
-<li>分时</li>
-<li>空间共享：多个CPU上同时调度多个线程</li>
-<li>群调度：一组相关线程作为一个单位调度，一个群的成员在不同的CPU上同时进行，群中所有成员共同开始和结束时间片</li>
-</ol>
-<h1 id="八、安全"><a href="#八、安全" class="headerlink" title="八、安全"></a>八、安全</h1><h2 id="目标与威胁"><a href="#目标与威胁" class="headerlink" title="目标与威胁"></a>目标与威胁</h2><ol>
-<li>数据机密性–数据暴露</li>
-<li>数据完整性–数据篡改，数据遗失</li>
-<li>系统可用性–拒绝服务</li>
-<li>排外性–病毒控制</li>
-</ol>
-<h2 id="密码学原理"><a href="#密码学原理" class="headerlink" title="密码学原理"></a>密码学原理</h2><ol>
-<li>密钥：算法的加密参数</li>
-<li>加密算法公开，加密安全性由独立于算法的密钥决定</li>
-<li>公钥加密：加密运算比较简单，没有密钥的解密运算十分繁琐。公钥是加密密钥，私钥用于解密</li>
-<li>单向函数：f(x)可容易计算出y值，给定y值不能计算x，也称作加密散列函数</li>
-<li>数字签名：对文档运行单向散列函数如MD5，文档拥有者用私钥计算得到D(散列值)，接收方用发送方公钥计算得到E(D(散列值))得到实际散列值，再比较</li>
-</ol>
-<h2 id="保护机制"><a href="#保护机制" class="headerlink" title="保护机制"></a>保护机制</h2><ol>
-<li>域：一对组合，指定一个对象和一些可在其上运行的操作子集</li>
-<li>基本原则：最低权限原则，每个域拥有最少对象和满足其完成工作的最少权限，安全性最好</li>
-<li>unix：进程的域由(UID,GID)定义，每个进程分为用户部分和核心部分，执行系统调用时，从用户态切换到内核态，核心部分可以访问与用户部分不同的对象集，这样系统调用引发域切换</li>
-<li>访问控制表与权能字</li>
-<li>隐写术：如将实际信息隐藏在图片中等</li>
-</ol>
-<h2 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h2><ol>
-<li>口令</li>
-<li>一次性口令，如网上银行银盾等</li>
-<li>挑战响应认证，密码问题等</li>
-<li>实物认证</li>
-<li>生物识别认证</li>
-</ol>
-<h2 id="内部安全"><a href="#内部安全" class="headerlink" title="内部安全"></a>内部安全</h2><ol>
-<li>逻辑炸弹</li>
-<li>后门陷阱</li>
-<li>登录欺骗</li>
-</ol>
-<h2 id="代码漏洞"><a href="#代码漏洞" class="headerlink" title="代码漏洞"></a>代码漏洞</h2><ol>
-<li>缓冲区溢出</li>
-<li>代码注入：系统调用时，如命令行</li>
-<li>权限提升攻击：利用计划任务进行攻击等</li>
-</ol>
-<h2 id="恶意软件"><a href="#恶意软件" class="headerlink" title="恶意软件"></a>恶意软件</h2><ol>
-<li>木马攻击</li>
-<li>病毒</li>
-<li>蠕虫</li>
-</ol>
-<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
-<li>防火墙</li>
-<li>反病毒扫描，完整性检查，行为检查捕捉系统调用</li>
-<li>代码签名</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-3/" data-id="cjszu2rkp000bgst9u5gvy2le" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-docker-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/08/17/docker-1/" class="article-date">
-  <time datetime="2018-08-17T14:44:38.000Z" itemprop="datePublished">2018-08-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Docker/">Docker</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/17/docker-1/">Docker文档与实践</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h1><h2 id="镜像与容器"><a href="#镜像与容器" class="headerlink" title="镜像与容器"></a>镜像与容器</h2><ul>
-<li>通过<a href="https://docs.docker.com/get-started/part2/" target="_blank" rel="noopener">官网文档</a>例子构建镜像，可以用镜像运行多个容器。</li>
-<li>镜像的发布与拉取，类似于github操作</li>
-</ul>
-<h2 id="服务组"><a href="#服务组" class="headerlink" title="服务组"></a>服务组</h2><ul>
-<li>大的系统往往需要拆分成多个服务，每个服务构建成独立的镜像。而一个服务组可以统一管理各个服务的部署</li>
-<li>通过docker-compose.yml配置，可以配置服务组，包含不同服务使用的镜像，容器数量，资源分配，重启策略，端口，网络</li>
-<li>docker stack deploy -c docker-compose.yml $services_name</li>
-<li>这里的部署前提是docker swarm init，启动集群管理，当前机器为其中的一个节点</li>
-<li>部署之前需要确认节点有配置所需要的镜像</li>
-</ul>
-<h2 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h2><ul>
-<li>docker swarm init 将当前节点作为管理节点</li>
-<li>其他机器可以通过docker swarm join 加入集群，作为其中的一个节点，服务组部署启动的容器将被分布在集群的节点上</li>
-</ul>
-<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><ul>
-<li>docker-compose.yml 引入可视化服务，redis服务</li>
-<li>volumes: 在redis容器内文件系统创建/data，通过映射到宿主系统的实际文件目录，redis数据将可以持久保存在宿主而不会因为容器删除而被删除</li>
-<li>通过可视化我们可以直观地看到不同节点运行的服务</li>
-</ul>
-<h1 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h1><h2 id="开发最佳实践"><a href="#开发最佳实践" class="headerlink" title="开发最佳实践"></a>开发最佳实践</h2><ul>
-<li>选择合适的基础镜像，避免构建的镜像太大</li>
-<li>多阶段构建，如果不使用多阶段构建，则尽量减少层数</li>
-<li>创建一个公共基础镜像，docker只需要加载一次并缓存它</li>
-<li>需要考虑基于生产镜像构建用于debug的镜像</li>
-<li>添加有意义的镜像tag，包含版本信息，运行环境等</li>
-<li>避免在容器存储层写数据，将会使容器膨胀，IO也不如使用数据卷高效</li>
-<li>敏感数据使用secrets，非敏感使用configs</li>
-<li>尽量使用swarm方式部署，可扩展，配置化，优雅重启，具备一些额外功能如secrets，configs，可以自动获取需要的镜像不需要手动拉取</li>
-<li>使用CI/CD自动构建，打tag，测试</li>
-</ul>
-<h2 id="Dockerfile最佳实践"><a href="#Dockerfile最佳实践" class="headerlink" title="Dockerfile最佳实践"></a>Dockerfile最佳实践</h2><ul>
-<li>FROM: 从指定的镜像创建一层，COPY: 从Docker客户端当前目录拷贝文件，RUN: 执行命令，CMD: 容器启动执行命令，容器启动时，添加一层可写容器层在镜像基础上，所有的修改仅发生在这一层</li>
-<li>执行docker build时，指定目录为build context，上下文会发送给Docker daemon</li>
-<li>.dockerignore 类似.gitignore</li>
-<li>多阶段构建有助于减小镜像大小和层数，不需要的包不装，构建下一层前清除当前层不需要的东西</li>
-<li>应用解耦: 尽可能一个容器一个进程，通过容器间通信配置可以解决依赖</li>
-<li>减少层次: RUN，COPY，ADD创建实际的层，其他指令创建临时中间层</li>
-<li>构建时指令顺序执行时会检查现有镜像的缓存</li>
-<li>从已经缓存的基础镜像开始，下一个指令检查基础镜像的子镜像是否有匹配</li>
-<li>ADD，COPY是否使用缓存会通过比较文件指纹</li>
-</ul>
-<h2 id="创建基础镜像"><a href="#创建基础镜像" class="headerlink" title="创建基础镜像"></a>创建基础镜像</h2><ul>
-<li>FROM scratch</li>
-</ul>
-<h2 id="多阶段构建"><a href="#多阶段构建" class="headerlink" title="多阶段构建"></a>多阶段构建</h2><ul>
-<li>同一个Dockerfile</li>
-<li>多个FROM，通过–from，下一阶段可以通过引用上一阶段构建好的镜像临时容器中获取需要的文件或程序</li>
-<li>可以只构建指定阶段，也可以直接引用其他镜像</li>
-</ul>
-<h1 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h1><h2 id="网络驱动"><a href="#网络驱动" class="headerlink" title="网络驱动"></a>网络驱动</h2><ul>
-<li>可插拔</li>
-<li>bridge: 独立容器通信使用，适用于同一个宿主不同容器通信</li>
-<li>host: 容器直接使用宿主机的网络，swarm不可用。适用于docker不隔离而容器隔离</li>
-<li>overlay: 连接多个Docker daemon，用于支持集群swarm services。适用于容器运行在不同宿主，或多服务间通信</li>
-<li>macvlan: 分配MAC地址给容器，Docker daemon通过MAC地址路由。适用于从虚拟机迁移</li>
-<li>none: 禁用网络</li>
-<li>docker network ls 可以看见已有的网络及对应的驱动类型</li>
-</ul>
-<h2 id="bridge"><a href="#bridge" class="headerlink" title="bridge"></a>bridge</h2><ul>
-<li>分为默认和自定义</li>
-<li>使用默认时，每个容器都需要打开指定端口。使用自定义网络时，处于同一网络的容器间端口是相互暴露，而只需要供外部访问的容器打开端口即可</li>
-<li>使用自定义网络，容器可以加入和移出自定义网络</li>
-<li>自定义网络有单独的配置文件</li>
-<li>默认网络使用–link参数可以使容器间共享环境变量，自定义网络则需要考虑从共享数据卷，docker-compose，swarm services实现环境变量共享</li>
-<li>自定义网络通过-p参数指定对其他网络的暴露端口</li>
-<li>容器创建时可以指定加入的网络，已经运行的可以通过docker network connect加入</li>
-<li>docker attach 将连接宿主与容器的标准输入输出错误流</li>
-<li>实践可以参考<a href="https://docs.docker.com/network/network-tutorial-standalone/" target="_blank" rel="noopener">https://docs.docker.com/network/network-tutorial-standalone/</a></li>
-</ul>
-<h2 id="host"><a href="#host" class="headerlink" title="host"></a>host</h2><ul>
-<li>容器与宿主没有隔离，容器的端口直接使用宿主的端口</li>
-<li>可以用于swarm services，如果容器绑定指定端口，则一个节点只能启动一个容器</li>
-</ul>
-<h2 id="overlay"><a href="#overlay" class="headerlink" title="overlay"></a>overlay</h2><ul>
-<li>用于创建分布式网络连接多个docker daemon，路由转发数据包</li>
-<li>docker swarm init 初始化时，docker network ls 可以查看到，默认网络ingress</li>
-<li>同一个docker daemon下的container通信用默认的bridge网络docker_gwbridge</li>
-<li>每一个docker daemon 需要开放系列端口：TCP2377用于集群的管理通信，TCP7946和UDP7946用于节点间通信，UDP4789用于overlay网络转发</li>
-<li>自定义overlay网络，可以–opt encrypted加密节点数据传输</li>
-<li>可以自定义默认ingress的配置，需要通过移除和重建的方式</li>
-<li>修改docker_gwbridge配置时，需要停止docker，也是通过移除和重建的方式</li>
-</ul>
-<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><ul>
-<li>外部访问容器：通过端口映射将容器端口暴露</li>
-<li>容器互联：基础服务容器不对外暴露端口，只供应用层服务容器访问，则传统方式通过–link手动互联，更好的方式是自定义网络，将容器加入同一个网络。Docker通过提供环境变量和更新host文件提供基础服务容器连接信息。</li>
-</ul>
-<h1 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h1><h2 id="持久化存储"><a href="#持久化存储" class="headerlink" title="持久化存储"></a>持久化存储</h2><h3 id="volumes"><a href="#volumes" class="headerlink" title="volumes"></a>volumes</h3><ul>
-<li>数据卷作为宿主文件系统的一部分，由docker管理，非docker进程无法修改，官方推荐最佳数据持久化方式</li>
-<li>可以同时挂载到多个容器，可以同时读写</li>
-<li>可以存储数据到云端</li>
-<li>可以方便的进行数据迁移</li>
-</ul>
-<h3 id="bind-mounts"><a href="#bind-mounts" class="headerlink" title="bind mounts"></a>bind mounts</h3><ul>
-<li>可以在宿主任何位置存储，非docker进程可以修改</li>
-<li>直接将宿主的文件或文件夹挂载到容器，不利于管理</li>
-<li>使用场景：共享配置文件如dns，在开发环境容器进行打包时可以生成包到指定路径，</li>
-</ul>
-<h3 id="tmpfs-mounts"><a href="#tmpfs-mounts" class="headerlink" title="tmpfs mounts"></a>tmpfs mounts</h3><ul>
-<li>存在宿主内存，而不是容器可写存储层</li>
-<li>主要基于性能考虑，如大量数据写时</li>
-</ul>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>文档帮助我们快速入门及对docker的整体有个大体了解。通过官网的实践例子，我们对docker不再陌生，剩下的则是实际开发生产解决具体问题，以下的几个问题还需要在实际应用过程中进行总结。</li>
-<li>如何更快构建更小的镜像，需要了解Dockerfile各个指令，多阶段构建，构建缓存使用等</li>
-<li>如何利用集群使服务高效便捷地扩展，如何编排服务组，分配资源等</li>
-<li>如何利用网络通信，使不同容器，服务，节点间进行解耦合作</li>
-<li>如何解决不同容器，服务，节点间数据持久化，共享</li>
-<li>实际生产监控与报警</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/08/17/docker-1/" data-id="cjszu2rk90000gst9yc1xidv2" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/08/18/opsystem-1/" data-id="cjt40fj3n000citt934na4znw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -700,7 +472,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AMQP/">AMQP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AMQP/">AMQP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
     </div>
   </div>
 
@@ -728,23 +500,23 @@
       <ul>
         
           <li>
+            <a href="/2018/09/20/ds-1/">1. 数组</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/20/ds-3/">3. 栈</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/20/ds-2/">2. 链表</a>
+          </li>
+        
+          <li>
             <a href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
           </li>
         
           <li>
             <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/18/opsystem-2/">《现代操作系统》阅读笔记二</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/18/opsystem-3/">《现代操作系统》阅读笔记三</a>
-          </li>
-        
-          <li>
-            <a href="/2018/08/17/docker-1/">Docker文档与实践</a>
           </li>
         
       </ul>

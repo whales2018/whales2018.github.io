@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>1. 数组 | 沧海一粟</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 数组常见题目 对无序数组进行排序 多维数组数组元素按规则变换 数组按指定行列分组 利用数组作为以下标为key的哈希表 配合额外的数据结构如哈希表等 滑动窗口 动态规划  排序 977 无序数组元素平方之后升序排序 905 无序数组元素按偶数奇数规则排序 5">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. 数组">
+<meta property="og:url" content="https://whales2018.github.io/2018/09/20/ds-1/index.html">
+<meta property="og:site_name" content="沧海一粟">
+<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 数组常见题目 对无序数组进行排序 多维数组数组元素按规则变换 数组按指定行列分组 利用数组作为以下标为key的哈希表 配合额外的数据结构如哈希表等 滑动窗口 动态规划  排序 977 无序数组元素平方之后升序排序 905 无序数组元素按偶数奇数规则排序 5">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-11T05:39:32.240Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="1. 数组">
+<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 数组常见题目 对无序数组进行排序 多维数组数组元素按规则变换 数组按指定行列分组 利用数组作为以下标为key的哈希表 配合额外的数据结构如哈希表等 滑动窗口 动态规划  排序 977 无序数组元素平方之后升序排序 905 无序数组元素按偶数奇数规则排序 5">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">沧海一粟</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://whales2018.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ds-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/20/ds-1/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      1. 数组
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="数组常见题目"><a href="#数组常见题目" class="headerlink" title="数组常见题目"></a>数组常见题目</h1><ul>
+<li>对无序数组进行排序</li>
+<li>多维数组数组元素按规则变换</li>
+<li>数组按指定行列分组</li>
+<li>利用数组作为以下标为key的哈希表</li>
+<li>配合额外的数据结构如哈希表等</li>
+<li>滑动窗口</li>
+<li>动态规划</li>
+</ul>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><ul>
+<li>977 无序数组元素平方之后升序排序</li>
+<li>905 无序数组元素按偶数奇数规则排序</li>
+<li>561 无序数组升序排序后，按step为2求和</li>
+</ul>
+<h2 id="多维数组数组元素按规则变换"><a href="#多维数组数组元素按规则变换" class="headerlink" title="多维数组数组元素按规则变换"></a>多维数组数组元素按规则变换</h2><ul>
+<li>解决思路：根据坐标寻找元素按规则变换的数学方程</li>
+<li>832 二维数组反转图片，F(i, j) = F(i, ~j) == 1 ? 0 : 1</li>
+<li>999 棋盘规则，可以列方程式 F(i, j) = (B(i, j+x) ? 0 : A(i, j+x)) + … F 表示位于该坐标的结果，B 表示某个坐标方向有没有阻隔, A 表示某个坐标方向有没有黑棋</li>
+<li>867 坐标转换，L = [[F(i,j),F(i+1,j)]\ …]</li>
+<li>766 遍历i,遍历j，需要满足F(i,j) == F(i+x,j+x) 直到F(i+x,j+x)不存在</li>
+</ul>
+<h2 id="利用数组作为以下标为key的哈希表"><a href="#利用数组作为以下标为key的哈希表" class="headerlink" title="利用数组作为以下标为key的哈希表"></a>利用数组作为以下标为key的哈希表</h2><ul>
+<li>448 把数值v对应的数组位置i = v 标记为0，标记为0的原先值v(i)对应的数组位置也标记为0，以此类推，最后遍历一遍数组，如果该位置对应的值不为0，则表明该值为缺失的连续值</li>
+</ul>
+<h2 id="配合额外的数据结构如哈希表等"><a href="#配合额外的数据结构如哈希表等" class="headerlink" title="配合额外的数据结构如哈希表等"></a>配合额外的数据结构如哈希表等</h2><ul>
+<li>217 检查数组是否存在重复</li>
+<li>914 计数公约数</li>
+</ul>
+<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><ul>
+<li>记录窗口起始点，窗口实时移动</li>
+<li>窗口起始点变换条件</li>
+<li>窗口记录值时机</li>
+<li>674 最长的递增子数组的大小，比较每个窗口的大小</li>
+<li>643 窗口大小为4在数组滑动，求每个窗口平均值，最后得出4元连续子数组最大平均值</li>
+</ul>
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>动态规划的套路一般可以分为三个步骤，跟多维数组数组元素按规则变换有点类似，本质都是找到对应的数学方程式：</p>
+<ol>
+<li>定义状态</li>
+<li>状态转移方程</li>
+<li>边界</li>
+</ol>
+<ul>
+<li>746 定义F(s)为选定坐标s时的最小和, F(s) = A(s) + min(F(s-1),F(s-2)),F(1) = A(1), F(2) = A(2), 结果为min(F(len(A)-1),F(len(A)-2))</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-1/" data-id="cjt40fj360000itt9wov8zrr7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/09/20/ds-3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">3. 栈</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AMQP/">AMQP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/09/20/ds-1/">1. 数组</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/20/ds-3/">3. 栈</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/20/ds-2/">2. 链表</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/18/tcpip-1/">《TCP/IP详解卷1》阅读笔记一</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/18/opsystem-1/">《现代操作系统》阅读笔记一</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Whales<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

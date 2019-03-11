@@ -5,16 +5,19 @@
   
 
   
-  <title>《TCP/IP详解卷1》阅读笔记一 | 沧海一粟</title>
+  <title>2. 链表 | 沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="《TCP&#x2F;IP详解卷1》阅读笔记一">
-<meta property="og:url" content="https://whales2018.github.io/2018/09/18/tcpip-1/index.html">
+  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见题目 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针指">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2. 链表">
+<meta property="og:url" content="https://whales2018.github.io/2018/09/20/ds-2/index.html">
 <meta property="og:site_name" content="沧海一粟">
+<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见题目 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针指">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-22T07:02:27.000Z">
+<meta property="og:updated_time" content="2019-03-11T07:10:48.959Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《TCP&#x2F;IP详解卷1》阅读笔记一">
+<meta name="twitter:title" content="2. 链表">
+<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 链表常见题目 节点基础操作 快慢指针 链表合并  节点增删改查 增删改查，反转 237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的 203 删除节点元素 83 有序链表删除重复元素 206 链表反转，画图辅助，临时节点存储，修改指针指">
   
   
     <link rel="icon" href="/favicon.png">
@@ -57,14 +60,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-tcpip-1" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-ds-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/09/18/tcpip-1/" class="article-date">
-  <time datetime="2018-09-18T03:21:11.000Z" itemprop="datePublished">2018-09-18</time>
+    <a href="/2018/09/20/ds-2/" class="article-date">
+  <time datetime="2018-09-20T03:21:11.000Z" itemprop="datePublished">2018-09-20</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a>
+    <a class="article-category-link" href="/categories/数据结构与算法/">数据结构与算法</a>
   </div>
 
   </div>
@@ -75,7 +78,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      《TCP/IP详解卷1》阅读笔记一
+      2. 链表
     </h1>
   
 
@@ -83,11 +86,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用《数据结构与算法分析》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
+<h1 id="链表常见题目"><a href="#链表常见题目" class="headerlink" title="链表常见题目"></a>链表常见题目</h1><ul>
+<li>节点基础操作</li>
+<li>快慢指针</li>
+<li>链表合并</li>
+</ul>
+<h2 id="节点增删改查"><a href="#节点增删改查" class="headerlink" title="节点增删改查"></a>节点增删改查</h2><ul>
+<li>增删改查，反转</li>
+<li>237 删除链表指定节点，画图辅助，修改值和指针指向达到删除链表节点目的</li>
+<li>203 删除节点元素</li>
+<li>83 有序链表删除重复元素</li>
+<li>206 链表反转，画图辅助，临时节点存储，修改指针指向</li>
+</ul>
+<h2 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h2><ul>
+<li>876 链表中间节点，快指针两步，慢指针一步，则快指针遍历完即得到中间节点</li>
+<li>141 判断链表是否有环，当快指针追上慢指针，则链表有环</li>
+<li>234 判断链表是否回文序列，快慢指针找到链表中间节点，反转以中间节点为头节点的链表b，比较原链表和b，遍历到其中一个的尽头如果都相等则为回文序列</li>
+<li>160 两个链表交汇节点，两个链表分叉部分的节点数差值为x，双指针分别按1步，快指针在短链表，则快指针遍历完链表时，快指针回到慢链表从头遍历，慢指针遍历完之后回到快链表，则此时快慢指针到达交汇点的节点数相等。需要注意没有交汇点时的情况判断</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/18/tcpip-1/" data-id="cjt40fj4p0018itt99d8mge31" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-2/" data-id="cjt40fj3e0003itt94y0dl1cl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -96,19 +118,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/09/20/ds-2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/09/20/ds-3/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          2. 链表
+          3. 栈
         
       </div>
     </a>
   
   
-    <a href="/2018/08/18/opsystem-1/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/09/18/tcpip-1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">《现代操作系统》阅读笔记一</div>
+      <div class="article-nav-title">《TCP/IP详解卷1》阅读笔记一</div>
     </a>
   
 </nav>
