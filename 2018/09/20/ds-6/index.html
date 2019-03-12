@@ -5,19 +5,19 @@
   
 
   
-  <title>6. 二叉树 | 沧海一粟</title>
+  <title>6. 树与二叉树 | 沧海一粟</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 二叉树常见问题">
+  <meta name="description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 基础 节点拥有的子树数为节点的度，度为0的节点为叶子节点 节点的层次由根开始，根为第一层。节点的最大层次为树的深度或高度 森林是若干不相交互的树集合 二叉树的第i层，至多有2的i-1次方个节点。深度为k的二叉树，至多有2的k次方-1个节点 对于任意二叉树">
 <meta property="og:type" content="article">
-<meta property="og:title" content="6. 二叉树">
+<meta property="og:title" content="6. 树与二叉树">
 <meta property="og:url" content="https://whales2018.github.io/2018/09/20/ds-6/index.html">
 <meta property="og:site_name" content="沧海一粟">
-<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 二叉树常见问题">
+<meta property="og:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 基础 节点拥有的子树数为节点的度，度为0的节点为叶子节点 节点的层次由根开始，根为第一层。节点的最大层次为树的深度或高度 森林是若干不相交互的树集合 二叉树的第i层，至多有2的i-1次方个节点。深度为k的二叉树，至多有2的k次方-1个节点 对于任意二叉树">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-11T11:48:35.997Z">
+<meta property="og:updated_time" content="2019-03-12T09:50:44.428Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="6. 二叉树">
-<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 二叉树常见问题">
+<meta name="twitter:title" content="6. 树与二叉树">
+<meta name="twitter:description" content="简介数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。 基础 节点拥有的子树数为节点的度，度为0的节点为叶子节点 节点的层次由根开始，根为第一层。节点的最大层次为树的深度或高度 森林是若干不相交互的树集合 二叉树的第i层，至多有2的i-1次方个节点。深度为k的二叉树，至多有2的k次方-1个节点 对于任意二叉树">
   
   
     <link rel="icon" href="/favicon.png">
@@ -78,7 +78,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      6. 二叉树
+      6. 树与二叉树
     </h1>
   
 
@@ -87,11 +87,50 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>数据结构与算法这一分类的文章，将采用严蔚敏《数据结构与算法》一书的顺序结合leetcode题目Go实现，实践与理论相结合的方式记录学习过程。</p>
-<h1 id="二叉树常见问题"><a href="#二叉树常见问题" class="headerlink" title="二叉树常见问题"></a>二叉树常见问题</h1>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><ul>
+<li>节点拥有的子树数为节点的度，度为0的节点为叶子节点</li>
+<li>节点的层次由根开始，根为第一层。节点的最大层次为树的深度或高度</li>
+<li>森林是若干不相交互的树集合</li>
+<li>二叉树的第i层，至多有2的i-1次方个节点。深度为k的二叉树，至多有2的k次方-1个节点</li>
+<li>对于任意二叉树，度为2的节点树为n2，则叶子节点树n = n2 + 1</li>
+<li>深度为k且有2的k次方-1个节点的二叉树为满二叉树，完全二叉树为当且仅当每一个节点与满二叉树中编号节点一一对应时</li>
+<li>具有n个节点的完全二叉树的深度为log2(n)+1</li>
+</ul>
+<h1 id="二叉树常见问题"><a href="#二叉树常见问题" class="headerlink" title="二叉树常见问题"></a>二叉树常见问题</h1><ul>
+<li>二叉树的遍历，先序遍历，中序遍历，后序遍历</li>
+<li>解决二叉树问题的一个重要思想就是递归，大体套路可以先考虑当前根局部解决的情况，然后递归操作以子节点为根的子树</li>
+<li>二叉搜索树</li>
+<li>树的变形</li>
+<li>深度优先搜索，广度优先搜索</li>
+<li>二叉平衡树</li>
+</ul>
+<h2 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h2><ul>
+<li>617 合并两个二叉树，节点重合的求和。递归思想解决就是，当前根节点重合的求和。左节点的合并两个树的左节点，右节点的合并两个树的右节点，最后考虑边界条件</li>
+<li>965 判断二叉树的所有节点数值是否一样，递归判断根节点与左右节点的值是否相同，如果左右节点为空，则不用比较</li>
+<li>872 比较两个树的叶子节点值序列是否相同。可以通过递归操作，收集每个树左右子树的叶子节点值，先左后右。最后比较</li>
+<li>104 求二叉树的深度。右子树的深度与左子树深度的较大值+1</li>
+<li>226 翻转二叉树，根节点的左子树等于翻转之后的右子树，根节点的右子树等于翻转之后的左子树</li>
+</ul>
+<h2 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h2><ul>
+<li>二叉搜索树 左子节点 &lt; 根节点 &lt;= 右子节点或者左子节点 &lt;= 根节点 &lt; 右子节点</li>
+<li>700 搜索节点=给定的值</li>
+<li>669 给定最小最大值，修剪二叉搜索树。思路：修剪当前树，直到当前树根节点落在范围内，递归修剪左子树和右子树</li>
+<li>108 有序数组构建二叉搜索树。数组中间树作为当前根节点，左边部分作为左子树的节点，右边作为右子树节点，递归填充</li>
+<li>783 求二叉搜索树相近节点之间最小差值，中序遍历</li>
+<li>530 求二叉搜索树节点之间最小差值，中序遍历</li>
+</ul>
+<h2 id="树的变形"><a href="#树的变形" class="headerlink" title="树的变形"></a>树的变形</h2><ul>
+<li>897 把二叉搜索树变成单向递增，每个节点只有一个右子节点。总体思路，先两边后中间，把右子树变为每个节点只有一个右子节点，把左子树变为每个节点只有左子节点，最后调整为最左子节点为当前树的根节点。递归操作</li>
+</ul>
+<h2 id="深度优先搜索，广度优先搜索"><a href="#深度优先搜索，广度优先搜索" class="headerlink" title="深度优先搜索，广度优先搜索"></a>深度优先搜索，广度优先搜索</h2><ul>
+<li>深度优先使用栈，广度优先用队列</li>
+<li>637 计算二叉树每一层节点。广度优先，累加当前层数值，记录当前层平均值。记录下一层入队节点的个数。</li>
+</ul>
+<h2 id="二叉平衡树"><a href="#二叉平衡树" class="headerlink" title="二叉平衡树"></a>二叉平衡树</h2>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/09/20/ds-6/" data-id="cjt4acf3h0008vjt93h8qilp8" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/09/20/ds-6/" data-id="cjt5n11xo000715t90qir81hu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -110,9 +149,9 @@
     </a>
   
   
-    <a href="/2018/09/18/tcpip-1/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/09/20/ds-4/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">《TCP/IP详解卷1》阅读笔记一</div>
+      <div class="article-nav-title">4. 字符串</div>
     </a>
   
 </nav>
@@ -128,7 +167,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AMQP/">AMQP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AMQP/">AMQP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ZooKeeper/">ZooKeeper</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
     </div>
   </div>
 
@@ -160,19 +199,19 @@
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-2/">2. 栈</a>
-          </li>
-        
-          <li>
             <a href="/2018/09/20/ds-3/">3. 队列</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-4/">4. 字符串</a>
+            <a href="/2018/09/20/ds-2/">2. 栈</a>
           </li>
         
           <li>
             <a href="/2018/09/20/ds-5/">5. 数组</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/20/ds-6/">6. 树与二叉树</a>
           </li>
         
       </ul>

@@ -58,6 +58,276 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-mysql-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/30/mysql-3/" class="article-date">
+  <time datetime="2018-06-30T05:53:23.000Z" itemprop="datePublished">2018-06-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MySQL/">MySQL</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/30/mysql-3/">《高性能MySQL》阅读笔记三</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-schema与数据类型优化"><a href="#1-schema与数据类型优化" class="headerlink" title="1. schema与数据类型优化"></a>1. schema与数据类型优化</h1><h2 id="1-1-数据类型选择"><a href="#1-1-数据类型选择" class="headerlink" title="1.1 数据类型选择"></a>1.1 数据类型选择</h2><p>更小: 选择不超过需求范围的最小类型</p>
+<p>更简单</p>
+<p>避免使用Null: 含有Null列会使索引,索引统计和值更为复杂</p>
+<p>分配空间: 根据实际需要分配.使用内存临时表或操作时会比较糟糕</p>
+<p>特殊类型:书中举例,ip地址应该用无符号整数存储,MySQL提供inet_aton, inet_ntoa方法转换</p>
+<h2 id="1-2-schema-设计陷阱"><a href="#1-2-schema-设计陷阱" class="headerlink" title="1.2 schema 设计陷阱"></a>1.2 schema 设计陷阱</h2><ol>
+<li><p>太多列,存储引擎api需要在服务器层和存储引擎层通过行缓冲格式拷贝数据,然后解码.转换代价依赖于列的数量</p>
+</li>
+<li><p>太多的关联,单个查询最好在12个表以内</p>
+</li>
+<li><p>最好不用枚举enum</p>
+</li>
+<li><p>可以使用其他”空值”替代Null</p>
+</li>
+</ol>
+<h2 id="1-3-范式和反范式"><a href="#1-3-范式和反范式" class="headerlink" title="1.3 范式和反范式"></a>1.3 范式和反范式</h2><ol>
+<li><p>范式化: 每个事实数据只出现一次</p>
+</li>
+<li><p>反范式化: 信息是冗余的</p>
+</li>
+<li><p>第一范式1NF: 关系中的每个属性都不可再分</p>
+</li>
+<li><p>第二范式2NF: 每个表中的非主属性完全依赖于码(例如主键, 可以唯一决定属性集合)</p>
+</li>
+<li><p>第三范式3NF: 消除非主属性之间的依赖关系，只保留非主属性与码的依赖关系</p>
+</li>
+<li><p>范式化优点: 更新操作更快,占用空间更小</p>
+</li>
+<li><p>范式化缺点: 表的关联查询更多</p>
+</li>
+<li><p>混用范式和反范式: 从父表冗余一些数据到子表有利于排序, 缓存衍生值减少子查询计算</p>
+</li>
+</ol>
+<h2 id="1-4-缓存表和汇总表"><a href="#1-4-缓存表和汇总表" class="headerlink" title="1.4 缓存表和汇总表"></a>1.4 缓存表和汇总表</h2><p>业务上有时需要一张完全独立的汇总表或缓存表主要用于满足检索的需求</p>
+<ol>
+<li><p>Flexviews实现物化视图,可以增量重新计算物化视图的内容</p>
+</li>
+<li><p>计数器表: 如果需要在表中保存计数器,更新计数器时,会有全局的互斥锁.要获的高并发更新的性能,可以将计数器保存在多行,每次随机选择一个进行更新</p>
+</li>
+</ol>
+<h2 id="1-5-修改表结构"><a href="#1-5-修改表结构" class="headerlink" title="1.5 修改表结构"></a>1.5 修改表结构</h2><ol>
+<li><p>大部分的alter table操作将导致服务中断</p>
+</li>
+<li><p>所有的modify column 操作都将导致表重建</p>
+</li>
+<li><p>可以新建一个.frm文件为修改后的表结构,替换原来的.frm文件避免表重建</p>
+</li>
+</ol>
+<h1 id="2-创建高性能的索引"><a href="#2-创建高性能的索引" class="headerlink" title="2. 创建高性能的索引"></a>2. 创建高性能的索引</h1><p>索引是存储引擎用于快速查找记录的数据结构</p>
+<h2 id="2-1-索引基础"><a href="#2-1-索引基础" class="headerlink" title="2.1 索引基础"></a>2.1 索引基础</h2><p>MySQL中,存储引擎先在索引中找到对应值根据匹配的索引记录找到对应的数据行.索引在存储引擎层实现</p>
+<h3 id="2-1-1-B-Tree索引"><a href="#2-1-1-B-Tree索引" class="headerlink" title="2.1.1 B-Tree索引"></a>2.1.1 B-Tree索引</h3><ol>
+<li><p>目前大部分数据库系统及文件系统都采用B-Tree或其变种B+Tree作为索引结构. </p>
+</li>
+<li><p>InnoDB使用B+Tree, NDB集群存储引擎实际使用T-Tree. 索引对多个值的排序一句是根据表定义索引时列的顺序.</p>
+</li>
+<li><p>索引对如下类型的查询有效</p>
+</li>
+<li><p>全值匹配</p>
+</li>
+<li><p>匹配最左前缀,只使用索引第一列</p>
+</li>
+<li><p>匹配列前缀: 只匹配某一列值的开头部分</p>
+</li>
+<li><p>匹配范围值</p>
+</li>
+<li><p>精确匹配某一列并范围匹配另外一列</p>
+</li>
+<li><p>只访问索引的查询: 查询只需要访问索引无需访问数据行(覆盖扫描)</p>
+</li>
+<li><p>限制</p>
+</li>
+<li><p>如果不是按照索引的最左列开始,则无法使用索引</p>
+</li>
+<li><p>不能跳过索引中的列,即定义索引(a,b,c),则使用a,c查询条件时,只能使用索引第一列</p>
+</li>
+<li><p>如果查询中有某个列的范围查询,则右边所有的列都无法使用索引优化查找</p>
+</li>
+</ol>
+<h3 id="2-1-2-哈希索引"><a href="#2-1-2-哈希索引" class="headerlink" title="2.1.2 哈希索引"></a>2.1.2 哈希索引</h3><ol>
+<li><p>对于每一行数据,存储引擎会对索引列计算一个哈希码.索引包含哈希码和行指针</p>
+</li>
+<li><p>MySQL中只有Memory存储引擎支持</p>
+</li>
+<li><p>限制</p>
+</li>
+<li><p>不能使用索引中的值避免读取行</p>
+</li>
+<li><p>无法用于排序</p>
+</li>
+<li><p>不支持部分索引列匹配查找</p>
+</li>
+<li><p>不支持范围查询</p>
+</li>
+<li><p>出现哈希冲突时会扫表</p>
+</li>
+</ol>
+<h3 id="2-1-3-伪哈希索引"><a href="#2-1-3-伪哈希索引" class="headerlink" title="2.1.3 伪哈希索引"></a>2.1.3 伪哈希索引</h3><ol>
+<li><p>应用: 当存储引擎不支持哈希索引,在B-Tree基础上使用哈希值索引查找</p>
+</li>
+<li><p>场景: 需要存储大量的url并根据url进行搜索查找</p>
+</li>
+<li><p>问题: 如果使用B-Tree存储,内容很大</p>
+</li>
+<li><p>方案: 删除url列索引,新增一个被索引的url_crc列,使用CRC32做哈希.</p>
+</li>
+<li><p>sql: select id from t_url where url=”<a href="https://www.google.as/&quot;" target="_blank" rel="noopener">https://www.google.as/&quot;</a> and url_crc=CRC32(“<a href="https://www.google.as/&quot;" target="_blank" rel="noopener">https://www.google.as/&quot;</a>)</p>
+</li>
+<li><p>结果: MySQL优化器会使用选择性很高体积很小的基于url_crc索引完成查找</p>
+</li>
+<li><p>缺陷: 需要维护哈希值, crc32表大时会出现大量冲突</p>
+</li>
+<li><p>注意: 不要使用SHA1和MD5做哈希函数,因为计算出来的哈希值比较长; 必须在where子句中包含常量</p>
+</li>
+<li><p>插件: 移植自Percona Server的FNV64可以在MySQL中作为哈希函数使用</p>
+</li>
+</ol>
+<h3 id="2-1-4-空间数据索引-R-Tree"><a href="#2-1-4-空间数据索引-R-Tree" class="headerlink" title="2.1.4 空间数据索引(R-Tree)"></a>2.1.4 空间数据索引(R-Tree)</h3><ol>
+<li>MyISAM表支持空间索引,可以用作地理数据存储</li>
+</ol>
+<h3 id="2-1-5-全文索引"><a href="#2-1-5-全文索引" class="headerlink" title="2.1.5 全文索引"></a>2.1.5 全文索引</h3><ol>
+<li>全文索引是一种特殊类型索引,查找文本中的关键词,后续讨论</li>
+</ol>
+<h3 id="2-1-6-其他"><a href="#2-1-6-其他" class="headerlink" title="2.1.6 其他"></a>2.1.6 其他</h3><ol>
+<li><p>TokuDB 使用分形树索引, 对于InnoDB的讨论也适用于TokuDB</p>
+</li>
+<li><p>ScaleDB 使用Patricia tries</p>
+</li>
+<li><p>InfiniDB和Infobright使用一些特殊的数据结构优化某些特殊的查询</p>
+</li>
+</ol>
+<h2 id="2-2索引的优点"><a href="#2-2索引的优点" class="headerlink" title="2.2索引的优点"></a>2.2索引的优点</h2><ol>
+<li><p>减少扫描数据量</p>
+</li>
+<li><p>避免排序和临时表</p>
+</li>
+<li><p>将随机I/O变成顺序I/O</p>
+</li>
+<li><p>对于TB级别的数据,经常会使用块级别的数据技术来替代索引</p>
+</li>
+</ol>
+<h2 id="2-3-高性能的索引策略"><a href="#2-3-高性能的索引策略" class="headerlink" title="2.3 高性能的索引策略"></a>2.3 高性能的索引策略</h2><h3 id="2-3-1-独立的列"><a href="#2-3-1-独立的列" class="headerlink" title="2.3.1 独立的列"></a>2.3.1 独立的列</h3><ol>
+<li>索引列不能是表达式一部分或函数参数,否则不能使用索引</li>
+</ol>
+<h3 id="2-3-2-前缀索引"><a href="#2-3-2-前缀索引" class="headerlink" title="2.3.2 前缀索引"></a>2.3.2 前缀索引</h3><ol>
+<li><p>场景: 需要索引很长的字符列,这会让索引变得大且慢</p>
+</li>
+<li><p>方案: 根据业务找到最适合的前缀长度,创建前缀索引</p>
+</li>
+<li><p>优点: 索引更小,更快</p>
+</li>
+<li><p>缺点: MySQL无法使用前缀索引order by 和group by,也无法使用前缀索引做覆盖扫描</p>
+</li>
+<li><p>常见: 用16进制唯一id存储session id,如果采用长度为8的前缀索引能显著提升性能</p>
+</li>
+</ol>
+<h3 id="2-3-3-多列索引"><a href="#2-3-3-多列索引" class="headerlink" title="2.3.3 多列索引"></a>2.3.3 多列索引</h3><ol>
+<li><p>MySQL的索引合并(index merge)策略,一定程度上可以使用多个单列索引定位</p>
+</li>
+<li><p>where查询条件的列最好使用多列索引而不是单独列单独索引</p>
+</li>
+</ol>
+<h3 id="2-3-4-选择合适的索引顺序"><a href="#2-3-4-选择合适的索引顺序" class="headerlink" title="2.3.4 选择合适的索引顺序"></a>2.3.4 选择合适的索引顺序</h3><ol>
+<li><p>将选择性最高的列放在索引最前列</p>
+</li>
+<li><p>性能不只依赖于所有索引列的选择性,也和查询条件的具体值分布有关,可能需要根据运行频率最高的查询调整索引列顺序</p>
+</li>
+<li><p>有时需要根据排序,分组和范围条件综合考虑</p>
+</li>
+</ol>
+<h3 id="2-3-5-聚簇索引"><a href="#2-3-5-聚簇索引" class="headerlink" title="2.3.5 聚簇索引"></a>2.3.5 聚簇索引</h3><ol>
+<li><p>聚簇索引并不是单独的索引类型,而是一种数据存储方式.叶子页包含行的全部数据,节点页只包含索引列</p>
+</li>
+<li><p>InnoDB默认使用主键聚集数据,如果没有会选择一个唯一的非空索引作为<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-index-types.html" target="_blank" rel="noopener">聚簇索引</a></p>
+</li>
+<li><p>可以把相关数据保存一起,减少磁盘I/O</p>
+</li>
+<li><p>数据访问更快</p>
+</li>
+<li><p>插入速度严重依赖插入顺序</p>
+</li>
+<li><p>更新聚簇索引代价高</p>
+</li>
+<li><p>可能面临”页分裂”问题,导致占用更多磁盘空间</p>
+</li>
+<li><p>可能导致全表扫描变慢,由于行比较稀疏或页分裂导致数据存储不连续</p>
+</li>
+<li><p>二级索引变大,二级索引访问需要两次索引查找</p>
+</li>
+</ol>
+<h3 id="2-3-6-覆盖索引"><a href="#2-3-6-覆盖索引" class="headerlink" title="2.3.6 覆盖索引"></a>2.3.6 覆盖索引</h3><ol>
+<li><p>如果一个索引包含所有需要查询的字段的值</p>
+</li>
+<li><p>覆盖索引必须要存储索引列的值</p>
+</li>
+<li><p>MySQL不能在索引中执行like 操作,但能在索引中做最左前缀匹配的like比较,因为可以转换为简单的比较操作</p>
+</li>
+<li><p>延迟关联: 先通过覆盖索引返回需要的主键再通过这些主键关联原表获得需要的行</p>
+</li>
+</ol>
+<h3 id="2-3-7-使用索引扫描做排序"><a href="#2-3-7-使用索引扫描做排序" class="headerlink" title="2.3.7 使用索引扫描做排序"></a>2.3.7 使用索引扫描做排序</h3><ol>
+<li><p>只有索引列的顺序和order by 子句的顺序一致时才能使用索引对结果做排序</p>
+</li>
+<li><p>如果关联多表,则只有当order by子句引用的字段全部为第一个表时才能使用索引排序</p>
+</li>
+</ol>
+<h3 id="2-3-8-压缩索引"><a href="#2-3-8-压缩索引" class="headerlink" title="2.3.8 压缩索引"></a>2.3.8 压缩索引</h3><ol>
+<li><p>MyISAM使用前缀压缩减少索引的大小</p>
+</li>
+<li><p>create table 时通过指定pack_keys控制压缩方式</p>
+</li>
+</ol>
+<h3 id="2-3-9-未使用的索引"><a href="#2-3-9-未使用的索引" class="headerlink" title="2.3.9 未使用的索引"></a>2.3.9 未使用的索引</h3><ol>
+<li><p>通过查询INFORMATION_SCHEMA.INDEX_STATISTICES能查到每个索引的使用频率</p>
+</li>
+<li><p>冗余和重复的索引会降低性能</p>
+</li>
+</ol>
+<h3 id="2-3-10-索引和锁"><a href="#2-3-10-索引和锁" class="headerlink" title="2.3.10 索引和锁"></a>2.3.10 索引和锁</h3><ol>
+<li>InnoDB在二级索引上使用共享(读)锁,但访问主键索引需要排他(写)锁,消除了使用覆盖索引的可能</li>
+</ol>
+<h2 id="2-4-维护索引和表"><a href="#2-4-维护索引和表" class="headerlink" title="2.4 维护索引和表"></a>2.4 维护索引和表</h2><ol>
+<li><p>check table 通常能够找出大多数的表和索引的错误</p>
+</li>
+<li><p>MyISAM表易损坏,InnoDB不容易,损坏可能是硬件或人为错误</p>
+</li>
+<li><p>MySQL查询优化器通过两个api,一个获取范围大概数据量,一个返回各种类型的数据包括索引基数</p>
+</li>
+<li><p>减少索引和数据的碎片,B-TREE索引可能碎片化,这会降低效率</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-3/" data-id="cjt5n11yj001015t9dtzgd0fo" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-mysql-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/30/mysql-2/" class="article-date">
@@ -172,7 +442,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-2/" data-id="cjt4acf3l000cvjt9r8ouyp4m" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-2/" data-id="cjt5n11xr000b15t9zvs6rbnx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -233,7 +503,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://whales2018.github.io/2018/06/30/mysql-1/" data-id="cjt4acf3j000bvjt90kthksyz" class="article-share-link">Share</a>
+      <a data-url="https://whales2018.github.io/2018/06/30/mysql-1/" data-id="cjt5n11xv000c15t980nbowht" class="article-share-link">Share</a>
       
       
     </footer>
@@ -258,7 +528,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AMQP/">AMQP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/AMQP/">AMQP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/HTTP/">HTTP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Nginx/">Nginx</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Redis/">Redis</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ZooKeeper/">ZooKeeper</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/《TCP-IP详解卷1》阅读笔记/">《TCP/IP详解卷1》阅读笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/操作系统/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
     </div>
   </div>
 
@@ -290,19 +560,19 @@
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-2/">2. 栈</a>
-          </li>
-        
-          <li>
             <a href="/2018/09/20/ds-3/">3. 队列</a>
           </li>
         
           <li>
-            <a href="/2018/09/20/ds-4/">4. 字符串</a>
+            <a href="/2018/09/20/ds-2/">2. 栈</a>
           </li>
         
           <li>
             <a href="/2018/09/20/ds-5/">5. 数组</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/20/ds-6/">6. 树与二叉树</a>
           </li>
         
       </ul>
